@@ -1,0 +1,118 @@
+package alpha.webservices;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import alpha.controller.LoginHandler;
+import alpha.controller.RegistrationHandler;
+import alpha.webservices.jaxbeans.LoginBean;
+import alpha.webservices.jaxbeans.RegistrationBean;
+
+
+/**
+ * JAVA WS RS - RESTFUL WEB SERVICE WITH JERSEY 
+ * ============================================
+ */
+@Path("/WebService")
+public class WebServices
+{
+	/**
+	 * This method handles the PUT-event from the /login path and accepts a LoginBean (jaxb) parameter
+	 * loginRequest, which is set in the client's application by using a JSONObject (JERSEY)
+	 * 
+	 * @param loginRequest = LoginBean representation of client's request object's JSON parameter
+	 * @return String representing the message the user will receive on his browser,
+	 * 		   being whether he logged in successfully or not
+	 * 				
+	 */
+	@PUT
+	@Path("/login")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public String login(final LoginBean loginRequest)
+	{
+	    try
+	    {
+	    	// Check if JAXB BEAN loginRequest (POST parameter) is correctly set and received
+	    	if (loginRequest != null)
+		       return new LoginHandler().verifyLogin(loginRequest.username, loginRequest.password);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(" * LoginService failed with error:   " + e.getMessage().toString());
+		}
+	    
+	    return null;
+	}
+	
+	
+	/**
+	 * This method handles the PUT-event from the /register path and accepts a RegistrationBeanf (jaxb) parameter
+	 * loginRequest, which is set in the client's application by using a JSONObject (JERSEY)
+	 * 
+	 * @param loginRequest = RegistrationBean representation of client's request object's JSON parameter
+	 * @return String representing the message the user will receive on his browser,
+	 * 		   being whether he registrated successfully or not
+	 * 				
+	 */
+	@PUT
+	@Path("/register")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public String register(final RegistrationBean registrationRequest)
+	{
+	    try
+	    {
+	    	// Check if JAXB BEAN loginRequest (POST parameter) is correctly set and received
+	    	if (registrationRequest != null)
+		       return new RegistrationHandler().verifyRegistration(registrationRequest.username, registrationRequest.password,
+		    		   											   registrationRequest.email, registrationRequest.gcm_registration_id);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(" * LoginService failed with error:   " + e.getMessage().toString());
+		}
+	    
+	    return null;
+	}
+	
+	
+	@PUT
+	@Path("/gcm")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public String sendMessage()
+	{
+		String result = "";
+		
+		return result;
+	}
+	
+	
+	//	PERHAPS FOR LATER USAGE:
+	//	
+	//	CHECKS WHETHER THE ENTERED USER HAS ALREADY AN ENTRY FOR A GCM REGISTRATION ID IN THE DB
+	//	@POST
+	//	@Path("/checkgcm")
+	//	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	//	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	//	public String checkgcm(final String username)
+	//	{
+	//	    try
+	//	    {
+	//	        return new LoginHandler().checkForGcmRegistration(username);
+	//		}
+	//		catch (Exception e)
+	//		{
+	//			e.printStackTrace();
+	//			System.out.println(" * LoginService failed with error:   " + e.getMessage().toString());
+	//		}
+	//	    
+	//	    return null;
+	//	}
+}
