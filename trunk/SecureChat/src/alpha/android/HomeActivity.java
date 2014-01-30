@@ -7,20 +7,17 @@ import java.io.IOException;
 import alpha.android.common.CommonUtilities;
 import alpha.android.fragments.HomeContentFragment;
 import alpha.android.fragments.MenuFragment;
-import alpha.android.gcm.GcmManager;
-import alpha.android.webservice.WebserviceManager;
+import alpha.android.fragments.MessageFragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class HomeActivity extends FragmentActivity implements MenuFragment.OnMenuSelectedListener
@@ -30,6 +27,7 @@ public class HomeActivity extends FragmentActivity implements MenuFragment.OnMen
 	
 	// Fragment objects
 	private MenuFragment menuFragment;
+	private MessageFragment messageFragment;
 	private HomeContentFragment contentFragment;
 	private Bundle menuItemsBundle;
 	
@@ -83,11 +81,29 @@ public class HomeActivity extends FragmentActivity implements MenuFragment.OnMen
     	contentFragment = new HomeContentFragment();
     	contentFragment.setArguments(menuItemsBundle);
 
-    	// Check if there was previous content -> replace , else -> add
-    	if (getSupportFragmentManager().findFragmentById(R.id.contentFragment_container_main) != null)
-            getSupportFragmentManager().beginTransaction().replace(R.id.contentFragment_container_main, contentFragment).commit();
+    	// CHAT
+    	if (position == 2)
+    	{
+    		messageFragment = new MessageFragment();
+    		
+        	// Check if there was previous content -> replace , else -> add
+        	if (getSupportFragmentManager().findFragmentById(R.id.contentFragment_container_main) != null)
+        	{
+        		getSupportFragmentManager().beginTransaction().replace(R.id.contentFragment_container_main, messageFragment).commit();
+        	}
+        	else
+        	{
+        		getSupportFragmentManager().beginTransaction().add(R.id.contentFragment_container_main, messageFragment).commit();
+        	}
+
+    	}
     	else
-    		getSupportFragmentManager().beginTransaction().add(R.id.contentFragment_container_main, contentFragment).commit();
+    	{
+	    	if (getSupportFragmentManager().findFragmentById(R.id.contentFragment_container_main) != null)
+	            getSupportFragmentManager().beginTransaction().replace(R.id.contentFragment_container_main, contentFragment).commit();
+	    	else
+	    		getSupportFragmentManager().beginTransaction().add(R.id.contentFragment_container_main, contentFragment).commit();
+    	}
     }
     
     
@@ -186,4 +202,90 @@ public class HomeActivity extends FragmentActivity implements MenuFragment.OnMen
 		else
 			return false;
 	}
+	
+	
+	
+	
+	
+	/**
+	 * TODO: NOG HERPLAATSEN
+	 */
+//	public void sendMessage(View v)
+//	{
+//		EditText text = (EditText) this.findViewById(R.id.text);
+//		String newMessage = text.getText().toString().trim(); 
+//		if(newMessage.length() > 0)
+//		{
+//			text.setText("");
+//			addNewMessage(new Message(newMessage, true));
+//			new SendMessage().execute();
+//		}
+//	}
+//	
+//
+//	private class SendMessage extends AsyncTask<Void, String, String>
+//	{
+//		ArrayList<Message> messages;
+//		AwesomeAdapter adapter;
+//		static Random rand = new Random();	
+//		static String sender;
+//		
+//		@Override
+//		protected String doInBackground(Void... params) {
+//			try {
+//				Thread.sleep(2000); //simulate a network call
+//			}catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//			
+//			this.publishProgress(String.format("%s started writing", sender));
+//			try {
+//				Thread.sleep(2000); //simulate a network call
+//			}catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//			this.publishProgress(String.format("%s has entered text", sender));
+//			try {
+//				Thread.sleep(3000);//simulate a network call
+//			}catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//			
+//			
+//			return Utility.messages[rand.nextInt(Utility.messages.length-1)];
+//			
+//			
+//		}
+//		@Override
+//		public void onProgressUpdate(String... v) {
+//			
+//			if(messages.get(messages.size()-1).isStatusMessage())//check wether we have already added a status message
+//			{
+//				messages.get(messages.size()-1).setMessage(v[0]); //update the status for that
+//				adapter.notifyDataSetChanged(); 
+//				getListView().setSelection(messages.size()-1);
+//			}
+//			else{
+//				addNewMessage(new Message(true,v[0])); //add new message, if there is no existing status message
+//			}
+//		}
+//		@Override
+//		protected void onPostExecute(String text) {
+//			if(messages.get(messages.size()-1).isStatusMessage)//check if there is any status message, now remove it.
+//			{
+//				messages.remove(messages.size()-1);
+//			}
+//			
+//			addNewMessage(new Message(text, false)); // add the orignal message from server.
+//		}
+//		
+//
+//	}
+//	
+//	void addNewMessage(Message m)
+//	{
+//		messages.add(m);
+//		adapter.notifyDataSetChanged();
+//		getListView().setSelection(messages.size()-1);
+//	}
 }
