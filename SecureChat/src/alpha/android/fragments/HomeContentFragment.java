@@ -39,7 +39,8 @@ public class HomeContentFragment extends Fragment
 
     			// CHAT
     			case 2: 
-    				return inflater.inflate(R.layout.fragment_content_gcm, container, false);
+    				//return inflater.inflate(R.layout.fragment_content_gcm, container, false);
+    				break;
     						
     			// CAMERA	
     			case 3: 
