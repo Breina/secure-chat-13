@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_alignParentBottom="true">
     
     <EditText
         android:id="@+id/text"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/btn_Send"
+    	android:layout_gravity="center_vertical"
+   		android:layout_alignParentBottom="true"
         android:layout_margin="5sp"
         android:background="@drawable/message_field"
         android:hint="Write here"
@@ -19,6 +22,9 @@
         android:id="@+id/btn_Send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+    	android:layout_alignParentBottom="true"
+    	android:layout_gravity="center_vertical"
+        android:layout_alignParentRight="true"
         android:layout_margin="5sp"
         android:background="@drawable/send_button"
         android:onClick="sendMessage"
@@ -29,4 +35,4 @@
         android:text="Send"
         android:textColor="#FFF" />
 
-</LinearLayout>
+</RelativeLayout>

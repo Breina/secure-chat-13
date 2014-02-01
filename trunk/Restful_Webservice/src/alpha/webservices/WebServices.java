@@ -6,6 +6,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.google.android.gcm.server.Message;
+import com.google.android.gcm.server.MulticastResult;
+import com.google.android.gcm.server.Result;
+import com.google.android.gcm.server.Sender;
+
 import alpha.controller.LoginHandler;
 import alpha.controller.RegistrationHandler;
 import alpha.webservices.jaxbeans.LoginBean;
@@ -19,6 +24,9 @@ import alpha.webservices.jaxbeans.RegistrationBean;
 @Path("/WebService")
 public class WebServices
 {
+	private static final String SENDER_ID = "556777754488";
+
+
 	/**
 	 * This method handles the PUT-event from the /login path and accepts a LoginBean (jaxb) parameter
 	 * loginRequest, which is set in the client's application by using a JSONObject (JERSEY)
@@ -86,11 +94,46 @@ public class WebServices
 	@Path("/gcm")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public String sendMessage()
+	public String sendMessage(String msg, String deviceKey)
 	{
-		String result = "";
+		Result result = null;
 		
-		return result;
+		// We'll collect the "CollapseKey" and "Message" values from our JSP page
+		String collapseKey = "";
+		
+		// Instance of com.android.gcm.server.Sender, that does the
+		// transmission of a Message to the Google Cloud Messaging service.
+		Sender sender = new Sender(SENDER_ID);
+		
+		// TODO: MAKE JSON
+		Message message = new Message.Builder()
+			.collapseKey(collapseKey)
+			.timeToLive(30)
+			.delayWhileIdle(true)
+			.addData("message", msg)
+			.build();
+		
+		try
+		{
+			// use this for multicast messages.  The second parameter
+			// of sender.send() will need to be an array of register ids.
+			result = sender.send(message, deviceKey, 1);
+			
+			if (result != null)
+			{
+				System.out.println("*  Result of message sending: " + result.toString());
+			}
+			else
+			{
+				System.out.println("*  Messaging failure: " + result.toString());
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}	
+		
+		return result.toString();
 	}
 	
 	
