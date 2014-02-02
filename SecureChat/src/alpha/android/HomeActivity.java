@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import alpha.android.common.CommonUtilities;
+import alpha.android.fragments.ContactsFragment;
 import alpha.android.fragments.HomeContentFragment;
 import alpha.android.fragments.MenuFragment;
 import alpha.android.fragments.MessageFragment;
@@ -28,7 +29,6 @@ public class HomeActivity extends FragmentActivity implements MenuFragment.OnMen
 	
 	// Fragment objects
 	private MenuFragment menuFragment;
-	private MessageFragment messageFragment;
 	private HomeContentFragment contentFragment;
 	private Bundle menuItemsBundle;
 	
@@ -81,30 +81,32 @@ public class HomeActivity extends FragmentActivity implements MenuFragment.OnMen
     	// Set and replace the contentFragment that was opened
     	contentFragment = new HomeContentFragment();
     	contentFragment.setArguments(menuItemsBundle);
-
-    	// CHAT
-    	if (position == 2)
-    	{
-    		messageFragment = new MessageFragment();
+    	
+    	Fragment content = null;
+    	
+    	switch (position) {
+    	case CommonUtilities.MENU_POS_CONTACTS:
+    		content = new ContactsFragment();
     		
-        	// Check if there was previous content -> replace , else -> add
-        	if (getSupportFragmentManager().findFragmentById(R.id.contentFragment_container_main) != null)
-        	{
-        		getSupportFragmentManager().beginTransaction().replace(R.id.contentFragment_container_main, messageFragment).commit();
-        	}
-        	else
-        	{
-        		getSupportFragmentManager().beginTransaction().add(R.id.contentFragment_container_main, messageFragment).commit();
-        	}
+    		break;
+    	case CommonUtilities.MENU_POS_CHAT:
+    		
+    		content = new MessageFragment();
 
+        	break;
+        	
+        default:
+        	content = contentFragment;
     	}
+    	
+    	// Check if there was previous content -> replace , else -> add
+    	if (getSupportFragmentManager().findFragmentById(R.id.contentFragment_container_main) != null)
+    		
+    		getSupportFragmentManager().beginTransaction().replace(R.id.contentFragment_container_main, content).commit();
+    	
     	else
-    	{
-	    	if (getSupportFragmentManager().findFragmentById(R.id.contentFragment_container_main) != null)
-	            getSupportFragmentManager().beginTransaction().replace(R.id.contentFragment_container_main, contentFragment).commit();
-	    	else
-	    		getSupportFragmentManager().beginTransaction().add(R.id.contentFragment_container_main, contentFragment).commit();
-    	}
+    		
+    		getSupportFragmentManager().beginTransaction().add(R.id.contentFragment_container_main, content).commit();
     }
     
     

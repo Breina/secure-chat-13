@@ -18,6 +18,14 @@ public final class CommonUtilities
         "Logout"
     };
     
+    public static final int MENU_POS_HOME = 0;
+    public static final int MENU_POS_CONTACTS = 1;
+    public static final int MENU_POS_CHAT = 2;
+    public static final int MENU_POS_CAMERA = 3;
+    public static final int MENU_POS_LOCATION = 4;
+    public static final int MENU_POS_SETTINGS = 5;
+    public static final int MENU_POS_LOGOUT = 6;
+    
     
     // Web Service + DB data
     public static final String HOST ="http://10.0.2.2";
