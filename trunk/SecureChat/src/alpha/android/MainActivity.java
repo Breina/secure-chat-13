@@ -25,6 +25,9 @@ public class MainActivity extends FragmentActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        // TODO: DO NOT FORGET TO REMOVE THIS CODE
+        navigateHome("bypassman");
     }
 
 	

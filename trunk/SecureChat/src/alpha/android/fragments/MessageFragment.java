@@ -68,7 +68,6 @@ public class MessageFragment extends ListFragment
 
 	@Override
 	public void onDestroyView() {
-		// TODO Auto-generated method stub
 		super.onDestroyView();
 		
 		setListAdapter(null);
