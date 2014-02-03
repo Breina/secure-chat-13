@@ -9,10 +9,14 @@ import alpha.android.fragments.ContactsFragment;
 import alpha.android.fragments.HomeContentFragment;
 import alpha.android.fragments.MenuFragment;
 import alpha.android.fragments.MessageFragment;
+import alpha.android.fragments.PreferenceListFragment;
+import alpha.android.fragments.PreferenceListFragment.OnPreferenceAttachedListener;
+import alpha.android.fragments.SettingsFragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.preference.PreferenceScreen;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -23,7 +27,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class HomeActivity extends FragmentActivity implements
-		MenuFragment.OnMenuSelectedListener
+		MenuFragment.OnMenuSelectedListener,
+		PreferenceListFragment.OnPreferenceAttachedListener
 {
 	// Managing objects
 	private CameraManager camManager;
@@ -99,12 +104,20 @@ public class HomeActivity extends FragmentActivity implements
 
 			break;
 			
+		case CommonUtilities.MENU_POS_SETTINGS:
+			
+			content = new SettingsFragment();
+			
+			break;
+			
 		case CommonUtilities.MENU_POS_LOGOUT:
 			
 			Intent intent = new Intent(this, MainActivity.class);
 	    	startActivity(intent);
+	    	break;
 
 		default:
+			
 			content = contentFragment;
 		}
 
@@ -226,6 +239,13 @@ public class HomeActivity extends FragmentActivity implements
 			return true;
 		else
 			return false;
+	}
+
+	@Override
+	public void onPreferenceAttached(PreferenceScreen root, int xmlId)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 	/**

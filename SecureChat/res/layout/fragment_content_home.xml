@@ -20,7 +20,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/tv_intro"/>
     
-    <!--  
+    <!-- 
      <TableLayout
          android:id="@+id/tbl_validation"
          android:layout_height="wrap_content"

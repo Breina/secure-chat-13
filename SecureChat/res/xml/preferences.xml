@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="pref_key_cat_1"
+        android:title="Een categorie" >
+        <CheckBoxPreference
+            android:enabled="true"
+            android:key="pref_key_check_box"
+            android:summary="Hij is aan"
+            android:title="Check de box" />
+
+        <Preference android:title="Visit web page" >
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="http://www.example.com" />
+        </Preference>
+    </PreferenceCategory>
+
+</PreferenceScreen>
