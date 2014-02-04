@@ -34,6 +34,8 @@
     <!-- FRAGMENT_CONTENT_OPTIONS -->
     <string name="btn_fix">Fix</string>
     <string name="change_pass">Change pass</string>
+    <string name="tv_allow_camera">Camera allowed</string>
+    <string name="tv_allow_gps">GPS allowed</string>
     
     <!-- FRAGMENT CONTENT CONTACTS -->
     <string name="menu_add">Add new contact</string>    

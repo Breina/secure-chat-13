@@ -215,7 +215,7 @@ public class HomeActivity extends FragmentActivity implements
 
 	public void fixDeviceRegistration(View v)
 	{
-		GoogleCloudMessaging.getInstance(getApplicationContext());
+		GoogleCloudMessaging.getInstance(this);
 		
 		Toast.makeText(getApplicationContext(), "Finished", Toast.LENGTH_SHORT).show();
 	}

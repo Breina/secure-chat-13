@@ -1,124 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tbl_validation"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="7dp" >
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TableLayout
+        android:id="@+id/tbl_validation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="7dp" >
          PLAY SERVICES
 
 
-    <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
-        <TextView
-            android:id="@+id/tv_PlayServices"
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:gravity="center_vertical"
-            android:padding="5dp"
-            android:text="@string/tv_PlayServices"
-            android:textSize="12sp" />
+            <TextView
+                android:id="@+id/tv_PlayServices"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+                android:text="@string/tv_PlayServices"
+                android:textSize="12sp" />
 
-        <Button
-            android:id="@+id/btn_FixPlayServices"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:onClick="fixPlayServices"
-            android:text="@string/btn_fix"
-            android:textSize="12sp" />
-    </TableRow>
+            <Button
+                android:id="@+id/btn_FixPlayServices"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="fixPlayServices"
+                android:text="@string/btn_fix"
+                android:textSize="12sp" />
+        </TableRow>
 
-    <TableRow
-        android:layout_height="1px"
-        android:background="#BDBDBD" >
-
-        <TextView
-            android:layout_width="fill_parent"
+        <TableRow
             android:layout_height="1px"
-            android:layout_span="2"
-            android:gravity="center_vertical"
-            android:text="" />
-    </TableRow>
+            android:background="#BDBDBD" >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_span="2"
+                android:gravity="center_vertical"
+                android:text="" />
+        </TableRow>
     	  GCM SERVICES
 
 
-    <TableRow
-        android:id="@+id/tableRow2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
-        <TextView
-            android:id="@+id/tv_GcmServices"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:gravity="center_vertical"
-            android:padding="5dp"
-            android:text="@string/tv_GcmServices"
-            android:textSize="12sp" />
+            <TextView
+                android:id="@+id/tv_GcmServices"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+                android:text="@string/tv_GcmServices"
+                android:textSize="12sp" />
 
-        <Button
-            android:id="@+id/btn_FixGcmServices"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:onClick="fixGcmServices"
-            android:text="@string/btn_fix"
-            android:textSize="12sp" />
-    </TableRow>
+            <Button
+                android:id="@+id/btn_FixGcmServices"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="fixGcmServices"
+                android:text="@string/btn_fix"
+                android:textSize="12sp" />
+        </TableRow>
 
-    <TableRow
-        android:layout_height="1px"
-        android:background="#BDBDBD" >
-
-        <TextView
-            android:layout_width="fill_parent"
+        <TableRow
             android:layout_height="1px"
-            android:layout_span="2"
-            android:gravity="center_vertical"
-            android:text="" />
-    </TableRow>
+            android:background="#BDBDBD" >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_span="2"
+                android:gravity="center_vertical"
+                android:text="" />
+        </TableRow>
          DEVICE REGISTRATION
 
 
-    <TableRow
-        android:id="@+id/tableRow3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
-        <TextView
-            android:id="@+id/tv_DeviceRegistration"
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:gravity="center_vertical"
-            android:padding="5dp"
-            android:text="@string/tv_DeviceRegistration"
-            android:textSize="12sp" />
+            <TextView
+                android:id="@+id/tv_DeviceRegistration"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+                android:text="@string/tv_DeviceRegistration"
+                android:textSize="12sp" />
 
-        <Button
-            android:id="@+id/btn_fixDeviceRegistration"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:onClick="fixDeviceRegistration"
-            android:text="@string/btn_fix"
-            android:textSize="12sp" />
-    </TableRow>
-    
-    <TableRow>
-        <Button
-            android:id="@+id/btn_changePassword"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:onClick="changePassword"
-            android:text="@string/change_pass"
-            />
-            
+            <Button
+                android:id="@+id/btn_fixDeviceRegistration"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="fixDeviceRegistration"
+                android:text="@string/btn_fix"
+                android:textSize="12sp" />
         </TableRow>
 
-</TableLayout>
+        <TableRow
+            android:layout_height="1px"
+            android:background="#BDBDBD" >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_span="2"
+                android:gravity="center_vertical"
+                android:text="" />
+        </TableRow>
+        
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            <TextView
+                android:id="@+id/tv_allowCamera"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+                android:text="@string/tv_allow_camera"
+                android:textSize="12sp" />
+
+            <CheckBox
+                android:id="@+id/cb_allowCamera"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="" />
+
+        </TableRow>
+        
+        <TableRow
+            android:layout_height="1px"
+            android:background="#BDBDBD" >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:layout_span="2"
+                android:gravity="center_vertical"
+                android:text="" />
+        </TableRow>
+        
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            <TextView
+                android:id="@+id/tv_allowGPS"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+                android:text="@string/tv_allow_gps"
+                android:textSize="12sp" />
+
+            <CheckBox
+                android:id="@+id/cb_allowGPS"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="" />
+
+        </TableRow>
+        
+    </TableLayout>
+
+    <Button
+        android:id="@+id/btn_changePassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="changePassword"
+        android:text="@string/change_pass" />
+
+</LinearLayout>
