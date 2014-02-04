@@ -12,8 +12,8 @@
         android:layout_alignParentTop="true"
         android:layout_marginRight="6dip"
         android:contentDescription="TODO"
-        android:src="@drawable/msn_icon_grey" />
-
+        android:src="@drawable/msn_icon_green" />
+<!-- 
     <TextView
         android:id="@+id/secondLine"
         android:layout_width="fill_parent"
@@ -25,18 +25,19 @@
         android:singleLine="true"
         android:text="Description"
         android:textSize="12sp" />
-
+        
+        android:layout_above="@id/secondLine"
+ -->
     <TextView
         android:id="@+id/firstLine"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/secondLine"
+        android:layout_toRightOf="@id/icon"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
-        android:layout_toRightOf="@id/icon"
         android:gravity="center_vertical"
         android:text=""
-        android:textSize="16sp" />
+        android:textSize="28sp" />
 
 </RelativeLayout> 
