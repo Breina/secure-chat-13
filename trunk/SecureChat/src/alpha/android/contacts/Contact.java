@@ -9,7 +9,7 @@ public class Contact
 {
 	private static final String UNINITVALUE = "ERROR";
 
-	private String name, description;
+	private String name, username;
 	private String gcm_id;
 
 	public Contact(String name, String description)
@@ -17,10 +17,10 @@ public class Contact
 		this(name, description, UNINITVALUE);
 	}
 
-	public Contact(String name, String description, String gcm_id)
+	public Contact(String name, String username, String gcm_id)
 	{
 		this.name = name;
-		this.description = description;
+		this.username = username;
 		this.gcm_id = gcm_id;
 	}
 
@@ -31,7 +31,7 @@ public class Contact
 
 	public String getDescription()
 	{
-		return description;
+		return username;
 	}
 
 	public String getGcm_id()
@@ -46,7 +46,7 @@ public class Contact
 
 	public void setDescription(String description)
 	{
-		this.description = description;
+		this.username = description;
 	}
 
 	public void setGcm_id(String gcm_id)

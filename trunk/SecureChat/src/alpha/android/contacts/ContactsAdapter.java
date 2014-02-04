@@ -47,14 +47,12 @@ public class ContactsAdapter extends BaseAdapter
 					R.layout.contact_row, parent, false);
 			
 			holder.name = (TextView) convertView.findViewById(R.id.firstLine);
-			holder.description = (TextView) convertView.findViewById(R.id.secondLine);
 			convertView.setTag(holder);
 		}
 		else
 			holder = (ViewHolder) convertView.getTag();
 
 		holder.name.setText(contact.getName());
-		holder.description.setText(contact.getDescription());
 		
 		return convertView;
 		
@@ -76,7 +74,6 @@ public class ContactsAdapter extends BaseAdapter
 	private static class ViewHolder
 	{
 		TextView name;
-		TextView description;
 	}
 
 	@Override

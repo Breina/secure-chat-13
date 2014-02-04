@@ -36,6 +36,7 @@
     <string name="change_pass">Change pass</string>
     
     <!-- FRAGMENT CONTENT CONTACTS -->
+    <string name="menu_add">Add new contact</string>
     <string name="menu_start_chat">Send message</string>
     <string name="menu_delete">Delete contact</string>
     

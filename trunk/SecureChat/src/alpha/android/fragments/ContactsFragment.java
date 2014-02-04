@@ -78,9 +78,9 @@ public class ContactsFragment extends ListFragment {
 			Bundle savedInstanceState)
 	{
 		ArrayList<Contact> contacts = new ArrayList<Contact>();
-		contacts.add(new Contact("Tjeu", "is number 1"));
-		contacts.add(new Contact("Brecht", "is number 2"));
-		contacts.add(new Contact("Jan", "number 3"));
+		contacts.add(new Contact("Tjeu", "beheerder"));
+		contacts.add(new Contact("Brecht", "cxgamer"));
+		contacts.add(new Contact("Jan", "chickensl4y3r"));
 		
 		setListAdapter(new ContactsAdapter(getActivity(), contacts));
 		
