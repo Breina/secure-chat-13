@@ -3,19 +3,75 @@ package alpha.android.fragments;
 import java.util.ArrayList;
 
 import alpha.android.R;
-import alpha.android.common.CommonUtilities;
 import alpha.android.contacts.Contact;
 import alpha.android.contacts.ContactsAdapter;
-import android.support.v4.app.ListFragment;
+import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.app.ListFragment;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 public class ContactsFragment extends ListFragment {
+	
+	private Contact lastSelectedContact;
+	private MenuItem menuStartChat, menuDelete;
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState)
+	{
+		super.onActivityCreated(savedInstanceState);
+		
+		setHasOptionsMenu(true);
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+	{
+		super.onCreateOptionsMenu(menu, inflater);
+		
+		inflater.inflate(R.menu.contacts, menu);
+		
+	}
+	
+	@Override
+	public void onPrepareOptionsMenu(Menu menu)
+	{
+		super.onPrepareOptionsMenu(menu);
+		
+		menuStartChat = menu.findItem(R.id.start_chat);
+		menuDelete = menu.findItem(R.id.delete);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		
+		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id)
+	{
+		super.onListItemClick(l, v, position, id);
+		
+		lastSelectedContact = (Contact) l.getItemAtPosition(position);
+		
+		menuStartChat.setTitle("Chat with " + lastSelectedContact.getName());
+		menuDelete.setTitle("Delete " + lastSelectedContact.getName());
+		
+		getActivity().openOptionsMenu();
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -24,13 +80,9 @@ public class ContactsFragment extends ListFragment {
 		ArrayList<Contact> contacts = new ArrayList<Contact>();
 		contacts.add(new Contact("Tjeu", "is number 1"));
 		contacts.add(new Contact("Brecht", "is number 2"));
-		contacts.add(new Contact("And we have also", "number 3"));
-		/*
-		Toast.makeText(getActivity(), String.valueOf(contacts.get(0).obtainGcmId()), Toast.LENGTH_LONG).show();
-		Log.i(CommonUtilities.TAG, "HOEREN   !!!!!!! " + String.valueOf(contacts.get(0).obtainGcmId()));*/
+		contacts.add(new Contact("Jan", "number 3"));
 		
 		setListAdapter(new ContactsAdapter(getActivity(), contacts));
-		//setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.contact_row, values));		
 		
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
