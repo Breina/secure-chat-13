@@ -119,8 +119,8 @@ public class HomeActivity extends FragmentActivity implements
 
 		case CommonUtilities.MENU_POS_LOGOUT:
 
-			Intent intent = new Intent(this, MainActivity.class);
-			startActivity(intent);
+			Toast.makeText(getApplicationContext(), "Successfully logged out", Toast.LENGTH_LONG).show();
+			finish();
 
 			break;
 

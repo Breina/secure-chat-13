@@ -36,10 +36,7 @@
     <string name="change_pass">Change pass</string>
     
     <!-- FRAGMENT CONTENT CONTACTS -->
-    <string name="menu_add">Add new contact</string>
-    <string name="menu_start_chat">Send message</string>
-    <string name="menu_delete">Delete contact</string>
-    
+    <string name="menu_add">Add new contact</string>    
     
     <!-- FRAGMENT_CONTENT_GCM -->
     <string name="msg_welcome">Welcome home. You can enter your message below:</string>
@@ -95,14 +92,16 @@
     <string name="pref_new_gcm_id_title">Use new GCM_ID every login</string>
     <string name="pref_new_gcm_id_desc">WARNING: Others having you as contact will lose their functionality!</string>
     
-    <string name="pref_remember">Remember</string>
-    <string name="pref_remember_username">Username</string>
-    <string name="pref_remember_password">Password</string>
-    
     <string name="pref_store_gallery_title">Galery storage</string>
     <string name="pref_store_gallery_desc">Store taken photos in Gallery</string>
     
     <string name="pref_store_location_title">Location storage</string>
     <string name="pref_store_location_desc">Store marked locations internally</string>
+    
+    <string name="pref_remember">Remember</string>
+    <string name="pref_remember_username">Username</string>
+    <string name="pref_remember_password">Password</string>
+    
+
 
 </resources>
