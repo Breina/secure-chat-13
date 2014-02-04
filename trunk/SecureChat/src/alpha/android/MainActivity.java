@@ -26,7 +26,7 @@ public class MainActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        navigateHome("bypassman");
+        //navigateHome("bypassman");
     }
 
 	
@@ -120,4 +120,15 @@ public class MainActivity extends FragmentActivity
     	     }
     	  }
     	}
+    
+    public void bypassLogin(View v) {
+    	
+    	EditText edUserName = (EditText) findViewById(R.id.edLogin);
+    	String username = edUserName.getText().toString();
+    	
+    	if (username.equals(""))
+    		username = "Bypasser";
+    	
+    	navigateHome(username);    	
+    }
 }
