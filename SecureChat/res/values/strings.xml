@@ -26,13 +26,14 @@
     <string name="tv_PlayServices">Google Play Services</string>
     <string name="tv_GcmServices">Google Cloud Messaging</string>
     <string name="tv_DeviceRegistration">Device registration</string>
-    <string name="btn_fix">Fix</string>
     <string name="tv_shortcut">shorcut to action</string>
     <string name="btn_shortcut">GO</string>
     <string name="tv_newShortcut"> ... add new shortcut</string>
     <string name="btn_newShortcut">+</string>
     
-    
+    <!-- FRAGMENT_CONTENT_OPTIONS -->
+    <string name="btn_fix">Fix</string>
+    <string name="change_pass">Change pass</string>
     
     
     <!-- FRAGMENT_CONTENT_GCM -->

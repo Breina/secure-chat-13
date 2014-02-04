@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 
-public class SettingsFragment extends PreferenceListFragment implements
+public class PrefsFragment extends PreferenceListFragment implements
 		SharedPreferences.OnSharedPreferenceChangeListener
 {
 	public static final String SHARED_PREFS_NAME = "settings";
