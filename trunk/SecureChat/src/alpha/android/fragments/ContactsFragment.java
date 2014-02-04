@@ -22,57 +22,72 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class ContactsFragment extends ListFragment {
-	
+public class ContactsFragment extends ListFragment
+{
+
+	private boolean contactSelected;
 	private Contact lastSelectedContact;
 	private MenuItem menuStartChat, menuDelete;
-	
+
+	public ContactsFragment()
+	{
+		contactSelected = false;
+	}
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState)
 	{
 		super.onActivityCreated(savedInstanceState);
-		
+
 		setHasOptionsMenu(true);
 	}
-	
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
 		super.onCreateOptionsMenu(menu, inflater);
-		
+
 		inflater.inflate(R.menu.contacts, menu);
-		
+
 	}
-	
+
 	@Override
 	public void onPrepareOptionsMenu(Menu menu)
 	{
 		super.onPrepareOptionsMenu(menu);
-		
+
 		menuStartChat = menu.findItem(R.id.start_chat);
 		menuDelete = menu.findItem(R.id.delete);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		
+
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id)
 	{
 		super.onListItemClick(l, v, position, id);
-		
+
 		lastSelectedContact = (Contact) l.getItemAtPosition(position);
-		
+
 		menuStartChat.setTitle("Chat with " + lastSelectedContact.getName());
 		menuDelete.setTitle("Delete " + lastSelectedContact.getName());
-		
+
+		if (!contactSelected)
+		{
+			menuStartChat.setVisible(true);
+			menuDelete.setVisible(true);
+
+			contactSelected = true;
+		}
+
 		getActivity().openOptionsMenu();
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
@@ -81,25 +96,26 @@ public class ContactsFragment extends ListFragment {
 		contacts.add(new Contact("Tjeu", "beheerder"));
 		contacts.add(new Contact("Brecht", "cxgamer"));
 		contacts.add(new Contact("Jan", "chickensl4y3r"));
-		
+
 		setListAdapter(new ContactsAdapter(getActivity(), contacts));
-		
+
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
-	
+
 	@Override
-	public void onStart() {
+	public void onStart()
+	{
 		super.onStart();
-		
-		 if (getFragmentManager().findFragmentById(R.id.content_fragment) != null)
-	        	getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+		if (getFragmentManager().findFragmentById(R.id.content_fragment) != null)
+			getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 	}
 
 	@Override
 	public void onDestroyView()
 	{
 		super.onDestroyView();
-		
+
 		setListAdapter(null);
 	}
 }
