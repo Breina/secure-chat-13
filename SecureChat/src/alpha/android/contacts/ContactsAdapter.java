@@ -54,7 +54,7 @@ public class ContactsAdapter extends BaseAdapter
 			holder = (ViewHolder) convertView.getTag();
 
 		holder.name.setText(contact.getName());
-		holder.name.setText(contact.getDescription());
+		holder.description.setText(contact.getDescription());
 		
 		return convertView;
 		
