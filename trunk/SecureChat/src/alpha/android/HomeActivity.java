@@ -9,9 +9,10 @@ import alpha.android.fragments.ContactsFragment;
 import alpha.android.fragments.HomeContentFragment;
 import alpha.android.fragments.MenuFragment;
 import alpha.android.fragments.MessageFragment;
+import alpha.android.fragments.OptionsFragment;
 import alpha.android.fragments.PreferenceListFragment;
 import alpha.android.fragments.PreferenceListFragment.OnPreferenceAttachedListener;
-import alpha.android.fragments.SettingsFragment;
+import alpha.android.fragments.PrefsFragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -104,9 +105,15 @@ public class HomeActivity extends FragmentActivity implements
 
 			break;
 			
-		case CommonUtilities.MENU_POS_SETTINGS:
+		case CommonUtilities.MENU_POS_PREFS:
 			
-			content = new SettingsFragment();
+			content = new PrefsFragment();
+			
+			break;
+			
+		case CommonUtilities.MENU_POS_OPTIONS:
+			
+			content = new OptionsFragment();
 			
 			break;
 			

@@ -14,7 +14,8 @@ public final class CommonUtilities
         "Chat",
         "Camera",
         "Location",
-        "Settings",
+        "Prefs",
+        "Options",
         "Logout"
     };
     
@@ -23,8 +24,9 @@ public final class CommonUtilities
     public static final int MENU_POS_CHAT = 2;
     public static final int MENU_POS_CAMERA = 3;
     public static final int MENU_POS_LOCATION = 4;
-    public static final int MENU_POS_SETTINGS = 5;
-    public static final int MENU_POS_LOGOUT = 6;
+    public static final int MENU_POS_PREFS = 5;
+    public static final int MENU_POS_OPTIONS = 6;
+    public static final int MENU_POS_LOGOUT = 7;
     
     
     // Web Service + DB data
