@@ -37,7 +37,7 @@ public class HomeActivity extends FragmentActivity implements
 	// Fragment objects
 	private MenuFragment menuFragment;
 	private HomeContentFragment contentFragment;
-	private Bundle menuItemsBundle;	
+	private Bundle menuItemsBundle;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -104,41 +104,42 @@ public class HomeActivity extends FragmentActivity implements
 			content = new MessageFragment();
 
 			break;
-			
+
 		case CommonUtilities.MENU_POS_PREFS:
-			
+
 			content = new PrefsFragment();
-			
+
 			break;
-			
+
 		case CommonUtilities.MENU_POS_OPTIONS:
-			
+
 			content = new OptionsFragment();
-			
+
 			break;
-			
+
 		case CommonUtilities.MENU_POS_LOGOUT:
-			
-			
+
+			Intent intent = new Intent(this, MainActivity.class);
+			startActivity(intent);
+
 			break;
 
 		default:
-			
+
 			content = contentFragment;
 		}
 
 		// Check if there was previous content -> replace , else -> add
-		if (getSupportFragmentManager().findFragmentById(
-				R.id.contentFragment_container_main) != null)
-
-			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.contentFragment_container_main, content)
-					.commit();
-
-		else
-
-			getSupportFragmentManager().beginTransaction()
-					.add(R.id.contentFragment_container_main, content).commit();
+		if (content != null)
+			if (getSupportFragmentManager().findFragmentById(
+					R.id.contentFragment_container_main) != null)
+				getSupportFragmentManager().beginTransaction()
+						.replace(R.id.contentFragment_container_main, content)
+						.commit();
+			else
+				getSupportFragmentManager().beginTransaction()
+						.add(R.id.contentFragment_container_main, content)
+						.commit();
 	}
 
 	// Handle Activity Result (Camera, )
@@ -251,7 +252,7 @@ public class HomeActivity extends FragmentActivity implements
 	public void onPreferenceAttached(PreferenceScreen root, int xmlId)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
