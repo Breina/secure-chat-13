@@ -2,19 +2,22 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceCategory
-        android:key="pref_key_cat_1"
-        android:title="Een categorie" >
+        android:key="pref_key_privary"
+        android:title="@string/pref_privary" >
+        
         <CheckBoxPreference
             android:enabled="true"
-            android:key="pref_key_check_box"
-            android:summary="Hij is aan"
-            android:title="Check de box" />
+            android:key="pref_key_new_gcm_id"
+            android:summary="@string/pref_new_gcm_id_desc"
+            android:title="@string/pref_new_gcm_id_title" />
+        <CheckBoxPreference android:summary="@string/pref_store_gallery_desc" android:title="@string/pref_store_gallery_title" android:key="pref_key_store_gallery"/>
+        <CheckBoxPreference android:summary="@string/pref_store_location_desc" android:title="@string/pref_store_location_title" android:key="pref_key_store_location"/>
 
-        <Preference android:title="Visit web page" >
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="http://www.example.com" />
-        </Preference>
+        
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_remember" android:key="pref_key_remember">
+        <CheckBoxPreference android:title="@string/pref_remember_username" android:key="pref_key_remember_username"/>
+        <CheckBoxPreference android:title="@string/pref_remember_password" android:key="pref_key_remember_password"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

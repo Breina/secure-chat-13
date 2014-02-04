@@ -89,5 +89,20 @@
     <string name="title_activity_camera">CameraActivity</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_activity_register">RegisterActivity</string>
+    
+    <!-- Preferences -->
+    <string name="pref_privary">Privary</string>
+    <string name="pref_new_gcm_id_title">Use new GCM_ID every login</string>
+    <string name="pref_new_gcm_id_desc">WARNING: Others having you as contact will lose their functionality!</string>
+    
+    <string name="pref_remember">Remember</string>
+    <string name="pref_remember_username">Username</string>
+    <string name="pref_remember_password">Password</string>
+    
+    <string name="pref_store_gallery_title">Galery storage</string>
+    <string name="pref_store_gallery_desc">Store taken photos in Gallery</string>
+    
+    <string name="pref_store_location_title">Location storage</string>
+    <string name="pref_store_location_desc">Store marked locations internally</string>
 
 </resources>
