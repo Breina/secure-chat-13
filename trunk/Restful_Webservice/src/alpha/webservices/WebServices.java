@@ -13,6 +13,7 @@ import com.google.android.gcm.server.Sender;
 
 import alpha.controller.LoginHandler;
 import alpha.controller.RegistrationHandler;
+import alpha.webservices.jaxbeans.CheckGcmBean;
 import alpha.webservices.jaxbeans.LoginBean;
 import alpha.webservices.jaxbeans.RegistrationBean;
 
@@ -137,25 +138,29 @@ public class WebServices
 	}
 	
 	
-	//	PERHAPS FOR LATER USAGE:
-	//	
-	//	CHECKS WHETHER THE ENTERED USER HAS ALREADY AN ENTRY FOR A GCM REGISTRATION ID IN THE DB
-	//	@POST
-	//	@Path("/checkgcm")
-	//	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	//	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	//	public String checkgcm(final String username)
-	//	{
-	//	    try
-	//	    {
-	//	        return new LoginHandler().checkForGcmRegistration(username);
-	//		}
-	//		catch (Exception e)
-	//		{
-	//			e.printStackTrace();
-	//			System.out.println(" * LoginService failed with error:   " + e.getMessage().toString());
-	//		}
-	//	    
-	//	    return null;
-	//	}
+		
+		/**
+		 * CHECKS WHETHER THE ENTERED USER HAS ALREADY AN ENTRY FOR A GCM REGISTRATION ID IN THE DB
+		 * 
+		 * @param username entered user
+		 * @return result
+		 */
+		@PUT
+		@Path("/checkgcm")
+		@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+		@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+		public String checkgcm(final CheckGcmBean gcmBean)
+		{
+		    try
+		    {
+		        return new LoginHandler().checkForGcmRegistration(gcmBean.username);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				System.out.println(" * LoginService failed with error:   " + e.getMessage().toString());
+			}
+		    
+		    return null;
+		}
 }
