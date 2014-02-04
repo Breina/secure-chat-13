@@ -105,7 +105,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:onClick="fixPlayServices"
+            android:onClick="fixDeviceRegistration"
             android:text="@string/btn_fix"
             android:textSize="12sp" />
     </TableRow>

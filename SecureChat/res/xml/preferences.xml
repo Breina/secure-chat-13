@@ -2,8 +2,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceCategory
-        android:key="pref_key_privary"
-        android:title="@string/pref_privary" >
+        android:key="pref_key_privacy"
+        android:title="@string/pref_privacy" >
         
         <CheckBoxPreference
             android:enabled="true"
@@ -15,9 +15,8 @@
 
         
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/pref_remember" android:key="pref_key_remember">
-        <CheckBoxPreference android:title="@string/pref_remember_username" android:key="pref_key_remember_username"/>
-        <CheckBoxPreference android:title="@string/pref_remember_password" android:key="pref_key_remember_password"/>
-    </PreferenceCategory>
+    
+    <PreferenceCategory android:title="@string/pref_remember" android:key="pref_key_remember"><CheckBoxPreference android:title="@string/pref_remember_username" android:key="pref_key_remember_username" /></PreferenceCategory>
+    
 
 </PreferenceScreen>

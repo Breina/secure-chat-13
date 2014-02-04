@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+
 import alpha.android.common.CommonUtilities;
 import alpha.android.fragments.ContactsFragment;
 import alpha.android.fragments.HomeContentFragment;
@@ -190,6 +193,40 @@ public class HomeActivity extends FragmentActivity implements
 					"Failed receiving image onActivityResult");
 		}
 	}
+	
+	public void fixPlayServices(View v) {
+		checkPlayServices();
+	}
+	
+	public void fixGcmServices(View v) {
+		
+	}
+	
+	public void fixDeviceRegistration(View v) {
+		
+	}
+	
+	private boolean checkPlayServices()
+    {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        
+        if (resultCode != ConnectionResult.SUCCESS)
+        {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode))
+            {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this, CommonUtilities.PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            }
+            else
+            {
+                Log.i(CommonUtilities.TAG, "This device is not supported.");
+                
+            }
+            
+            return false;
+        }
+        
+        return true;
+    }
 
 	// Handles click-event of the 'Take a picture'-button in the
 	// fragment_content_camera
