@@ -3,9 +3,7 @@ package alpha.android;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
+import java.util.Locale;
 
 import alpha.android.common.CommonUtilities;
 import alpha.android.fragments.ContactsFragment;
@@ -14,7 +12,6 @@ import alpha.android.fragments.MenuFragment;
 import alpha.android.fragments.MessageFragment;
 import alpha.android.fragments.OptionsFragment;
 import alpha.android.fragments.PreferenceListFragment;
-import alpha.android.fragments.PreferenceListFragment.OnPreferenceAttachedListener;
 import alpha.android.fragments.PrefsFragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -27,8 +24,12 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public class HomeActivity extends FragmentActivity implements
 		MenuFragment.OnMenuSelectedListener,
@@ -122,7 +123,8 @@ public class HomeActivity extends FragmentActivity implements
 
 		case CommonUtilities.MENU_POS_LOGOUT:
 
-			Toast.makeText(getApplicationContext(), "Successfully logged out", Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), "Successfully logged out",
+					Toast.LENGTH_LONG).show();
 			finish();
 
 			break;
@@ -193,40 +195,55 @@ public class HomeActivity extends FragmentActivity implements
 					"Failed receiving image onActivityResult");
 		}
 	}
-	
-	public void fixPlayServices(View v) {
-		checkPlayServices();
+
+	public void fixPlayServices(View v)
+	{
+		String text;
+		
+		if (checkPlayServices())
+			text = "Success";
+		else
+			text = "Failure";
+		
+		Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
 	}
-	
-	public void fixGcmServices(View v) {
+
+	public void fixGcmServices(View v)
+	{
 		
 	}
-	
-	public void fixDeviceRegistration(View v) {
+
+	public void fixDeviceRegistration(View v)
+	{
+		GoogleCloudMessaging.getInstance(getApplicationContext());
 		
+		Toast.makeText(getApplicationContext(), "Finished", Toast.LENGTH_SHORT).show();
 	}
-	
+
 	private boolean checkPlayServices()
-    {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        
-        if (resultCode != ConnectionResult.SUCCESS)
-        {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode))
-            {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this, CommonUtilities.PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            }
-            else
-            {
-                Log.i(CommonUtilities.TAG, "This device is not supported.");
-                
-            }
-            
-            return false;
-        }
-        
-        return true;
-    }
+	{
+		int resultCode = GooglePlayServicesUtil
+				.isGooglePlayServicesAvailable(this);
+
+		if (resultCode != ConnectionResult.SUCCESS)
+		{
+			if (GooglePlayServicesUtil.isUserRecoverableError(resultCode))
+			{
+				GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+						CommonUtilities.PLAY_SERVICES_RESOLUTION_REQUEST)
+						.show();
+			}
+			else
+			{
+				Log.i(CommonUtilities.TAG, "This device is not supported.");
+
+			}
+
+			return false;
+		}
+
+		return true;
+	}
 
 	// Handles click-event of the 'Take a picture'-button in the
 	// fragment_content_camera

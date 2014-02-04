@@ -129,6 +129,6 @@ public class MainActivity extends FragmentActivity
     	if (username.equals(""))
     		username = "Bypasser";
     	
-    	navigateHome(username);    	
+    	navigateHome(username);
     }
 }
