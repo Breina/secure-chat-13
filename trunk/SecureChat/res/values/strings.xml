@@ -35,6 +35,10 @@
     <string name="btn_fix">Fix</string>
     <string name="change_pass">Change pass</string>
     
+    <!-- FRAGMENT CONTENT CONTACTS -->
+    <string name="menu_start_chat">Send message</string>
+    <string name="menu_delete">Delete contact</string>
+    
     
     <!-- FRAGMENT_CONTENT_GCM -->
     <string name="msg_welcome">Welcome home. You can enter your message below:</string>

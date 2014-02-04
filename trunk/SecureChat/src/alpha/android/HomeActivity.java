@@ -37,7 +37,7 @@ public class HomeActivity extends FragmentActivity implements
 	// Fragment objects
 	private MenuFragment menuFragment;
 	private HomeContentFragment contentFragment;
-	private Bundle menuItemsBundle;
+	private Bundle menuItemsBundle;	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
