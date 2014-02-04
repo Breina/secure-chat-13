@@ -119,9 +119,8 @@ public class HomeActivity extends FragmentActivity implements
 			
 		case CommonUtilities.MENU_POS_LOGOUT:
 			
-			Intent intent = new Intent(this, MainActivity.class);
-	    	startActivity(intent);
-	    	break;
+			
+			break;
 
 		default:
 			

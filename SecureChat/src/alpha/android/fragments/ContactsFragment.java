@@ -25,9 +25,9 @@ public class ContactsFragment extends ListFragment {
 		contacts.add(new Contact("Tjeu", "is number 1"));
 		contacts.add(new Contact("Brecht", "is number 2"));
 		contacts.add(new Contact("And we have also", "number 3"));
-		
+		/*
 		Toast.makeText(getActivity(), String.valueOf(contacts.get(0).obtainGcmId()), Toast.LENGTH_LONG).show();
-		Log.i(CommonUtilities.TAG, "HOEREN   !!!!!!! " + String.valueOf(contacts.get(0).obtainGcmId()));
+		Log.i(CommonUtilities.TAG, "HOEREN   !!!!!!! " + String.valueOf(contacts.get(0).obtainGcmId()));*/
 		
 		setListAdapter(new ContactsAdapter(getActivity(), contacts));
 		//setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.contact_row, values));		
