@@ -79,7 +79,9 @@ public class LoginHandler
 			
 			// Check if successfull and if one, return corresponding gcm registration ID
 			if (rs.next())
-				return rs.getString(3);
+			{
+				return rs.getString(4);
+			}
 			else
 				return "fail";
 			
