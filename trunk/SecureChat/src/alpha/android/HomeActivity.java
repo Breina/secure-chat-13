@@ -13,6 +13,7 @@ import alpha.android.fragments.MessageFragment;
 import alpha.android.fragments.OptionsFragment;
 import alpha.android.fragments.PreferenceListFragment;
 import alpha.android.fragments.PrefsFragment;
+import alpha.android.gcm.GcmManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -33,11 +34,13 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public class HomeActivity extends FragmentActivity implements
 		MenuFragment.OnMenuSelectedListener,
-		PreferenceListFragment.OnPreferenceAttachedListener
+		PreferenceListFragment.OnPreferenceAttachedListener,
+		GcmManager.GcmDataConnection
 {
 	// Managing objects
 	private CameraManager camManager;
-
+	private GcmManager gcmManager;
+	
 	// Fragment objects
 	private MenuFragment menuFragment;
 	private HomeContentFragment contentFragment;
@@ -65,7 +68,9 @@ public class HomeActivity extends FragmentActivity implements
 		contentFragment = new HomeContentFragment();
 		menuItemsBundle.putInt("menuIndex", 0);
 		contentFragment.setArguments(menuItemsBundle);
-
+		
+		gcmManager = new GcmManager(this);
+		
 		// Add the menuFragment and contentFragment to its FrameLayouts
 		getSupportFragmentManager().beginTransaction()
 				.add(R.id.menuFragment_container_main, menuFragment).commit();
@@ -210,14 +215,14 @@ public class HomeActivity extends FragmentActivity implements
 
 	public void fixGcmServices(View v)
 	{
-		
+		GoogleCloudMessaging.getInstance(getApplicationContext());
 	}
 
 	public void fixDeviceRegistration(View v)
 	{
-		GoogleCloudMessaging.getInstance(this);
+		String result = gcmManager.registerInBackground();
 		
-		Toast.makeText(getApplicationContext(), "Finished", Toast.LENGTH_SHORT).show();
+		Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
 	}
 
 	private boolean checkPlayServices()
@@ -307,6 +312,12 @@ public class HomeActivity extends FragmentActivity implements
 	{
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void registrationResponse(String result)
+	{
+		Toast.makeText(getApplicationContext(), "Printing result: " + result, Toast.LENGTH_LONG).show();
 	}
 
 	/**

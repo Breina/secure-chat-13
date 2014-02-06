@@ -114,14 +114,14 @@ public class WebserviceManager extends AsyncTask<String, Void, String>
 		catch(Exception e)
 		{
 			e.printStackTrace();
-            Log.i(CommonUtilities.TAG, "Error in WebserviceManager of type:   " + e.getMessage().toString());
+            Log.i(CommonUtilities.TAG, "General error in WebserviceManager while putting the request");
         }
 		
-		System.out.println("Printing Request and Response-Objects: \n" +
-						   " * Request-object:   " + put.toString() + " at URI " +
-		   				   put.getURI().toString() + "\n" +
-		   				   " * Response-object:  " + response.toString() + " with params " +
-		   				   response.getParams().toString());
+		Log.i(CommonUtilities.TAG, "Printing Request and Response-Objects: \n" +
+						           " * Request-object:   " + put.toString() + " at URI " +
+		   				           put.getURI().toString() + "\n" +
+		   				           " * Response-object:  " + response.toString() + " with params " +
+		   				           response.getParams().toString());
 		
 		return null;
 	}

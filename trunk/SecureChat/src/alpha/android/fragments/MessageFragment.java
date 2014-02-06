@@ -3,7 +3,7 @@ package alpha.android.fragments;
 import java.util.ArrayList;
 
 import alpha.android.R;
-import alpha.android.speechbubble.AwesomeAdapter;
+import alpha.android.speechbubble.ListviewAdapter;
 import alpha.android.speechbubble.Message;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -27,9 +27,9 @@ public class MessageFragment extends ListFragment
 		messages.add(new Message("Hello", false));
 		messages.add(new Message("Hi!", true));
 		messages.add(new Message("Wassup??", false));
-		messages.add(new Message("nothing much, working on speech bubbles.", true));
-		messages.add(new Message("shit's going goooood.", true));
-		messages.add(new Message("allright!! That means it's time to blaze a big fat joint!.", true));
+		messages.add(new Message("Nothing much, working on speech bubbles.", true));
+		messages.add(new Message("It's going goooood.", true));
+		messages.add(new Message("Allright!", false));
 
 
 	}
@@ -41,7 +41,7 @@ public class MessageFragment extends ListFragment
 			footerView = inflater.inflate(R.layout.sms_footer, null);
 			
 			// ADAPTER
-			setListAdapter(new AwesomeAdapter(getActivity(), messages));
+			setListAdapter(new ListviewAdapter(getActivity(), messages));
 
 	        return super.onCreateView(inflater, container, savedInstanceState);
 	 }
