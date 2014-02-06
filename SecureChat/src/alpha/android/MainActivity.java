@@ -26,7 +26,7 @@ public class MainActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        //navigateHome("bypassman");
+        ///navigateHome("bypassman");
     }
 
 	
@@ -119,8 +119,45 @@ public class MainActivity extends FragmentActivity
 	        	 edUserName.setText(username);
     	     }
     	  }
-    	}
+    }
     
+	
+	// TESTING WEBSERVICE FUNCTION FOR BRECHT
+//	public void testGcmId(View view)
+//	{
+//    	// Get the entered data EditText's and extract the data
+//    	EditText edUserName = (EditText) findViewById(R.id.edLogin);
+//    	String username = edUserName.getText().toString();
+//    	
+//    	Log.i("TESTT", username + " was found ");
+//    	
+//    	String[] columnNames = {"username"};
+//    	String[] columnValues = {username};
+//    	
+//		try
+//		{
+//			final String result = new WebserviceManager(CommonUtilities.REST_CHECK_GCM, columnNames).execute(columnValues).get();
+//			
+//			Toast.makeText(this, "Printing result for Brecht:   " + result, Toast.LENGTH_LONG).show();
+//		}
+//		catch (InterruptedException e)
+//		{
+//			e.printStackTrace();
+//			Log.i(CommonUtilities.TAG, "InterruptedException thrown from MainActivity with cause " + e.getCause());
+//		}
+//    	catch (ExecutionException e)
+//    	{
+//			e.printStackTrace();
+//			Log.i(CommonUtilities.TAG, "ExecutionException thrown from MainActivity with cause " + e.getCause());
+//		}
+//    	catch (Exception e)
+//    	{
+//    		e.printStackTrace();
+//			Log.i(CommonUtilities.TAG, "Error in MainActivity of type:   " + e.getMessage().toString() +
+//									   "with cause " + e.getCause());
+//    	}
+//	}
+	
     public void bypassLogin(View v) {
     	
     	EditText edUserName = (EditText) findViewById(R.id.edLogin);
@@ -131,4 +168,5 @@ public class MainActivity extends FragmentActivity
     	
     	navigateHome(username);
     }
+	
 }

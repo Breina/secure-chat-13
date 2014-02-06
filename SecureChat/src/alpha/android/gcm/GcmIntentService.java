@@ -21,6 +21,8 @@ public class GcmIntentService extends GCMBaseIntentService
     public GcmIntentService()
     {
         super(CommonUtilities.SENDER_ID);
+        
+        Log.i(CommonUtilities.TAG, "ENTERED GCMINTENTSERVICE");
     }
     
 
@@ -51,7 +53,10 @@ public class GcmIntentService extends GCMBaseIntentService
 //        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 //    }
 
-
+    
+    /**
+     * Method called on Receiving a new message from GCM server
+     **/
 	@Override
 	protected void onMessage(Context ctx, Intent intent)
 	{
@@ -59,6 +64,7 @@ public class GcmIntentService extends GCMBaseIntentService
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
         String messageType = gcm.getMessageType(intent);
 
+        Log.i(CommonUtilities.TAG, "ENTERED ONMESSAGE IN GCMINTENTSERVICE");
         
         if (!extras.isEmpty())
         {
