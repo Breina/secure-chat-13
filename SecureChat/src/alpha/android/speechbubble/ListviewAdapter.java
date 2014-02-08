@@ -48,7 +48,7 @@ public class ListviewAdapter extends BaseAdapter
 		if(convertView == null)
 		{
 			holder = new ViewHolder();
-			convertView = LayoutInflater.from(appContext).inflate(R.layout.sms_row, parent, false);
+			convertView = LayoutInflater.from(appContext).inflate(R.layout.list_chat_row, parent, false);
 			holder.message = (TextView) convertView.findViewById(R.id.message_text);
 			convertView.setTag(holder);
 		}

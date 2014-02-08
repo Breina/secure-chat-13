@@ -38,7 +38,7 @@ public class MessageFragment extends ListFragment
 	            Bundle savedInstanceState)
 	 {
 	        // FOOTER
-			footerView = inflater.inflate(R.layout.sms_footer, null);
+			footerView = inflater.inflate(R.layout.list_chat_footer, null);
 			
 			// ADAPTER
 			setListAdapter(new ListviewAdapter(getActivity(), messages));

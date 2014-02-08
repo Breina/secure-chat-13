@@ -3,29 +3,37 @@ package alpha.android;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Locale;
 
 import alpha.android.common.CommonUtilities;
+import alpha.android.fragments.CameraFragment;
 import alpha.android.fragments.ContactsFragment;
-import alpha.android.fragments.HomeContentFragment;
+import alpha.android.fragments.HomeFragment;
 import alpha.android.fragments.MenuFragment;
 import alpha.android.fragments.MessageFragment;
 import alpha.android.fragments.OptionsFragment;
 import alpha.android.fragments.PreferenceListFragment;
 import alpha.android.fragments.PrefsFragment;
 import alpha.android.gcm.GcmManager;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceScreen;
 import android.provider.MediaStore;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -41,46 +49,92 @@ public class HomeActivity extends FragmentActivity implements
 	private CameraManager camManager;
 	private GcmManager gcmManager;
 	
-	// Fragment objects
-	private MenuFragment menuFragment;
-	private HomeContentFragment contentFragment;
-	private Bundle menuItemsBundle;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
 
+    
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.fragmentcontainer_activity_home);
+		setContentView(R.layout.fragment_container_home);
 
-		// Restore from previous state if possible
-		// if (savedInstanceState != null)
-		// return;
+		// Get Drawer's Layout and List
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-		// Create a new MenuFragment instance with a bundle containing the
-		// menu-items that need to be inflated
-		menuItemsBundle = new Bundle();
-		menuItemsBundle.putStringArray("menu_items",
-				CommonUtilities.MENU_ITEMS_HOME);
-		menuFragment = new MenuFragment();
-		menuFragment.setArguments(menuItemsBundle);
+        // Set up the drawer's list view with items and click listener
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.list_navigation_drawer_row, CommonUtilities.MENU_ITEMS_HOME));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* HomeActivity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
+                R.string.drawer_open,  /* "open drawer" description */
+                R.string.drawer_close  /* "close drawer" description */
+                ) {
 
-		// Create a new ContentFragment with index 0: HOME
-		contentFragment = new HomeContentFragment();
-		menuItemsBundle.putInt("menuIndex", 0);
-		contentFragment.setArguments(menuItemsBundle);
-		
-		gcmManager = new GcmManager(this);
-		
-		// Add the menuFragment and contentFragment to its FrameLayouts
-		getSupportFragmentManager().beginTransaction()
-				.add(R.id.menuFragment_container_main, menuFragment).commit();
-		getSupportFragmentManager().beginTransaction()
-				.add(R.id.contentFragment_container_main, contentFragment)
-				.commit();
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                getActionBar().setTitle(R.string.drawer_open);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
 
-		// Add name of logged in user to welcome message
-		updateWelcomeMessage(getIntent().getStringExtra("username"));
-	}
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getActionBar().setTitle(R.string.drawer_close);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+
+        // Set the drawer toggle as the DrawerListener
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        // Instantiate new GCM Manager (Google Cloud Messaging)
+ 		gcmManager = new GcmManager(this);
+ 		
+ 		// Set the Swipe Icon
+ 	    getActionBar().setHomeButtonEnabled(true);
+ 	    getActionBar().setTitle(R.string.drawer_open);
+
+ 	    // Inflates HomeFragment
+ 		onMenuItemSelected(CommonUtilities.MENU_POS_HOME);
+ 		
+ 	    // Add name of logged in user to welcome message
+ 		updateWelcomeMessage(getIntent().getStringExtra("username"));
+    }
+	
+    
+	// Click event of Drawer Action Bar
+    private class DrawerItemClickListener implements ListView.OnItemClickListener
+    {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id)
+        {
+            selectItem(position);
+        }
+    }
+    
+	
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
 
 	// Appends the username to the welcome message
 	private void updateWelcomeMessage(String username)
@@ -93,50 +147,45 @@ public class HomeActivity extends FragmentActivity implements
 	@Override
 	public void onMenuItemSelected(int position)
 	{
-		// Put the clicked menu index in the Bundle object
-		menuItemsBundle.putInt("menuIndex", position);
-
-		// Set and replace the contentFragment that was opened
-		contentFragment = new HomeContentFragment();
-		contentFragment.setArguments(menuItemsBundle);
-
 		Fragment content = null;
 
 		switch (position)
 		{
-		case CommonUtilities.MENU_POS_CONTACTS:
-			content = new ContactsFragment();
-
-			break;
-		case CommonUtilities.MENU_POS_CHAT:
-
-			content = new MessageFragment();
-
-			break;
-
-		case CommonUtilities.MENU_POS_PREFS:
-
-			content = new PrefsFragment();
-
-			break;
-
-		case CommonUtilities.MENU_POS_OPTIONS:
-
-			content = new OptionsFragment();
-
-			break;
-
-		case CommonUtilities.MENU_POS_LOGOUT:
-
-			Toast.makeText(getApplicationContext(), "Successfully logged out",
-					Toast.LENGTH_LONG).show();
-			finish();
-
-			break;
-
-		default:
-
-			content = contentFragment;
+			case CommonUtilities.MENU_POS_HOME:
+				content = new HomeFragment();
+				break;
+			
+			case CommonUtilities.MENU_POS_CONTACTS:
+				content = new ContactsFragment();
+				break;
+				
+			case CommonUtilities.MENU_POS_CHAT:
+				content = new MessageFragment();
+				break;
+			
+			case CommonUtilities.MENU_POS_CAMERA:
+				content = new CameraFragment();
+				break;
+			
+//			case CommonUtilities.MENU_POS_LOCATION:
+//				content = new LocationFragment();
+//				break;
+				
+			case CommonUtilities.MENU_POS_PREFS:
+				content = new PrefsFragment();
+				break;
+	
+			case CommonUtilities.MENU_POS_OPTIONS:
+				content = new OptionsFragment();
+				break;
+	
+			case CommonUtilities.MENU_POS_LOGOUT:
+				Toast.makeText(getApplicationContext(), "Successfully logged out", Toast.LENGTH_LONG).show();
+				finish();
+				break;
+	
+			default:
+				break;
 		}
 
 		// Check if there was previous content -> replace , else -> add
@@ -151,7 +200,40 @@ public class HomeActivity extends FragmentActivity implements
 						.add(R.id.contentFragment_container_main, content)
 						.commit();
 	}
+	
+	
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+          return true;
+        }
+        // Handle your other action bar items...
+        switch (item.getItemId()) {
+    case R.id.action_settings:
+      Toast.makeText(this, "Settings selected", Toast.LENGTH_LONG).show();
+      break;
 
+    default:
+      break;
+    }
+        return super.onOptionsItemSelected(item);
+    }
+    
+    
+    /** Swaps fragments in the main content view */
+    private void selectItem(int position)
+    {
+    	onMenuItemSelected(position);
+
+        // Highlight the selected item, update the title, and close the drawer
+        mDrawerList.setItemChecked(position, true);
+        getActionBar().setTitle((CommonUtilities.MENU_ITEMS_HOME[position]));
+        mDrawerLayout.closeDrawer(mDrawerList);
+    }
+    
+    
 	// Handle Activity Result (Camera, )
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -188,8 +270,7 @@ public class HomeActivity extends FragmentActivity implements
 				}
 
 				// Put bitmap image in image view
-				ImageView imgView = (ImageView) contentFragment.getView()
-						.findViewById(R.id.ivPicture);
+				ImageView imgView = (ImageView) findViewById(R.id.ivPicture);
 				imgView.setImageBitmap(imageBitmap);
 			}
 		}

@@ -44,7 +44,7 @@ public class ContactsAdapter extends BaseAdapter
 		{
 			holder = new ViewHolder();
 			convertView = LayoutInflater.from(context).inflate(
-					R.layout.contact_row, parent, false);
+					R.layout.list_contacts_row, parent, false);
 			
 			holder.name = (TextView) convertView.findViewById(R.id.firstLine);
 			convertView.setTag(holder);

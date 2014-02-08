@@ -3,29 +3,29 @@ package alpha.android;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-
 import alpha.android.common.CommonUtilities;
 import alpha.android.gcm.GcmManager;
 import alpha.android.webservice.WebserviceManager;
-import android.os.Bundle;
-import android.os.Handler;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+
 public class RegisterActivity extends Activity implements GcmManager.GcmDataConnection
 {
 	// Managing objects
 	private WebserviceManager webServiceManager;
 	private GcmManager gcmManager;
+	private String registrationID;
 	
 	
 	@Override
@@ -45,16 +45,12 @@ public class RegisterActivity extends Activity implements GcmManager.GcmDataConn
     	// Get the entered data EditText's and extract the data
     	EditText edUserName = (EditText) findViewById(R.id.edUsername);
     	EditText edPassword = (EditText) findViewById(R.id.edPassword);
-    	EditText edEmail = (EditText) findViewById(R.id.edEmail);
-    	TextView tvGcmRegId = (TextView) findViewById(R.id.tvGcmRegistration);
     	
     	final String username = edUserName.getText().toString();
     	String password = edPassword.getText().toString();
-    	String email = edEmail.getText().toString();
-    	String gcm_registration_id = tvGcmRegId.getText().toString();
     	
     	// Validate entered data and show error message if one returned
-    	String validationResult = validateData(username, password, email);
+    	String validationResult = validateData(username, password);
     	if (validationResult != null)
     	{
     		Toast.makeText(this, validationResult, Toast.LENGTH_LONG).show();
@@ -62,8 +58,8 @@ public class RegisterActivity extends Activity implements GcmManager.GcmDataConn
     	}
 
 		// Set the data for the WebserviceManager to use
-    	String[] registrationParamKeys = {"username", "password", "email", "gcm_registration_id"};
-    	String[] registrationParamValues = {username, password, email, gcm_registration_id};
+    	String[] registrationParamKeys = {"username", "password", "gcm_registration_id"};
+    	String[] registrationParamValues = {username, password, registrationID};
     	
     	try
     	{
@@ -71,8 +67,11 @@ public class RegisterActivity extends Activity implements GcmManager.GcmDataConn
     		webServiceManager = new WebserviceManager(CommonUtilities.REST_REGISTER, registrationParamKeys);
 			String result = webServiceManager.execute(registrationParamValues).get();
 			
- 			// Show pop-up message with the result, being whether client registered successfully or not
- 			Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+			// Cut off leading and trailing quote
+			result = result.substring(1);
+			result = result.substring(0, result.length() - 1);
+			
+			Toast.makeText(this, result, Toast.LENGTH_LONG).show();
 
 			// If registered successfully
 			if (result.toLowerCase(Locale.getDefault()).contains("congratulations"))
@@ -88,7 +87,7 @@ public class RegisterActivity extends Activity implements GcmManager.GcmDataConn
                       	setResult(RESULT_OK, returnIntent);     
                       	finish();
                       }
-                 }, 3500);
+                 }, 1500);
 			}
 			else
 			{
@@ -96,6 +95,11 @@ public class RegisterActivity extends Activity implements GcmManager.GcmDataConn
 			}
 
 		}
+    	catch (IllegalStateException e)
+    	{
+			e.printStackTrace();
+			Log.i(CommonUtilities.TAG, "IllegalStateException thrown from MainActivity");
+    	}
     	catch (InterruptedException e)
     	{
 			e.printStackTrace();
@@ -115,16 +119,13 @@ public class RegisterActivity extends Activity implements GcmManager.GcmDataConn
     
 
 	// Validate entered data in edit text fields
-    private String validateData(String username, String password, String email)
+    private String validateData(String username, String password)
     {
     	if (username.length() <= 3 || username.length() > 15)
     		return "Username has to contain between 4 and 15 characters.";
     		
 		if (password.length() <= 5)
 			return "Password has to be longer than 5 characters.";
-
-		if (!email.contains("@") || !email.contains("."))
-			return "Invalid emailaddress entered.";
 		
 		return null;
 	}
@@ -144,7 +145,7 @@ public class RegisterActivity extends Activity implements GcmManager.GcmDataConn
     	else
     	{
     		if (checkPlayServices())
-    			gcmManager.registerInBackground();
+    			registrationID = gcmManager.registerInBackground();
     		else
     			Toast.makeText(getApplicationContext(), "Please install the Google Play Services APK in order to proceed.",
     						   Toast.LENGTH_LONG).show();
@@ -164,7 +165,25 @@ public class RegisterActivity extends Activity implements GcmManager.GcmDataConn
         {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode))
             {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this, CommonUtilities.PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            	try
+            	{
+            		GooglePlayServicesUtil.getErrorDialog(resultCode, this, CommonUtilities.PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            	}
+            	catch (IllegalStateException e)
+            	{
+        			e.printStackTrace();
+        			Log.i(CommonUtilities.TAG, "IllegalStateException thrown from MainActivity");
+            	}
+            	catch (NoClassDefFoundError e)
+            	{
+        			e.printStackTrace();
+        			Log.i(CommonUtilities.TAG, "NoClassDefFoundError thrown from MainActivity");
+            	}
+            	catch (Exception e)
+            	{
+        			e.printStackTrace();
+        			Log.i(CommonUtilities.TAG, "Exception thrown from MainActivity");
+            	}
             }
             else
             {
@@ -176,7 +195,7 @@ public class RegisterActivity extends Activity implements GcmManager.GcmDataConn
             return false;
         }
         
-        return true;
+        return false;
     }
     
     
@@ -184,18 +203,10 @@ public class RegisterActivity extends Activity implements GcmManager.GcmDataConn
 	@Override
 	public void registrationResponse(String registration_id)
 	{
-    	Toast.makeText(getApplicationContext(), "Successfully registered device for GCM usage!", Toast.LENGTH_LONG).show();
-    	
     	TextView tvGcmRegId = (TextView) findViewById(R.id.tvGcmRegistration);
     	tvGcmRegId.setText("Device successfully registered.");
     	
-    	/**
-    	 * 	TO DO:
-    	 *  ======
-    	 *  
-    	 *  STORE REGISTRATION ID IN DATABASE THROUGH WEBSERVICE
-    	 */
-    	
+    	this.registrationID = registration_id;
     	
     	// Get references to the Buttons, so we can enable the RegisterAccount button and disable the RegisterDevice
     	// and disable the GcmRegisterButton

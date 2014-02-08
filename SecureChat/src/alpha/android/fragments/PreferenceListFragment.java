@@ -74,7 +74,7 @@ import android.widget.ListView;
         if(b != null)
             xmlId = b.getInt("xml");
         mPreferenceManager = onCreatePreferenceManager();
-        lv = (ListView) LayoutInflater.from(getActivity()).inflate(R.layout.preference_list_content, null);
+        lv = (ListView) LayoutInflater.from(getActivity()).inflate(R.layout.list_preferences_content, null);
         lv.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         addPreferencesFromResource(xmlId);
         postBindPreferences();

@@ -1,5 +1,13 @@
 <resources>
 
-    <style name="AppTheme" parent="android:Theme.Holo.Light" />
-
+    <style name="AppTheme" parent="android:Theme.Holo.Light">
+       	<item name="android:actionBarStyle">@style/ActionBarStyle</item>
+	</style>
+	
+	<style name="ActionBarStyle" parent="android:Widget.Holo.Light.ActionBar.Solid">
+	    <item name="android:icon">@android:color/transparent</item>
+	</style>
+	
+	
+	
 </resources>

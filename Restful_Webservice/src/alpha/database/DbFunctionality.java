@@ -96,15 +96,25 @@ public class DbFunctionality
 	 * 	@param tableName = name of the table to insert into
 	 *  @param values = String array of the values (make sure to insert blanks for unwanted col values)
 	 */
-	public boolean insertStatement(String tableName, String[] values)
+	public boolean insertStatement(String tableName, String[] columnNames, String[] values)
 	{
 		boolean success = false;
 		
 		try
 		{
 			// Build the query string
-			String strStatement = "INSERT INTO " + tableName + " VALUES (";
-			for (@SuppressWarnings("unused") String value : values)
+			String strStatement = "INSERT INTO " + tableName + "(";
+			
+			for (String col : columnNames)
+			{
+				strStatement += col + ", ";
+			}
+			
+			strStatement = strStatement.substring(0, strStatement.lastIndexOf(','));
+			
+			strStatement += ") VALUES (";
+			
+			for (String value : values)
 			{
 				strStatement += "?, ";
 			}
