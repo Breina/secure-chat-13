@@ -49,7 +49,11 @@ public class MainActivity extends FragmentActivity
 			final String result = webServiceManager.execute(loginParamValues).get();
 			
 			// Check and handle result message
-			if (!result.contains("fail"))
+			if (result == null)
+			{
+				Toast.makeText(this, "The web service appears to be offline. Please try again later.", Toast.LENGTH_LONG).show();
+			}
+			else if (!result.contains("fail"))
 			{
 	 			Toast.makeText(this, "Login successful, welcome back " + result, Toast.LENGTH_LONG).show();
 	 			
@@ -61,7 +65,7 @@ public class MainActivity extends FragmentActivity
                       {
                     	  navigateHome(result);
                       }
-                 }, 2500);
+                 }, 1500);
 			}
 			else
 			{

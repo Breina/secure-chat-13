@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="12"
+        android:minSdkVersion="14"
         android:targetSdkVersion="19" />
 
     <!-- JSON & GCM & GPS permissions -->
@@ -32,6 +32,7 @@
         android:name="android.hardware.camera"
         android:required="false" >
     </uses-feature>
+    
 
     <!-- Google Maps v2 -->
     <uses-feature

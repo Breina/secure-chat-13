@@ -45,6 +45,9 @@
     <string name="button_clear">Clear</string>
     <string name="button_send">Send</string>
     
+    <!-- MENU DRAWER ACTION BAR -->
+    <string name="drawer_open">Open Menu</string>
+    <string name="drawer_close">Close Menu</string>
     
     <!-- GOOGLE CLOUD MESSAGING -->
     <!-- Information for users that need to install Google Play services (from Play Store) -->

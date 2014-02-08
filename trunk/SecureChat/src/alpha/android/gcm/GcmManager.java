@@ -33,31 +33,15 @@ public class GcmManager
 	        @Override
 	        protected String doInBackground(Void... params)
 	        {
-	            String result = "";
-	            
 	            Log.i(CommonUtilities.TAG, "Starting registering");
 	    	
 	            try
 	            {
 	                registrationID = gcm.register(CommonUtilities.SENDER_ID);
-	                result = "Device registered successfully, registration ID = " + registrationID;
-	                
-	                // You should send the registration ID to your server over HTTP, so it
-	                // can use GCM/HTTP or CCS to send messages to your application
-	                sendRegistrationIdToBackend();
-	                
-	                // For this demo: we don't need to send it because the device will send
-	                // upstream messages to a server that echo back the message using the
-	                // 'from' address in the message.
-	                // Persist the regID - no need to register again.
-	                //storeRegistrationId(applicationContext, registrationID);
 	            }
 	            catch (IOException ex)
 	            {
-	               result = "Error :" + ex.getMessage();
-	                // If there is an error, don't just keep trying to register.
-	                // Require the user to click a button again, or perform
-	                // exponential back-off.
+	            	ex.printStackTrace();
 	               return "fail";
 	            }
 	            
@@ -71,7 +55,7 @@ public class GcmManager
 	            
 	            if (gcmDataConn != null) 
 	            {
-	          	  gcmDataConn.registrationResponse(reg_id);
+	            	gcmDataConn.registrationResponse(reg_id);
 	            }
 	        }
         }.execute(null, null, null);

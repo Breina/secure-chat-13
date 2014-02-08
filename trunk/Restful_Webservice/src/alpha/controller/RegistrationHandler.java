@@ -32,22 +32,22 @@ public class RegistrationHandler
 	 * 
 	 * @param username = entered username of client
 	 * @param password = entered password of client
-	 * @param gcm_registration_id 
 	 * @return String object representing whether the used registered successfully or not
 	 */
-	public String verifyRegistration(String username, String password, String email, String gcm_registration_id)
+	public String verifyRegistration(String username, String password, String gcm_registration_id)
 	{
 		String returnString = "";
 		
 		// Check if username still free
 		if (!checkForDuplicateUsernames(username))
 		{
-			String [] values = {username, password, email, gcm_registration_id};
+			String [] colNames = {"username", "password", "gcm_registration_id"};
+			String [] values = {username, password, gcm_registration_id};
 	
 			try
 			{
 				// Use DbFunctionality insert new user from the DB
-				boolean isSucces = dbFunc.insertStatement("userinfo", values);
+				boolean isSucces = dbFunc.insertStatement("userinfo", colNames, values);
 				
 				// Check if insert-statement was successful
 				if (isSucces)
@@ -63,8 +63,7 @@ public class RegistrationHandler
 								   "Printing Params received from RegistrationService:  \n" +
 								   "==================================================\n\n" +
 								   "Username:   " + username + "\n" + 
-								   "Password:   " + password + "\n" +
-								   "Email:      " + email + "\n");
+								   "Password:   " + password + "\n");
 				return "Error. Please contact the system admin.";
 			}
 		}

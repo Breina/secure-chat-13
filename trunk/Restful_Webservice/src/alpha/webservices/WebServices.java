@@ -79,7 +79,7 @@ public class WebServices
 	    	// Check if JAXB BEAN loginRequest (POST parameter) is correctly set and received
 	    	if (registrationRequest != null)
 		       return new RegistrationHandler().verifyRegistration(registrationRequest.username, registrationRequest.password,
-		    		   											   registrationRequest.email, registrationRequest.gcm_registration_id);
+		    		   											   registrationRequest.gcm_registration_id);
 		}
 		catch (Exception e)
 		{

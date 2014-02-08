@@ -2,15 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:layout_margin="13dp">
 
     <TableLayout
         android:id="@+id/tbl_validation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="7dp" >
-         PLAY SERVICES
-
+        android:layout_height="wrap_content">
 
         <TableRow
             android:id="@+id/tableRow1"
@@ -48,8 +46,7 @@
                 android:gravity="center_vertical"
                 android:text="" />
         </TableRow>
-    	  GCM SERVICES
-
+        
 
         <TableRow
             android:id="@+id/tableRow2"
@@ -87,7 +84,6 @@
                 android:gravity="center_vertical"
                 android:text="" />
         </TableRow>
-         DEVICE REGISTRATION
 
 
         <TableRow

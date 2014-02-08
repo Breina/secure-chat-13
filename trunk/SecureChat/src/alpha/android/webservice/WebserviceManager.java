@@ -44,7 +44,7 @@ public class WebserviceManager extends AsyncTask<String, Void, String>
 		// Create a default HttpClient Object
         httpclient = new DefaultHttpClient();
         
-        return putWebservice(createHttpPutObject(), params).toString();
+        return putWebservice(createHttpPutObject(), params);
     }
 
 
@@ -96,10 +96,20 @@ public class WebserviceManager extends AsyncTask<String, Void, String>
             
             // Execute the request and set response
             response = httpclient.execute(put);
-            Log.i(CommonUtilities.TAG, "Succesfully executed the request");
             
-            // Return String read from the parsed response
-            return readResponse();
+            if (response != null)
+            {
+            	Log.i(CommonUtilities.TAG, "Succesfully executed the request");
+            	
+                // Return String read from the parsed response
+                return readResponse();
+            }
+            else
+            {
+            	Log.i(CommonUtilities.TAG, "Received null from the Web Service while putting request.");
+            	
+            	return null;
+            }
         }
 		catch(ClientProtocolException e)
 		{
@@ -117,11 +127,9 @@ public class WebserviceManager extends AsyncTask<String, Void, String>
             Log.i(CommonUtilities.TAG, "General error in WebserviceManager while putting the request");
         }
 		
-		Log.i(CommonUtilities.TAG, "Printing Request and Response-Objects: \n" +
+		Log.i(CommonUtilities.TAG, "Printing Request Objects: \n" +
 						           " * Request-object:   " + put.toString() + " at URI " +
-		   				           put.getURI().toString() + "\n" +
-		   				           " * Response-object:  " + response.toString() + " with params " +
-		   				           response.getParams().toString());
+		   				           put.getURI().toString());
 		
 		return null;
 	}

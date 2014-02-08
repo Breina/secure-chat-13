@@ -4,16 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="5dp">
+    android:layout_margin="13dp">
     
     <!-- TITLE -->
-
     <TextView
         android:id="@+id/tvTitleRegistration"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="17dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
@@ -21,6 +20,7 @@
         android:text="@string/tvRegistrationTitle"
         android:textAlignment="center"
         android:textSize="18sp" />
+    
     
     <!-- USERNAME TEXTVIEW AND TEXTBOX -->
     <LinearLayout 
@@ -75,33 +75,7 @@
             android:ems="10"
             android:inputType="textPassword" />
 
-    </LinearLayout>
-
-    
-    <!-- EMAIL TEXTVIEW AND TEXTBOX -->
-    <LinearLayout 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="3dp">
-               
-        <TextView
-            android:id="@+id/tvEmail"
-		    android:layout_weight="1"
-		    android:layout_width="0dp"
-		    android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/tvEmail"/>
-
-        <EditText
-            android:id="@+id/edEmail"
-            android:layout_weight="2"
-		    android:layout_width="0dp"
-		    android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textEmailAddress" />
-
-    </LinearLayout>
+   	</LinearLayout>
     
     
     <!-- GCM REGISTRATION -->
