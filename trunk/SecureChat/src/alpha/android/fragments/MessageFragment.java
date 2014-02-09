@@ -15,7 +15,6 @@ import android.widget.ListView;
 public class MessageFragment extends ListFragment
 {
 	private ArrayList<Message> messages;
-	private View footerView;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -37,27 +36,18 @@ public class MessageFragment extends ListFragment
 	 public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	            Bundle savedInstanceState)
 	 {
-	        // FOOTER
-			footerView = inflater.inflate(R.layout.list_chat_footer, null);
-			
-			// ADAPTER
-			setListAdapter(new ListviewAdapter(getActivity(), messages));
+		 View view = inflater.inflate(R.layout.fragment_content_gcm, container, false);
+		 
+		 // ADAPTER
+		 ListviewAdapter adapter = new ListviewAdapter(getActivity(), messages);
+		 setListAdapter(adapter);
 
-	        return super.onCreateView(inflater, container, savedInstanceState);
+         return view;
 	 }
-	 
-	 
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onViewCreated(view, savedInstanceState);
-		
-
-		getListView().addFooterView(footerView);
-	}
 
 	@Override
-	public void onStart() {
+	public void onStart()
+	{
 		super.onStart();
 		
 		 if (getFragmentManager().findFragmentById(R.id.content_fragment) != null)
