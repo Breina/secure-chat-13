@@ -48,6 +48,7 @@
     <!-- MENU DRAWER ACTION BAR -->
     <string name="drawer_open">Open Menu</string>
     <string name="drawer_close">Close Menu</string>
+    <string name="iv_left_drawer">Menu Sliding Icon</string>
     
     <!-- GOOGLE CLOUD MESSAGING -->
     <!-- Information for users that need to install Google Play services (from Play Store) -->

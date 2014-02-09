@@ -31,90 +31,93 @@ public final class R {
          */
         public static final int activity_horizontal_margin=0x7f060000;
         public static final int activity_vertical_margin=0x7f060001;
-        public static final int padding_large=0x7f060004;
-        public static final int padding_medium=0x7f060003;
-        public static final int padding_small=0x7f060002;
+        public static final int padding_large=0x7f060005;
+        public static final int padding_medium=0x7f060004;
+        public static final int padding_small=0x7f060003;
+        public static final int sliding_icon_padding=0x7f060002;
     }
     public static final class drawable {
         public static final int drawer_shadow=0x7f020000;
         public static final int green=0x7f020001;
-        public static final int ic_action_search=0x7f020002;
-        public static final int ic_drawer=0x7f020003;
-        public static final int ic_launcher=0x7f020004;
-        public static final int logo_android=0x7f020005;
-        public static final int message_bar=0x7f020006;
-        public static final int message_field=0x7f020007;
-        public static final int msn_icon_green=0x7f020008;
-        public static final int msn_icon_grey=0x7f020009;
-        public static final int msn_icon_red=0x7f02000a;
-        public static final int orange=0x7f02000b;
-        public static final int send_button=0x7f02000c;
-        public static final int speech_bubble_green=0x7f02000d;
-        public static final int speech_bubble_orange=0x7f02000e;
-        public static final int wallpaper=0x7f02000f;
+        public static final int ic_action_next_item=0x7f020002;
+        public static final int ic_action_search=0x7f020003;
+        public static final int ic_drawer=0x7f020004;
+        public static final int ic_launcher=0x7f020005;
+        public static final int logo_android=0x7f020006;
+        public static final int message_bar=0x7f020007;
+        public static final int message_field=0x7f020008;
+        public static final int msn_icon_green=0x7f020009;
+        public static final int msn_icon_grey=0x7f02000a;
+        public static final int msn_icon_red=0x7f02000b;
+        public static final int orange=0x7f02000c;
+        public static final int send_button=0x7f02000d;
+        public static final int speech_bubble_green=0x7f02000e;
+        public static final int speech_bubble_orange=0x7f02000f;
+        public static final int wallpaper=0x7f020010;
     }
     public static final class id {
-        public static final int action_settings=0x7f0b0039;
-        public static final int add=0x7f0b003a;
+        public static final int action_settings=0x7f0b003a;
+        public static final int add=0x7f0b003b;
         public static final int btnAccountRegister=0x7f0b000e;
         public static final int btnBypass=0x7f0b0007;
         public static final int btnGcmRegister=0x7f0b000d;
         public static final int btnLogin=0x7f0b0003;
-        public static final int btnPicture=0x7f0b0013;
+        public static final int btnPicture=0x7f0b0014;
         public static final int btnRegister=0x7f0b0006;
-        public static final int btn_FixGcmServices=0x7f0b0029;
-        public static final int btn_FixPlayServices=0x7f0b0026;
-        public static final int btn_Send=0x7f0b0016;
-        public static final int btn_changePassword=0x7f0b0033;
-        public static final int btn_fixDeviceRegistration=0x7f0b002c;
-        public static final int btn_newShortcut=0x7f0b0022;
-        public static final int btn_shortcut1=0x7f0b001c;
-        public static final int btn_shortcut2=0x7f0b001f;
-        public static final int cb_allowCamera=0x7f0b002f;
-        public static final int cb_allowGPS=0x7f0b0032;
+        public static final int btn_FixGcmServices=0x7f0b002a;
+        public static final int btn_FixPlayServices=0x7f0b0027;
+        public static final int btn_Send=0x7f0b0017;
+        public static final int btn_changePassword=0x7f0b0034;
+        public static final int btn_fixDeviceRegistration=0x7f0b002d;
+        public static final int btn_newShortcut=0x7f0b0023;
+        public static final int btn_shortcut1=0x7f0b001d;
+        public static final int btn_shortcut2=0x7f0b0020;
+        public static final int cb_allowCamera=0x7f0b0030;
+        public static final int cb_allowGPS=0x7f0b0033;
         public static final int contentFragment_container_main=0x7f0b0010;
-        public static final int content_fragment=0x7f0b0035;
-        public static final int delete=0x7f0b003c;
+        public static final int content_fragment=0x7f0b0036;
+        public static final int delete=0x7f0b003d;
         public static final int drawer_layout=0x7f0b000f;
         public static final int edLogin=0x7f0b0002;
         public static final int edPassword=0x7f0b0005;
         public static final int edUsername=0x7f0b000b;
-        public static final int firstLine=0x7f0b0038;
-        public static final int icon=0x7f0b0037;
-        public static final int ivPicture=0x7f0b0012;
+        public static final int firstLine=0x7f0b0039;
+        public static final int icon=0x7f0b0038;
+        public static final int ivPicture=0x7f0b0013;
+        public static final int iv_left_drawer=0x7f0b0012;
         public static final int left_drawer=0x7f0b0011;
-        public static final int list=0x7f0b0014;
+        public static final int list=0x7f0b0015;
         public static final int ll_pass=0x7f0b0000;
         public static final int map=0x7f0b0008;
-        public static final int menu_fragment=0x7f0b0034;
-        public static final int message_text=0x7f0b0036;
-        public static final int start_chat=0x7f0b003b;
-        public static final int tableRow1=0x7f0b0024;
-        public static final int tableRow1a=0x7f0b001a;
-        public static final int tableRow2=0x7f0b0027;
-        public static final int tableRow2a=0x7f0b001d;
-        public static final int tableRow3=0x7f0b002a;
-        public static final int tableRow3a=0x7f0b0020;
-        public static final int tableRow4=0x7f0b002d;
-        public static final int tableRow5=0x7f0b0030;
-        public static final int tbl_shortcuts=0x7f0b0019;
-        public static final int tbl_validation=0x7f0b0023;
-        public static final int text=0x7f0b0015;
+        public static final int menu_fragment=0x7f0b0035;
+        public static final int message_text=0x7f0b0037;
+        public static final int start_chat=0x7f0b003c;
+        public static final int tableRow1=0x7f0b0025;
+        public static final int tableRow1a=0x7f0b001b;
+        public static final int tableRow2=0x7f0b0028;
+        public static final int tableRow2a=0x7f0b001e;
+        public static final int tableRow3=0x7f0b002b;
+        public static final int tableRow3a=0x7f0b0021;
+        public static final int tableRow4=0x7f0b002e;
+        public static final int tableRow5=0x7f0b0031;
+        public static final int tbl_shortcuts=0x7f0b001a;
+        public static final int tbl_validation=0x7f0b0024;
+        public static final int text=0x7f0b0016;
         public static final int tvGcmRegistration=0x7f0b000c;
         public static final int tvLogin=0x7f0b0001;
         public static final int tvPassword=0x7f0b0004;
         public static final int tvTitleRegistration=0x7f0b0009;
         public static final int tvUsername=0x7f0b000a;
-        public static final int tv_DeviceRegistration=0x7f0b002b;
-        public static final int tv_GcmServices=0x7f0b0028;
-        public static final int tv_PlayServices=0x7f0b0025;
-        public static final int tv_allowCamera=0x7f0b002e;
-        public static final int tv_allowGPS=0x7f0b0031;
-        public static final int tv_intro=0x7f0b0018;
-        public static final int tv_shortcut1=0x7f0b001b;
-        public static final int tv_shortcut2=0x7f0b001e;
-        public static final int tv_shortcut3=0x7f0b0021;
-        public static final int tv_welcome=0x7f0b0017;
+        public static final int tv_DeviceRegistration=0x7f0b002c;
+        public static final int tv_GcmServices=0x7f0b0029;
+        public static final int tv_PlayServices=0x7f0b0026;
+        public static final int tv_allowCamera=0x7f0b002f;
+        public static final int tv_allowGPS=0x7f0b0032;
+        public static final int tv_intro=0x7f0b0019;
+        public static final int tv_shortcut1=0x7f0b001c;
+        public static final int tv_shortcut2=0x7f0b001f;
+        public static final int tv_shortcut3=0x7f0b0022;
+        public static final int tv_welcome=0x7f0b0018;
     }
     public static final class integer {
         public static final int google_play_services_version=0x7f070000;
@@ -143,7 +146,7 @@ public final class R {
         public static final int register=0x7f0a0004;
     }
     public static final class string {
-        public static final int action_settings=0x7f080034;
+        public static final int action_settings=0x7f080035;
         public static final int app_name=0x7f080000;
         public static final int btnLogin=0x7f080003;
         public static final int btnPicture=0x7f08000b;
@@ -158,72 +161,73 @@ public final class R {
         public static final int button_clear=0x7f08001b;
         public static final int button_send=0x7f08001c;
         public static final int change_pass=0x7f080016;
-        public static final int common_google_play_services_enable_button=0x7f080025;
-        public static final int common_google_play_services_enable_text=0x7f080024;
+        public static final int common_google_play_services_enable_button=0x7f080026;
+        public static final int common_google_play_services_enable_text=0x7f080025;
         /**  Information for users that need to enable Google Play Services 
          */
-        public static final int common_google_play_services_enable_title=0x7f080023;
-        public static final int common_google_play_services_install_button=0x7f080022;
-        public static final int common_google_play_services_install_text_phone=0x7f080020;
-        public static final int common_google_play_services_install_text_tablet=0x7f080021;
+        public static final int common_google_play_services_enable_title=0x7f080024;
+        public static final int common_google_play_services_install_button=0x7f080023;
+        public static final int common_google_play_services_install_text_phone=0x7f080021;
+        public static final int common_google_play_services_install_text_tablet=0x7f080022;
         /**  GOOGLE CLOUD MESSAGING 
  Information for users that need to install Google Play services (from Play Store) 
          */
-        public static final int common_google_play_services_install_title=0x7f08001f;
-        public static final int common_google_play_services_invalid_account_text=0x7f08002c;
+        public static final int common_google_play_services_install_title=0x7f080020;
+        public static final int common_google_play_services_invalid_account_text=0x7f08002d;
         /**  Information for users that have an invalid account 
          */
-        public static final int common_google_play_services_invalid_account_title=0x7f08002b;
-        public static final int common_google_play_services_network_error_text=0x7f08002a;
+        public static final int common_google_play_services_invalid_account_title=0x7f08002c;
+        public static final int common_google_play_services_network_error_text=0x7f08002b;
         /**  Information for users that have a network error 
          */
-        public static final int common_google_play_services_network_error_title=0x7f080029;
+        public static final int common_google_play_services_network_error_title=0x7f08002a;
         /**  Information for users that have an unknown error/issue 
          */
-        public static final int common_google_play_services_unknown_issue=0x7f08002d;
+        public static final int common_google_play_services_unknown_issue=0x7f08002e;
         /**  Message in confirmation dialog informing user that date on the device is not correct 
          */
-        public static final int common_google_play_services_unsupported_date_text=0x7f080030;
-        public static final int common_google_play_services_unsupported_text=0x7f08002f;
-        public static final int common_google_play_services_unsupported_title=0x7f08002e;
-        public static final int common_google_play_services_update_button=0x7f080028;
-        public static final int common_google_play_services_update_text=0x7f080027;
+        public static final int common_google_play_services_unsupported_date_text=0x7f080031;
+        public static final int common_google_play_services_unsupported_text=0x7f080030;
+        public static final int common_google_play_services_unsupported_title=0x7f08002f;
+        public static final int common_google_play_services_update_button=0x7f080029;
+        public static final int common_google_play_services_update_text=0x7f080028;
         /**  Information for users that need to update Google Play Services 
          */
-        public static final int common_google_play_services_update_title=0x7f080026;
+        public static final int common_google_play_services_update_title=0x7f080027;
         /**  Sign-in 
          */
-        public static final int common_signin_button_text=0x7f080031;
-        public static final int common_signin_button_text_long=0x7f080032;
+        public static final int common_signin_button_text=0x7f080032;
+        public static final int common_signin_button_text_long=0x7f080033;
         public static final int drawer_close=0x7f08001e;
         /**  MENU DRAWER ACTION BAR 
          */
         public static final int drawer_open=0x7f08001d;
-        public static final int hello_world=0x7f080035;
+        public static final int hello_world=0x7f080036;
         /**  FRAGMENT CONTENT CAMERA 
          */
         public static final int ivPicture_desc=0x7f08000a;
+        public static final int iv_left_drawer=0x7f08001f;
         /**  FRAGMENT CONTENT CONTACTS 
          */
         public static final int menu_add=0x7f080019;
         /**  FRAGMENT_CONTENT_GCM 
          */
         public static final int msg_welcome=0x7f08001a;
-        public static final int pref_new_gcm_id_desc=0x7f08003b;
-        public static final int pref_new_gcm_id_title=0x7f08003a;
+        public static final int pref_new_gcm_id_desc=0x7f08003c;
+        public static final int pref_new_gcm_id_title=0x7f08003b;
         /**  Preferences 
          */
-        public static final int pref_privacy=0x7f080039;
-        public static final int pref_remember=0x7f080040;
-        public static final int pref_remember_username=0x7f080041;
-        public static final int pref_store_gallery_desc=0x7f08003d;
-        public static final int pref_store_gallery_title=0x7f08003c;
-        public static final int pref_store_location_desc=0x7f08003f;
-        public static final int pref_store_location_title=0x7f08003e;
-        public static final int title_activity_camera=0x7f080036;
-        public static final int title_activity_home=0x7f080037;
-        public static final int title_activity_map=0x7f080033;
-        public static final int title_activity_register=0x7f080038;
+        public static final int pref_privacy=0x7f08003a;
+        public static final int pref_remember=0x7f080041;
+        public static final int pref_remember_username=0x7f080042;
+        public static final int pref_store_gallery_desc=0x7f08003e;
+        public static final int pref_store_gallery_title=0x7f08003d;
+        public static final int pref_store_location_desc=0x7f080040;
+        public static final int pref_store_location_title=0x7f08003f;
+        public static final int title_activity_camera=0x7f080037;
+        public static final int title_activity_home=0x7f080038;
+        public static final int title_activity_map=0x7f080034;
+        public static final int title_activity_register=0x7f080039;
         public static final int tvEmail=0x7f080006;
         public static final int tvGcmRegistration=0x7f080009;
         /**  ACTIVITY MAIN 
