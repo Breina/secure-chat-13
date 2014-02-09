@@ -64,34 +64,12 @@ public class GcmManager
 	  
 	}
 	  
-	  
+	
+	// Interface that provides a data connection with other activities
 	public interface GcmDataConnection
 	{
+		// Returns response to RegisterActivity
 		public void registrationResponse(String result);
 	}
-	
-	  
-	/**
-	 * Sends the registration ID to your server over HTTP, so it can use GCM/HTTP to send messages
-	 */
-	private void sendRegistrationIdToBackend()
-	{
-	    // Implementation
-	}
-	
-	
-	/**
-	 * Stores the registration ID
-	 *
-	 * @param context application's context.
-	 * @param regId registration ID
-	 */
-	private void storeRegistrationId(Context context, String regId)
-	{
-	    // Implementation
-	}
-  
-	
-
 	
 }

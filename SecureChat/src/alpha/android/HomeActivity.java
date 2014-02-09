@@ -8,18 +8,15 @@ import alpha.android.common.CommonUtilities;
 import alpha.android.fragments.CameraFragment;
 import alpha.android.fragments.ContactsFragment;
 import alpha.android.fragments.HomeFragment;
-import alpha.android.fragments.MenuFragment;
 import alpha.android.fragments.MessageFragment;
 import alpha.android.fragments.OptionsFragment;
 import alpha.android.fragments.PreferenceListFragment;
 import alpha.android.fragments.PrefsFragment;
 import alpha.android.gcm.GcmManager;
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceScreen;
 import android.provider.MediaStore;
@@ -41,20 +38,22 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public class HomeActivity extends FragmentActivity implements
-		MenuFragment.OnMenuSelectedListener,
-		PreferenceListFragment.OnPreferenceAttachedListener,
-		GcmManager.GcmDataConnection
+		PreferenceListFragment.OnPreferenceAttachedListener
+		
 {
 	// Managing objects
 	private CameraManager camManager;
-	private GcmManager gcmManager;
 	
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
-    private ActionBarDrawerToggle mDrawerToggle;
+	// Menu Objects
+    private DrawerLayout menuDrawerLayout;
+    private ListView menuDrawerListView;
+    private ActionBarDrawerToggle menuDrawerToggle;
 
     
-	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    /**
+     * LIFECYCLE HOME ACTIVITY
+     */
+    // On Create Home Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -62,91 +61,106 @@ public class HomeActivity extends FragmentActivity implements
 		setContentView(R.layout.fragment_container_home);
 
 		// Get Drawer's Layout and List
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        menuDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        menuDrawerListView = (ListView) findViewById(R.id.left_drawer);
 
         // Set up the drawer's list view with items and click listener
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+        menuDrawerListView.setAdapter(new ArrayAdapter<String>(this,
                 R.layout.list_navigation_drawer_row, CommonUtilities.MENU_ITEMS_HOME));
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        menuDrawerListView.setOnItemClickListener(new DrawerItemClickListener());
         
-        mDrawerToggle = new ActionBarDrawerToggle(
+        // Set up the ActionBarDrawerToggle
+        menuDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* HomeActivity */
-                mDrawerLayout,         /* DrawerLayout object */
+                menuDrawerLayout,         /* DrawerLayout object */
                 R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
-                R.string.drawer_open,  /* "open drawer" description */
-                R.string.drawer_close  /* "close drawer" description */
-                ) {
-
+                R.string.drawer_open,  /* "Open drawer" description */
+                R.string.drawer_close  /* "Close drawer" description */
+                )
+        {
             /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                getActionBar().setTitle(R.string.drawer_open);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            public void onDrawerClosed(View view)
+            {
+                ImageView slider = (ImageView) findViewById(R.id.iv_left_drawer);
+                slider.setVisibility(View.VISIBLE);
             }
 
             /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                getActionBar().setTitle(R.string.drawer_close);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            public void onDrawerOpened(View drawerView)
+            {
+                ImageView slider = (ImageView) findViewById(R.id.iv_left_drawer);
+                slider.setVisibility(View.INVISIBLE);
             }
         };
 
-        // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        // Set the Drawer Toggle as the DrawerListener
+        menuDrawerLayout.setDrawerListener(menuDrawerToggle);
 
-        // Instantiate new GCM Manager (Google Cloud Messaging)
- 		gcmManager = new GcmManager(this);
- 		
- 		// Set the Swipe Icon
+ 		// Set the Home Icon as menu button
  	    getActionBar().setHomeButtonEnabled(true);
- 	    getActionBar().setTitle(R.string.drawer_open);
 
  	    // Inflates HomeFragment
- 		onMenuItemSelected(CommonUtilities.MENU_POS_HOME);
- 		
- 	    // Add name of logged in user to welcome message
- 		updateWelcomeMessage(getIntent().getStringExtra("username"));
+ 		menuItemClicked(CommonUtilities.MENU_POS_HOME);
     }
 	
+	
+    // Syncs the Drawer Toggle state after onRestoreInstanceState has occurred.
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState)
+    {
+        super.onPostCreate(savedInstanceState);
+        
+        menuDrawerToggle.syncState();
+    }
     
+
+    // Configuration change of Drawer Toggle
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+        
+        menuDrawerToggle.onConfigurationChanged(newConfig);
+    }
+    
+    
+    
+    /**
+     * CLICK EVENTS
+     */
 	// Click event of Drawer Action Bar
     private class DrawerItemClickListener implements ListView.OnItemClickListener
     {
         @Override
-        public void onItemClick(AdapterView parent, View view, int position, long id)
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
-            selectItem(position);
+            menuItemClicked(position);
         }
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (menuDrawerToggle.onOptionsItemSelected(item)) {
+          return true;
+        }
+        // Handle your other action bar items...
+        switch (item.getItemId()) {
+    case R.id.action_settings:
+      Toast.makeText(this, "Settings selected", Toast.LENGTH_LONG).show();
+      break;
+
+    default:
+      break;
+    }
+        return super.onOptionsItemSelected(item);
+    }
     
-	
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-
-	// Appends the username to the welcome message
-	private void updateWelcomeMessage(String username)
-	{
-		// TextView tvWelcomeMessage = (TextView) findViewById(R.id.tv_welcome);
-		// tvWelcomeMessage.append(username);
-	}
-
-	// MenuFragment's MenuItem clicked
-	@Override
-	public void onMenuItemSelected(int position)
-	{
+    // Occurs when a menu-item was clicked -> handles the fragments
+    private void menuItemClicked(int position)
+    {
 		Fragment content = null;
 
 		switch (position)
@@ -199,38 +213,11 @@ public class HomeActivity extends FragmentActivity implements
 				getSupportFragmentManager().beginTransaction()
 						.add(R.id.contentFragment_container_main, content)
 						.commit();
-	}
-	
-	
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch event
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-          return true;
-        }
-        // Handle your other action bar items...
-        switch (item.getItemId()) {
-    case R.id.action_settings:
-      Toast.makeText(this, "Settings selected", Toast.LENGTH_LONG).show();
-      break;
-
-    default:
-      break;
-    }
-        return super.onOptionsItemSelected(item);
-    }
-    
-    
-    /** Swaps fragments in the main content view */
-    private void selectItem(int position)
-    {
-    	onMenuItemSelected(position);
-
+		
         // Highlight the selected item, update the title, and close the drawer
-        mDrawerList.setItemChecked(position, true);
+        menuDrawerListView.setItemChecked(position, true);
         getActionBar().setTitle((CommonUtilities.MENU_ITEMS_HOME[position]));
-        mDrawerLayout.closeDrawer(mDrawerList);
+        menuDrawerLayout.closeDrawer(menuDrawerListView);
     }
     
     
@@ -282,34 +269,15 @@ public class HomeActivity extends FragmentActivity implements
 		}
 	}
 
-	public void fixPlayServices(View v)
-	{
-		String text;
-		
-		if (checkPlayServices())
-			text = "Success";
-		else
-			text = "Failure";
-		
-		Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-	}
-
-	public void fixGcmServices(View v)
-	{
-		GoogleCloudMessaging.getInstance(getApplicationContext());
-	}
-
-	public void fixDeviceRegistration(View v)
-	{
-		String result = gcmManager.registerInBackground();
-		
-		Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-	}
-
+	
+	
+	/**
+	 * GOOGLE CLOUD MESSAGING
+	 */
+	// Checks if Google Play Services .apk is installed on the device
 	private boolean checkPlayServices()
 	{
-		int resultCode = GooglePlayServicesUtil
-				.isGooglePlayServicesAvailable(this);
+		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
 
 		if (resultCode != ConnectionResult.SUCCESS)
 		{
@@ -330,9 +298,44 @@ public class HomeActivity extends FragmentActivity implements
 
 		return true;
 	}
+	
+	
+	// TODO: Fixes the Google Play Services .apk (re-install)
+	public void fixPlayServices(View v)
+	{
+		String text;
+		
+		if (checkPlayServices())
+			text = "Success";
+		else
+			text = "Failure";
+		
+		Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+	}
 
-	// Handles click-event of the 'Take a picture'-button in the
-	// fragment_content_camera
+	
+	// TODO: Fixes the GCM instance (re-initiate)
+	public void fixGcmServices(View v)
+	{
+		GoogleCloudMessaging.getInstance(getApplicationContext());
+	}
+
+	
+	// TODO: Re-registers device registration (first check if needed)
+	public void fixDeviceRegistration(View v)
+	{
+		GcmManager gcmManager = new GcmManager(getApplicationContext());
+		String result = gcmManager.registerInBackground();
+		
+		Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+	}
+
+	
+
+	/**
+	 * CAMERA INTENT
+	 */
+	// Handles click-event of the 'Take a picture'-button in the fragment_content_camera
 	public void initiateCamera(View view)
 	{
 		// Check for camera device
@@ -388,6 +391,10 @@ public class HomeActivity extends FragmentActivity implements
 			return false;
 	}
 
+
+	
+	
+	// TODO: ???
 	@Override
 	public void onPreferenceAttached(PreferenceScreen root, int xmlId)
 	{
@@ -395,96 +402,4 @@ public class HomeActivity extends FragmentActivity implements
 
 	}
 
-	@Override
-	public void registrationResponse(String result)
-	{
-		Toast.makeText(getApplicationContext(), "Printing result: " + result, Toast.LENGTH_LONG).show();
-	}
-
-	/**
-	 * TODO: NOG HERPLAATSEN
-	 */
-	// public void sendMessage(View v)
-	// {
-	// EditText text = (EditText) this.findViewById(R.id.text);
-	// String newMessage = text.getText().toString().trim();
-	// if(newMessage.length() > 0)
-	// {
-	// text.setText("");
-	// addNewMessage(new Message(newMessage, true));
-	// new SendMessage().execute();
-	// }
-	// }
-	//
-	//
-	// private class SendMessage extends AsyncTask<Void, String, String>
-	// {
-	// ArrayList<Message> messages;
-	// AwesomeAdapter adapter;
-	// static Random rand = new Random();
-	// static String sender;
-	//
-	// @Override
-	// protected String doInBackground(Void... params) {
-	// try {
-	// Thread.sleep(2000); //simulate a network call
-	// }catch (InterruptedException e) {
-	// e.printStackTrace();
-	// }
-	//
-	// this.publishProgress(String.format("%s started writing", sender));
-	// try {
-	// Thread.sleep(2000); //simulate a network call
-	// }catch (InterruptedException e) {
-	// e.printStackTrace();
-	// }
-	// this.publishProgress(String.format("%s has entered text", sender));
-	// try {
-	// Thread.sleep(3000);//simulate a network call
-	// }catch (InterruptedException e) {
-	// e.printStackTrace();
-	// }
-	//
-	//
-	// return Utility.messages[rand.nextInt(Utility.messages.length-1)];
-	//
-	//
-	// }
-	// @Override
-	// public void onProgressUpdate(String... v) {
-	//
-	// if(messages.get(messages.size()-1).isStatusMessage())//check wether we
-	// have already added a status message
-	// {
-	// messages.get(messages.size()-1).setMessage(v[0]); //update the status for
-	// that
-	// adapter.notifyDataSetChanged();
-	// getListView().setSelection(messages.size()-1);
-	// }
-	// else{
-	// addNewMessage(new Message(true,v[0])); //add new message, if there is no
-	// existing status message
-	// }
-	// }
-	// @Override
-	// protected void onPostExecute(String text) {
-	// if(messages.get(messages.size()-1).isStatusMessage)//check if there is
-	// any status message, now remove it.
-	// {
-	// messages.remove(messages.size()-1);
-	// }
-	//
-	// addNewMessage(new Message(text, false)); // add the orignal message from
-	// server.
-	// }
-	//
-	//
-	// }
-	//
-	// void addNewMessage(Message m)
-	// {
-	// messages.add(m);
-	// adapter.notifyDataSetChanged();
-	// getListView().setSelection(messages.size()-1);
-	// }
 }
