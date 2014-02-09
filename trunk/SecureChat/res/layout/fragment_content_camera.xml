@@ -3,15 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="13dp">
+    android:layout_margin="3dp" >
 
     <ImageView
         android:id="@+id/ivPicture"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="8"
-        android:layout_margin="5dp"
-        android:layout_marginBottom="10dp"
+        android:layout_weight="6"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
         android:contentDescription="@string/ivPicture_desc" />
     
     <Button

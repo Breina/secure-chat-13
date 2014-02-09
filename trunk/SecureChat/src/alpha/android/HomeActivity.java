@@ -114,7 +114,7 @@ public class HomeActivity extends FragmentActivity implements
     }
     
 
-    // Configuration change of Drawer Toggle
+    // Configuration changed
     @Override
     public void onConfigurationChanged(Configuration newConfig)
     {
@@ -232,19 +232,17 @@ public class HomeActivity extends FragmentActivity implements
 			{
 				Bitmap imageBitmap = null;
 
-				if (data.getExtras() != null)
+				if (data.getExtras().get("data") != null)
 				{
 					imageBitmap = (Bitmap) data.getExtras().get("data");
 
-					Log.i(CommonUtilities.TAG, "Successfully received image: "
-							+ imageBitmap.toString());
+					Log.i(CommonUtilities.TAG, "Successfully received image: " + imageBitmap.toString());
 				}
 				else
 				{
 					try
 					{
-						imageBitmap = MediaStore.Images.Media.getBitmap(
-								this.getContentResolver(), data.getData());
+						imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
 					}
 					catch (FileNotFoundException e)
 					{
@@ -256,16 +254,18 @@ public class HomeActivity extends FragmentActivity implements
 					}
 				}
 
-				// Put bitmap image in image view
-				ImageView imgView = (ImageView) findViewById(R.id.ivPicture);
-				imgView.setImageBitmap(imageBitmap);
+				if (imageBitmap != null)
+				{
+					// Put bitmap image in image view
+					ImageView imgView = (ImageView) findViewById(R.id.ivPicture);
+					imgView.setImageBitmap(imageBitmap);
+				}
 			}
 		}
 		else
 		{
 
-			Log.i(CommonUtilities.TAG,
-					"Failed receiving image onActivityResult");
+			Log.i(CommonUtilities.TAG, "Failed receiving image onActivityResult");
 		}
 	}
 
