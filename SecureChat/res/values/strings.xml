@@ -44,6 +44,7 @@
     <string name="msg_welcome">Welcome home. You can enter your message below:</string>
     <string name="button_clear">Clear</string>
     <string name="button_send">Send</string>
+    <string name="ed_text_hint">Write here</string>
     
     <!-- MENU DRAWER ACTION BAR -->
     <string name="drawer_open">Open Menu</string>
