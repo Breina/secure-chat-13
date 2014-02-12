@@ -8,6 +8,7 @@ import alpha.android.common.CommonUtilities;
 import alpha.android.fragments.CameraFragment;
 import alpha.android.fragments.ContactsFragment;
 import alpha.android.fragments.HomeFragment;
+import alpha.android.fragments.MapFragment;
 import alpha.android.fragments.MessageFragment;
 import alpha.android.fragments.OptionsFragment;
 import alpha.android.fragments.PreferenceListFragment;
@@ -146,15 +147,14 @@ public class HomeActivity extends FragmentActivity implements
         if (menuDrawerToggle.onOptionsItemSelected(item)) {
           return true;
         }
-        // Handle your other action bar items...
-        switch (item.getItemId()) {
-    case R.id.action_settings:
-      Toast.makeText(this, "Settings selected", Toast.LENGTH_LONG).show();
-      break;
-
-    default:
-      break;
-    }
+        int itemId = item.getItemId();
+		if (itemId == R.id.action_settings)
+		{
+			Toast.makeText(this, "Settings selected", Toast.LENGTH_LONG).show();
+		}
+		else
+		{
+		}
         return super.onOptionsItemSelected(item);
     }
     
@@ -181,9 +181,9 @@ public class HomeActivity extends FragmentActivity implements
 				content = new CameraFragment();
 				break;
 			
-//			case CommonUtilities.MENU_POS_LOCATION:
-//				content = new LocationFragment();
-//				break;
+			case CommonUtilities.MENU_POS_LOCATION:
+				content = new MapFragment();
+				break;
 				
 			case CommonUtilities.MENU_POS_PREFS:
 				content = new PrefsFragment();
