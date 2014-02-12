@@ -187,7 +187,6 @@
         android:id="@+id/btn_changePassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="changePassword"
         android:text="@string/change_pass" />
 
 </LinearLayout>

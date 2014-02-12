@@ -40,7 +40,6 @@
 	    	android:layout_gravity="center_vertical"
 	        android:layout_margin="5sp"
 	        android:background="@drawable/send_button"
-	        android:onClick="sendMessage"
 	        android:paddingBottom="5sp"
 	        android:paddingLeft="15sp"
 	        android:paddingRight="15sp"
