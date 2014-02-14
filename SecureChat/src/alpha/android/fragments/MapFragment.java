@@ -14,6 +14,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -44,6 +45,8 @@ public class MapFragment extends Fragment
 	private static final int MAPPADDING = 50;
 	private static final boolean ANIMATION = true;
 	private static final boolean ZOOMTOSELECTION = false;
+	
+	public static RelativeLayout view;
 
 	private GoogleMap googleMap;
 	private Location lastLoc;
@@ -64,43 +67,62 @@ public class MapFragment extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
-		RelativeLayout view = new RelativeLayout(getActivity());
-		View mapView = inflater.inflate(R.layout.fragment_content_map, container,
-				false);
-		
-		view.addView(mapView, new RelativeLayout.LayoutParams(-1, -1));
-		
-		LinearLayout linearLayout = new LinearLayout(getActivity());
-		linearLayout.setOrientation(LinearLayout.VERTICAL);
-		view.addView(linearLayout);
-		
-		btnZoom = new Button(getActivity());
-		btnZoom.setText("Zoom");
-		btnZoom.setWidth(80);
-		btnZoom.setHeight(40);
-		btnZoom.setEnabled(false);
-		btnZoom.setOnClickListener(new OnBtnZoomHandler());
-		linearLayout.addView(btnZoom);
-		
-		btnDelete = new Button(getActivity());
-		btnDelete.setText("Del");
-		btnDelete.setWidth(80);
-		btnDelete.setHeight(40);
-		btnDelete.setEnabled(false);
-		btnDelete.setOnClickListener(new OnBtnDeleteHandler());
-		linearLayout.addView(btnDelete);
-		
-		btnAccept = new Button(getActivity());
-		btnAccept.setText("OK");
-		btnAccept.setWidth(80);
-		btnAccept.setHeight(40);
-		linearLayout.addView(btnAccept);
-		
+		// Clear view if needed
+	    if (view != null)
+	    {
+	        ViewGroup parent = (ViewGroup) view.getParent();
+	        
+	        if (parent != null)
+	            parent.removeView(view);
+	    }
+	    
+	    // Inflate view
+	    try
+	    {
+	    	view = new RelativeLayout(getActivity());
+			View mapView = inflater.inflate(R.layout.fragment_content_map, container,
+					false);
+			
+			view.addView(mapView, new RelativeLayout.LayoutParams(-1, -1));
+			
+			LinearLayout linearLayout = new LinearLayout(getActivity());
+			linearLayout.setOrientation(LinearLayout.VERTICAL);
+			view.addView(linearLayout);
+			
+			btnZoom = new Button(getActivity());
+			btnZoom.setText("Zoom");
+			btnZoom.setWidth(80);
+			btnZoom.setHeight(40);
+			btnZoom.setEnabled(false);
+			btnZoom.setOnClickListener(new OnBtnZoomHandler());
+			linearLayout.addView(btnZoom);
+			
+			btnDelete = new Button(getActivity());
+			btnDelete.setText("Del");
+			btnDelete.setWidth(80);
+			btnDelete.setHeight(40);
+			btnDelete.setEnabled(false);
+			btnDelete.setOnClickListener(new OnBtnDeleteHandler());
+			linearLayout.addView(btnDelete);
+			
+			btnAccept = new Button(getActivity());
+			btnAccept.setText("OK");
+			btnAccept.setWidth(80);
+			btnAccept.setHeight(40);
+			linearLayout.addView(btnAccept);
+			
 
-		initilizeMap();
-		initPos();
-
-		return view;
+			initilizeMap();
+			initPos();
+	    }
+	    catch (InflateException e)
+	    {
+	        // map is already there
+	    	return view;
+	    }
+	    
+	    return view;
+	    
 	}
 
 	private void initPos()
@@ -138,7 +160,7 @@ public class MapFragment extends Fragment
 					Toast.LENGTH_LONG).show();
 
 			// TODO: add this return when you no longer want the 0,0 gps
-			 return;
+//			 return;
 
 		}
 		else
@@ -299,8 +321,10 @@ public class MapFragment extends Fragment
 		marker.setIcon(BitmapDescriptorFactory
 				.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
 		
-		if (isMarkerGPS(marker))
+		if (isMarkerGPS(marker)) {
 			btnDelete.setEnabled(false);
+			marker.showInfoWindow();
+		}
 		else
 			btnDelete.setEnabled(true);
 	}
@@ -344,8 +368,8 @@ public class MapFragment extends Fragment
 		
 		if (markers.size() == 0)
 			btnZoom.setEnabled(false);
-		
-		btnDelete.setEnabled(false);
+		else
+			btnDelete.setEnabled(true);
 	}
 
 	private class MapLongClickHandler implements OnMapLongClickListener
