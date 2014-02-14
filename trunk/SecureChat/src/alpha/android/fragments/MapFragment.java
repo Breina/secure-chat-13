@@ -7,6 +7,8 @@ import java.util.Locale;
 import alpha.android.R;
 import alpha.android.common.CommonUtilities;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -46,6 +48,9 @@ public class MapFragment extends Fragment
 	private static final boolean ANIMATION = true;
 	private static final boolean ZOOMTOSELECTION = false;
 	
+	private static final String SIZEKEY = "marker_size";
+	private static final String MARKERPREFIX = "marker_";
+	
 	public static RelativeLayout view;
 
 	private GoogleMap googleMap;
@@ -59,7 +64,7 @@ public class MapFragment extends Fragment
 	private Button btnZoom, btnDelete, btnAccept;
 
 	public MapFragment()
-	{
+	{		
 		markers = new ArrayList<MarkerOptions>();
 	}
 
@@ -227,6 +232,92 @@ public class MapFragment extends Fragment
 		// adding marker
 
 	}
+	
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		
+		loadMarkers();
+	}
+	
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		
+		saveMarkers();
+	}
+	
+	private void saveMarkers() {
+		
+		Log.i(CommonUtilities.TAG, "Saving markers");
+		
+		SharedPreferences prefs = getActivity()
+				.getSharedPreferences("alpha.android", Context.MODE_PRIVATE);
+		Editor editor = prefs.edit();
+		
+		int size = markers.size();
+		MarkerOptions marker;
+		
+		int prefIndex = 0;
+		
+		for (int listIndex = 0; listIndex < size; listIndex++) {
+			
+			Log.i(CommonUtilities.TAG, Integer.toString(listIndex));
+			
+			marker = markers.get(listIndex);
+			
+			if (isMarkerGPS(marker))
+				continue;
+			
+			LatLng pos = marker.getPosition();
+			editor.putLong(MARKERPREFIX + "lat_" + prefIndex,
+					Double.doubleToLongBits(pos.latitude));
+			editor.putLong(MARKERPREFIX + "lng_" + prefIndex,
+					Double.doubleToLongBits(pos.longitude));
+			
+			prefIndex++;
+		}
+		
+		editor.putInt(SIZEKEY, prefIndex);
+		editor.commit();
+		
+		Log.i(CommonUtilities.TAG, "All done!");
+	}
+	
+	private void loadMarkers() {
+		
+		Log.i(CommonUtilities.TAG, "Loading markers");
+		
+		SharedPreferences prefs = getActivity()
+				.getSharedPreferences("alpha.android", Context.MODE_PRIVATE);
+		
+		int size = prefs.getInt(SIZEKEY, 0);
+		
+		if (size == 0)
+			return;
+		
+		for (int i = 0; i < size; i++) {
+			
+			Log.i(CommonUtilities.TAG, Integer.toString(i));
+			
+			double lat = Double.longBitsToDouble(
+					prefs.getLong(MARKERPREFIX + "lat_" + i, 0l));
+			double lng = Double.longBitsToDouble(
+					prefs.getLong(MARKERPREFIX + "lng_" + i, 0l));
+			
+			if (lat == 0l || lng == 0l) {
+				Log.w(CommonUtilities.TAG, "Bad location data found!");
+				continue;
+			}
+			
+			LatLng pos = new LatLng(lat, lng);
+			addNewMarker(pos);					
+		}
+		
+		Log.i(CommonUtilities.TAG, "All done!");
+	}
 
 	private void addNewMarker(LatLng pos)
 	{
@@ -298,7 +389,13 @@ public class MapFragment extends Fragment
 	}
 	
 	private boolean isMarkerGPS(Marker marker) {
-		String potentialTitle = selectedMarker.getTitle();
+		String potentialTitle = marker.getTitle();
+		return (potentialTitle != null && potentialTitle.equals(GPSMARKER));
+	}
+	
+	private boolean isMarkerGPS(MarkerOptions marker)
+	{
+		String potentialTitle = marker.getTitle();
 		return (potentialTitle != null && potentialTitle.equals(GPSMARKER));
 	}
 
@@ -362,6 +459,18 @@ public class MapFragment extends Fragment
 		}
 
 		markers.remove(selectedMarker);
+		
+		int size = markers.size();
+		MarkerOptions markerOptions;
+		for (int i = 0; i < size; i++) {
+			markerOptions = markers.get(i);
+			if (markerOptions.getPosition().equals(selectedMarker.getPosition())) {
+				markers.remove(markerOptions);
+				Log.i(CommonUtilities.TAG, "Removing some marker");
+				break;
+			}
+		}
+		
 		selectedMarker.remove();
 		
 		selectedMarker = null;
