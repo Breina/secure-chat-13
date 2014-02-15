@@ -531,9 +531,10 @@ public class MapFragment extends Fragment
 
 			updatePos();
 
-			Toast.makeText(getActivity().getApplicationContext(),
-					"Location changed: " + getLocationString(location),
-					Toast.LENGTH_SHORT).show();
+			// Crashes when running in background
+//			Toast.makeText(getActivity().getApplicationContext(),
+//					"Location changed: " + getLocationString(location),
+//					Toast.LENGTH_SHORT).show();
 		}
 
 		@Override

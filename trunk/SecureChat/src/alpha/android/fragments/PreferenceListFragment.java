@@ -22,8 +22,8 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.ListView;
 
-@SuppressLint("ValidFragment") public class PreferenceListFragment extends ListFragment{
-     
+@SuppressLint("ValidFragment") public class PreferenceListFragment extends ListFragment
+{
     private PreferenceManager mPreferenceManager;
      
     /**
@@ -32,9 +32,11 @@ import android.widget.ListView;
     private static final int FIRST_REQUEST_CODE = 100;
      
     private static final int MSG_BIND_PREFERENCES = 0;
-    private Handler mHandler = new Handler() {
+    private Handler mHandler = new Handler()
+    {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(Message msg)
+        {
             switch (msg.what) {
                  
                 case MSG_BIND_PREFERENCES:
@@ -78,7 +80,7 @@ import android.widget.ListView;
         lv.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         addPreferencesFromResource(xmlId);
         postBindPreferences();
-        ((OnPreferenceAttachedListener)getActivity()).onPreferenceAttached(getPreferenceScreen(), xmlId);
+        //((OnPreferenceAttachedListener)getActivity()).onPreferenceAttached(getPreferenceScreen(), xmlId);
     }
  
     @Override

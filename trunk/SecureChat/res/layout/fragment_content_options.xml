@@ -3,41 +3,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="13dp">
+    android:layout_marginLeft="13dp"
+    android:layout_marginRight="13dp">
 
+    <TextView
+         android:id="@+id/tv_title_validation"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:paddingBottom="3dp"
+         android:layout_marginTop="7dp"
+         android:textAppearance="?android:attr/textAppearanceMedium"
+         android:text="@string/tv_title_validation" />
+    
     <TableLayout
         android:id="@+id/tbl_validation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="13dp">
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+        	android:padding="3dp" >
 
             <TextView
                 android:id="@+id/tv_PlayServices"
                 android:layout_width="0dp"
                 android:layout_weight="2"
                 android:gravity="center_vertical"
-                android:padding="5dp"
                 android:text="@string/tv_PlayServices"
                 android:textSize="12sp" />
 
             <Button
-                android:id="@+id/btn_FixPlayServices"
+                android:id="@+id/btn_checkPlayServices"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:onClick="fixPlayServices"
+                android:onClick="checkPlayServices"
                 android:text="@string/btn_fix"
                 android:textSize="12sp" />
+            
         </TableRow>
 
         <TableRow
             android:layout_height="1px"
-            android:background="#BDBDBD" >
+            android:background="#BDBDBD">
 
             <TextView
                 android:layout_width="fill_parent"
@@ -45,94 +56,80 @@
                 android:layout_span="2"
                 android:gravity="center_vertical"
                 android:text="" />
+            
         </TableRow>
-        
+
 
         <TableRow
-            android:id="@+id/tableRow2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <TextView
-                android:id="@+id/tv_GcmServices"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center_vertical"
-                android:padding="5dp"
-                android:text="@string/tv_GcmServices"
-                android:textSize="12sp" />
-
-            <Button
-                android:id="@+id/btn_FixGcmServices"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:onClick="fixGcmServices"
-                android:text="@string/btn_fix"
-                android:textSize="12sp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_height="1px"
-            android:background="#BDBDBD" >
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:layout_span="2"
-                android:gravity="center_vertical"
-                android:text="" />
-        </TableRow>
-
-
-        <TableRow
-            android:id="@+id/tableRow3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+        	android:padding="3dp"  >
 
             <TextView
                 android:id="@+id/tv_DeviceRegistration"
                 android:layout_width="0dp"
                 android:layout_weight="2"
                 android:gravity="center_vertical"
-                android:padding="5dp"
                 android:text="@string/tv_DeviceRegistration"
                 android:textSize="12sp" />
 
             <Button
-                android:id="@+id/btn_fixDeviceRegistration"
+                android:id="@+id/btn_checkDeviceRegistration"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:onClick="fixDeviceRegistration"
+                android:onClick="checkDeviceRegistration"
                 android:text="@string/btn_fix"
                 android:textSize="12sp" />
-        </TableRow>
+    
+    </TableRow>
 
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dp">    
+             
+	    <Button
+	        android:id="@+id/btn_reregister"
+	        android:layout_width="0dp"
+	        android:layout_weight="1"
+	        android:layout_height="wrap_content"
+	        android:enabled="false"
+	        android:onClick="reregisterGcm"
+	        android:text="@string/btn_reregister" />
+    
+	</TableRow>
+        
+    
+    
+        <!--  ACCESS -->
         <TableRow
-            android:layout_height="1px"
-            android:background="#BDBDBD" >
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="1px"
-                android:layout_span="2"
-                android:gravity="center_vertical"
-                android:text="" />
-        </TableRow>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+        	android:paddingBottom="3dp"
+            android:layout_marginTop="5dp">
+            
+	            <TextView
+			         android:id="@+id/tv_title_access"
+			         android:layout_width="match_parent"
+			         android:layout_height="wrap_content"
+         			 android:textAppearance="?android:attr/textAppearanceMedium"
+			         android:text="@string/tv_title_access" />
+	            
+	    </TableRow>
+	           
         
         <TableRow
-            android:id="@+id/tableRow4"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+        	android:padding="3dp">
+	            
             <TextView
                 android:id="@+id/tv_allowCamera"
                 android:layout_width="0dp"
                 android:layout_weight="2"
                 android:gravity="center_vertical"
-                android:padding="5dp"
                 android:text="@string/tv_allow_camera"
                 android:textSize="12sp" />
 
@@ -159,15 +156,15 @@
         </TableRow>
         
         <TableRow
-            android:id="@+id/tableRow5"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+        	android:padding="3dp">
+            
             <TextView
                 android:id="@+id/tv_allowGPS"
                 android:layout_width="0dp"
                 android:layout_weight="2"
                 android:gravity="center_vertical"
-                android:padding="5dp"
                 android:text="@string/tv_allow_gps"
                 android:textSize="12sp" />
 
@@ -180,13 +177,38 @@
                 android:text="" />
 
         </TableRow>
-        
+          
     </TableLayout>
 
-    <Button
+    
+    <!--  ACTIONS  -->
+    <TextView
+         android:id="@+id/tv_title_actions"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:paddingBottom="3dp"
+         android:layout_marginTop="5dp"
+         android:textAppearance="?android:attr/textAppearanceMedium"
+         android:text="@string/tv_title_actions" />
+        
+    
+     <EditText
+        android:id="@+id/ed_changePass"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/ed_change_pass_hint"
+        android:textSize="13sp"
+        android:inputType="textPassword" />
+
+     <Button
         android:id="@+id/btn_changePassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:onClick="changePassword"
         android:text="@string/change_pass" />
+     
 
+                              
 </LinearLayout>

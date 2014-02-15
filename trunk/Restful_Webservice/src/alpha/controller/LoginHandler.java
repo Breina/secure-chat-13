@@ -65,32 +65,4 @@ public class LoginHandler
 		}
 	}
 
-	
-	
-	public String checkForGcmRegistration(String username)
-	{
-		String [] keys = {"username"};
-		String [] values = {username};
-
-		try
-		{
-			// Use DbFunctionality to get user from the db
-			ResultSet rs = dbFunc.selectObjectStatement("userinfo", keys, values);
-			
-			// Check if successfull and if one, return corresponding gcm registration ID
-			if (rs.next())
-			{
-				return rs.getString(4);
-			}
-			else
-				return "fail";
-			
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			System.out.println("Exception thrown from checking the Gcm Registration with cause: " + e.getCause());
-			return null;
-		}
-	}
 }

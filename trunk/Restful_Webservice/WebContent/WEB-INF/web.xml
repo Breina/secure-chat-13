@@ -39,15 +39,5 @@
 		<servlet-name>ServletAdaptor</servlet-name>
 		<url-pattern>/REST/*</url-pattern>
 	</servlet-mapping>
-	
-	<!-- GOOGLE CLOUD MESSAGING -->
-    <servlet>
-        <servlet-name>GCMBroadcast</servlet-name>
-        <servlet-class>alpha.webservices.GCMBroadcast</servlet-class>
-    </servlet> 
-    <servlet-mapping>
-        <servlet-name>GCMBroadcast</servlet-name>
-        <url-pattern>/GCMBroadcast</url-pattern>
-    </servlet-mapping>
 
 </web-app>

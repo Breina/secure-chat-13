@@ -1,9 +1,5 @@
 package alpha.android;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import alpha.android.common.CommonUtilities;
 import alpha.android.fragments.CameraFragment;
 import alpha.android.fragments.ContactsFragment;
@@ -11,21 +7,13 @@ import alpha.android.fragments.HomeFragment;
 import alpha.android.fragments.MapFragment;
 import alpha.android.fragments.MessageFragment;
 import alpha.android.fragments.OptionsFragment;
-import alpha.android.fragments.PreferenceListFragment;
 import alpha.android.fragments.PrefsFragment;
-import alpha.android.gcm.GcmManager;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.preference.PreferenceScreen;
-import android.provider.MediaStore;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,16 +22,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-
-public class HomeActivity extends FragmentActivity implements
-		PreferenceListFragment.OnPreferenceAttachedListener
-		
+public class HomeActivity extends FragmentActivity
 {
-	// Managing objects
-	private CameraManager camManager;
+	public static String username;
 	
 	// Menu Objects
     private DrawerLayout menuDrawerLayout;
@@ -51,15 +32,16 @@ public class HomeActivity extends FragmentActivity implements
     private ActionBarDrawerToggle menuDrawerToggle;
 
     
-    /**
-     * LIFECYCLE HOME ACTIVITY
-     */
     // On Create Home Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_container_home);
+
+		// Get Client's user name and set it in the title textview
+		username = getIntent().getStringExtra("username");
+		username = username.trim();
 
 		// Get Drawer's Layout and List
         menuDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -125,10 +107,6 @@ public class HomeActivity extends FragmentActivity implements
     }
     
     
-    
-    /**
-     * CLICK EVENTS
-     */
 	// Click event of Drawer Action Bar
     private class DrawerItemClickListener implements ListView.OnItemClickListener
     {
@@ -140,23 +118,19 @@ public class HomeActivity extends FragmentActivity implements
     }
 
 
+    // App Icon clicked (Menu drop-down)
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch event
-        if (menuDrawerToggle.onOptionsItemSelected(item)) {
-          return true;
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        // Pass the event to ActionBarDrawerToggle when the app icon was clicked
+        if (menuDrawerToggle.onOptionsItemSelected(item))
+        {
+        	return true;
         }
-        int itemId = item.getItemId();
-		if (itemId == R.id.action_settings)
-		{
-			Toast.makeText(this, "Settings selected", Toast.LENGTH_LONG).show();
-		}
-		else
-		{
-		}
+        
         return super.onOptionsItemSelected(item);
     }
+    
     
     // Occurs when a menu-item was clicked -> handles the fragments
     private void menuItemClicked(int position)
@@ -220,186 +194,4 @@ public class HomeActivity extends FragmentActivity implements
         menuDrawerLayout.closeDrawer(menuDrawerListView);
     }
     
-    
-	// Handle Activity Result (Camera, )
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-		if (resultCode == RESULT_OK)
-		{
-			// CAMERA
-			if (requestCode == CommonUtilities.REQUEST_IMAGE_CAPTURE)
-			{
-				Bitmap imageBitmap = null;
-
-				if (data.getExtras().get("data") != null)
-				{
-					imageBitmap = (Bitmap) data.getExtras().get("data");
-
-					Log.i(CommonUtilities.TAG, "Successfully received image: " + imageBitmap.toString());
-				}
-				else
-				{
-					try
-					{
-						imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
-					}
-					catch (FileNotFoundException e)
-					{
-						e.printStackTrace();
-					}
-					catch (IOException e)
-					{
-						e.printStackTrace();
-					}
-				}
-
-				if (imageBitmap != null)
-				{
-					// Put bitmap image in image view
-					ImageView imgView = (ImageView) findViewById(R.id.ivPicture);
-					imgView.setImageBitmap(imageBitmap);
-				}
-			}
-		}
-		else
-		{
-
-			Log.i(CommonUtilities.TAG, "Failed receiving image onActivityResult");
-		}
-	}
-
-	
-	
-	/**
-	 * GOOGLE CLOUD MESSAGING
-	 */
-	// Checks if Google Play Services .apk is installed on the device
-	private boolean checkPlayServices()
-	{
-		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-
-		if (resultCode != ConnectionResult.SUCCESS)
-		{
-			if (GooglePlayServicesUtil.isUserRecoverableError(resultCode))
-			{
-				GooglePlayServicesUtil.getErrorDialog(resultCode, this,
-						CommonUtilities.PLAY_SERVICES_RESOLUTION_REQUEST)
-						.show();
-			}
-			else
-			{
-				Log.i(CommonUtilities.TAG, "This device is not supported.");
-
-			}
-
-			return false;
-		}
-
-		return true;
-	}
-	
-	
-	// TODO: Fixes the Google Play Services .apk (re-install)
-	public void fixPlayServices(View v)
-	{
-		String text;
-		
-		if (checkPlayServices())
-			text = "Success";
-		else
-			text = "Failure";
-		
-		Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-	}
-
-	
-	// TODO: Fixes the GCM instance (re-initiate)
-	public void fixGcmServices(View v)
-	{
-		GoogleCloudMessaging.getInstance(getApplicationContext());
-	}
-
-	
-	// TODO: Re-registers device registration (first check if needed)
-	public void fixDeviceRegistration(View v)
-	{
-		GcmManager gcmManager = new GcmManager(getApplicationContext());
-		String result = gcmManager.registerInBackground();
-		
-		Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-	}
-
-	
-
-	/**
-	 * CAMERA INTENT
-	 */
-	// Handles click-event of the 'Take a picture'-button in the fragment_content_camera
-	public void initiateCamera(View view)
-	{
-		// Check for camera device
-		if (!checkForValidCameraDevice())
-		{
-			Toast.makeText(
-					this,
-					"No camera device was found. Please enable or install your camera.",
-					Toast.LENGTH_LONG).show();
-			return;
-		}
-		else
-		{
-			Intent takePictureIntent = new Intent(
-					MediaStore.ACTION_IMAGE_CAPTURE);
-
-			// Create new instance of CameraManager
-			camManager = new CameraManager(this);
-
-			// Create the File where the photo should go
-			File photoFile = null;
-
-			try
-			{
-				photoFile = camManager.createImageFile();
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-				Log.i(CommonUtilities.TAG,
-						"IOException while getting the photo back to HomeActivity with cause "
-								+ e.getCause());
-			}
-
-			// Continue only if the File was successfully created
-			if (photoFile != null)
-			{
-				// takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-				// Uri.fromFile(photoFile));
-				startActivityForResult(takePictureIntent,
-						CommonUtilities.REQUEST_IMAGE_CAPTURE);
-			}
-		}
-
-	}
-
-	// Checks whether the device has a valid camera
-	private boolean checkForValidCameraDevice()
-	{
-		if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA))
-			return true;
-		else
-			return false;
-	}
-
-
-	
-	
-	// TODO: ???
-	@Override
-	public void onPreferenceAttached(PreferenceScreen root, int xmlId)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
 }

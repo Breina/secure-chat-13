@@ -1,27 +1,42 @@
 package alpha.android.speechbubble;
 
+import android.text.SpannableString;
+
 
 public class Message
 {
-	String message;
-	boolean isMine;
+	private String textMessage;
+	private SpannableString imageMessage;
+	private boolean isMine;
 	
 
+	// Constructor for text message
 	public Message(String message, boolean isMine)
 	{
-		this.message = message;
+		this.textMessage = message;
 		this.isMine = isMine;
 	}
 	
-
-	public String getMessage()
+	
+	// Constructor for image message
+	public Message(SpannableString image, boolean isMine)
 	{
-		return message;
+		this.imageMessage = image;
+		this.isMine = isMine;
+	}
+
+	
+	public Object getMessage()
+	{
+		if (this.textMessage != null)
+			return textMessage;
+		else
+			return imageMessage;
 	}
 	
-	public void setMessage(String message)
+	public void setTextMessage(String message)
 	{
-		this.message = message;
+		this.textMessage = message;
 	}
 	
 	public boolean isMine()

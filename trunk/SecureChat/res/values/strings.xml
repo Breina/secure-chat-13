@@ -18,7 +18,6 @@
 
     <!-- FRAGMENT CONTENT CAMERA -->
     <string name="ivPicture_desc">Imageview that will hold the picture</string>
-    <string name="btnPicture">Take a picture</string>
 
     <!-- FRAGMENT_CONTENT_HOME -->
     <string name="tv_welcome">Welcome home, </string>
@@ -28,20 +27,25 @@
     <string name="tv_DeviceRegistration">Device registration</string>
     <string name="tv_shortcut">shorcut to action</string>
     <string name="btn_shortcut">GO</string>
-    <string name="tv_newShortcut"> ... add new shortcut</string>
+    <string name="tv_newShortcut">&#8230; add new shortcut</string>
     <string name="btn_newShortcut">+</string>
     
     <!-- FRAGMENT_CONTENT_OPTIONS -->
-    <string name="btn_fix">Fix</string>
-    <string name="change_pass">Change pass</string>
-    <string name="tv_allow_camera">Camera allowed</string>
-    <string name="tv_allow_gps">GPS allowed</string>
+    <string name="btn_fix">Check</string>
+    <string name="change_pass">Change password</string>
+    <string name="tv_allow_camera">Camera access already allowed</string>
+    <string name="tv_allow_gps">GPS access already allowed</string>
+    <string name="ed_change_pass_hint">Enter new password here</string>
+    <string name="btn_reregister">Re-register GCM Account</string>
+    <string name="tv_title_validation">Validation</string>
+    <string name="tv_title_access">Access</string>
+    <string name="tv_title_actions">Actions</string>
     
     <!-- FRAGMENT CONTENT CONTACTS -->
     <string name="menu_add">Add new contact</string>    
     
     <!-- FRAGMENT_CONTENT_GCM -->
-    <string name="msg_welcome">Welcome home. You can enter your message below:</string>
+    <string name="msg_welcome">You can enter your message below:</string>
     <string name="button_clear">Clear</string>
     <string name="button_send">Send</string>
     <string name="ed_text_hint">Write here</string>
@@ -108,8 +112,14 @@
     <string name="pref_remember">Remember</string>
     <string name="pref_remember_username">Username</string>
     
-    <!-- Map -->
+    <!-- MAP -->
     <string name="map_play_fail">Google play services not found</string>
 
+    <!--  LIST CONTACTS ROW  -->
+    <string name="iv_icon_desc">Messenger Icon</string>
+    
+    <!--   PREVIEW IMAGE  -->
+    <string name="iv_preview_image">Preview picture</string>
+    <string name="btnClose">Close</string>
 
 </resources>

@@ -145,7 +145,7 @@ public class RegisterActivity extends Activity implements GcmManager.GcmDataConn
     	else
     	{
     		if (checkPlayServices())
-    			registrationID = gcmManager.registerInBackground();
+    			gcmManager.registerInBackground();
     		else
     			Toast.makeText(getApplicationContext(), "Please install the Google Play Services APK in order to proceed.",
     						   Toast.LENGTH_LONG).show();

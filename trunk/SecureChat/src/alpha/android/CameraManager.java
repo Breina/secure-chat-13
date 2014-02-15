@@ -13,7 +13,7 @@ import android.util.Log;
 
 public class CameraManager 
 {
-	private static String currentPhotoPath;
+	//private static String currentPhotoPath;
 	private Context appContext;
 	
 	

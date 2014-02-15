@@ -6,7 +6,6 @@ import alpha.android.common.CommonUtilities;
 import alpha.android.webservice.WebserviceManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
@@ -25,8 +24,6 @@ public class MainActivity extends FragmentActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
-        ///navigateHome("bypassman");
     }
 
 	
@@ -46,7 +43,7 @@ public class MainActivity extends FragmentActivity
     	{
         	// Instantiate AsyncTask successful WebserviceManager and execute the request with the login parameters
     		webServiceManager = new WebserviceManager(CommonUtilities.REST_LOGIN, loginParamKeys);
-			final String result = webServiceManager.execute(loginParamValues).get();
+			String result = webServiceManager.execute(loginParamValues).get();
 			
 			// Check and handle result message
 			if (result == null)
@@ -55,17 +52,13 @@ public class MainActivity extends FragmentActivity
 			}
 			else if (!result.contains("fail"))
 			{
+				// Remove quotes
+				result = result.replaceAll("^\"|\"$", "");
+				result = result.replaceAll("\\\\n", "");
+				
 	 			Toast.makeText(this, "Login successful, welcome back " + result, Toast.LENGTH_LONG).show();
 	 			
-	 			// Post-delayed so the user has the time to read the Toast message
-                new Handler().postDelayed(new Runnable()
-                {
-                      @Override
-                      public void run()
-                      {
-                    	  navigateHome(result);
-                      }
-                 }, 1500);
+        	    navigateHome(result);
 			}
 			else
 			{

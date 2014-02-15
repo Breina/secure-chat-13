@@ -1,7 +1,6 @@
 package alpha.android.gcm;
 
 import alpha.android.common.CommonUtilities;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 public class GcmIntentService extends GCMBaseIntentService
 {
     public static final int NOTIFICATION_ID = 1;
-    private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
 
     public GcmIntentService()

@@ -3,7 +3,6 @@ package alpha.android.contacts;
 import java.util.ArrayList;
 
 import alpha.android.R;
-import alpha.android.speechbubble.Message;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
