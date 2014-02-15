@@ -10,8 +10,11 @@ import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.json.JSONObject;
 
 import alpha.android.common.CommonUtilities;
@@ -43,6 +46,10 @@ public class WebserviceManager extends AsyncTask<String, Void, String>
     	
 		// Create a default HttpClient Object
         httpclient = new DefaultHttpClient();
+        
+        HttpParams httpParams = httpclient.getParams();
+        HttpConnectionParams.setConnectionTimeout(httpParams, 3000);
+        HttpConnectionParams.setSoTimeout(httpParams, 3000);
         
         return putWebservice(createHttpPutObject(), params);
     }
@@ -111,15 +118,20 @@ public class WebserviceManager extends AsyncTask<String, Void, String>
             	return null;
             }
         }
+		catch(ConnectTimeoutException e)
+		{
+			e.printStackTrace();
+			Log.i(CommonUtilities.TAG, "ConnectTimeoutException thrown while executing PUT request");
+		}
 		catch(ClientProtocolException e)
 		{
 			e.printStackTrace();
-			Log.i(CommonUtilities.TAG, "ClientProtocolException thrown while executing POST request");
+			Log.i(CommonUtilities.TAG, "ClientProtocolException thrown while executing PUT request");
 		}
 		catch(IOException e)
 		{
 			e.printStackTrace();
-			Log.i(CommonUtilities.TAG, "IOException thrown while executing POST request");
+			Log.i(CommonUtilities.TAG, "IOException thrown while executing PUT request");
 		}
 		catch(Exception e)
 		{
@@ -157,7 +169,7 @@ public class WebserviceManager extends AsyncTask<String, Void, String>
         	String line = "";
         	while ((line = reader.readLine()) != null)
         	{
-        		sb.append(line + "\n");
+        		sb.append(line);
         	}
        
         	is.close();

@@ -3,8 +3,8 @@ package alpha.android.gcm;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
+
 import alpha.android.common.CommonUtilities;
-import alpha.android.speechbubble.ListviewAdapter;
 import alpha.android.speechbubble.Message;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,7 +16,6 @@ public class MessageHandler extends AsyncTask<Void, String, String>
 {
     private GoogleCloudMessaging gcm;
 	private ArrayList<Message> messages;
-    private ListviewAdapter adapter;
 	private AtomicInteger msgId;
 	
 	

@@ -59,7 +59,7 @@ public class RegistrationHandler
 			{
 				e.printStackTrace();
 				System.out.println("Exception thrown from verifyRegistration() in RegistrationHandler \n" +
-								   "Probably an error with getting an object from the DB using selectObjectStatement(). \n" + 
+								   "Probably an error while inserting an object into the DB using insertStatement(). \n" + 
 								   "Printing Params received from RegistrationService:  \n" +
 								   "==================================================\n\n" +
 								   "Username:   " + username + "\n" + 

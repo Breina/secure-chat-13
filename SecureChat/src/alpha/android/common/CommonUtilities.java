@@ -36,6 +36,7 @@ public final class CommonUtilities
     public static final String REST_LOGIN = "/REST/WebService/login";
     public static final String REST_REGISTER = "/REST/WebService/register";
     public static final String REST_CHECK_GCM = "/REST/WebService/checkgcm";
+    public static final String REST_CHANGE_PASS = "/REST/WebService/changepass";
     
     
     // GOOGLE API PROJECT KEY

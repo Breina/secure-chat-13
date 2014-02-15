@@ -4,7 +4,6 @@ import alpha.android.R;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 
 public class PrefsFragment extends PreferenceListFragment implements
 		SharedPreferences.OnSharedPreferenceChangeListener

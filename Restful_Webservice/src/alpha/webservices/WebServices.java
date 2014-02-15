@@ -6,16 +6,18 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.google.android.gcm.server.Message;
-import com.google.android.gcm.server.MulticastResult;
-import com.google.android.gcm.server.Result;
-import com.google.android.gcm.server.Sender;
-
+import alpha.controller.ChangePasswordHandler;
+import alpha.controller.GcmRegistrationHandler;
 import alpha.controller.LoginHandler;
 import alpha.controller.RegistrationHandler;
+import alpha.webservices.jaxbeans.ChangePassBean;
 import alpha.webservices.jaxbeans.CheckGcmBean;
 import alpha.webservices.jaxbeans.LoginBean;
 import alpha.webservices.jaxbeans.RegistrationBean;
+
+import com.google.android.gcm.server.Message;
+import com.google.android.gcm.server.Result;
+import com.google.android.gcm.server.Sender;
 
 
 /**
@@ -84,7 +86,7 @@ public class WebServices
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			System.out.println(" * LoginService failed with error:   " + e.getMessage().toString());
+			System.out.println(" * RegisterService failed with error:   " + e.getMessage().toString());
 		}
 	    
 	    return null;
@@ -121,13 +123,9 @@ public class WebServices
 			result = sender.send(message, deviceKey, 1);
 			
 			if (result != null)
-			{
 				System.out.println("*  Result of message sending: " + result.toString());
-			}
 			else
-			{
-				System.out.println("*  Messaging failure: " + result.toString());
-			}
+				System.out.println("*  Message failed to receive");
 		}
 		catch (Exception e)
 		{
@@ -139,28 +137,63 @@ public class WebServices
 	
 	
 		
-		/**
-		 * CHECKS WHETHER THE ENTERED USER HAS ALREADY AN ENTRY FOR A GCM REGISTRATION ID IN THE DB
-		 * 
-		 * @param username entered user
-		 * @return result
-		 */
-		@PUT
-		@Path("/checkgcm")
-		@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-		@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-		public String checkgcm(final CheckGcmBean gcmBean)
-		{
-		    try
-		    {
-		        return new LoginHandler().checkForGcmRegistration(gcmBean.username);
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				System.out.println(" * LoginService failed with error:   " + e.getMessage().toString());
-			}
-		    
-		    return null;
+	/**
+	 * CHECKS WHETHER THE ENTERED USER HAS ALREADY AN ENTRY FOR A GCM REGISTRATION ID IN THE DB
+	 * 
+	 * @param username entered user
+	 * @return result
+	 */
+	@PUT
+	@Path("/checkgcm")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public String checkgcm(final CheckGcmBean gcmBean)
+	{
+	    try
+	    {
+	    	return new GcmRegistrationHandler().checkForGcmRegistration(gcmBean.username);
 		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(" * GcmService failed with error:   " + e.getMessage().toString());
+		}
+	    
+	    return null;
+	}
+		
+		
+	/**
+	 * CHANGES PASSWORD OF USER
+	 * 
+	 * @param username entered user
+	 * @return result
+	 */
+	@PUT
+	@Path("/changepass")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public String changepass(final ChangePassBean changePassBean)
+	{
+		boolean isSuccess = false;
+		
+	    try
+	    {
+	    	isSuccess = new ChangePasswordHandler().changePassword(changePassBean.username, changePassBean.password);
+	    	
+	    	if (isSuccess)
+	    		return "Password was successfully changed.";
+	    	else
+	    		return "Password change failed. The connection with the DB is probably down. " + 
+	    	           "Please contact the system administrator";
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(" * ChangePassService failed with error:   " + e.getMessage().toString());
+		}
+	    
+	    return null;
+	}
+	
 }

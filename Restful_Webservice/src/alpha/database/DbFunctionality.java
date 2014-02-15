@@ -114,7 +114,7 @@ public class DbFunctionality
 			
 			strStatement += ") VALUES (";
 			
-			for (String value : values)
+			for (@SuppressWarnings("unused") String value : values)
 			{
 				strStatement += "?, ";
 			}
@@ -174,9 +174,58 @@ public class DbFunctionality
 	    catch (SQLException e)
 	    {
 			e.printStackTrace();
+			
+			System.out.println(" * Delete-statement failed with error: " + e.getMessage().toString() + "\n" +
+					   		   "   Printing query string: " + preparedStatement.toString());
 		}
 
 	    preparedStatement = null;
 	}
 
+	
+	/*
+	 * Creates an insert-query and inserts it into a given table
+	 * 	@param tableName = name of the table to insert into
+	 *  @param values = String array of the values (make sure to insert blanks for unwanted col values)
+	 */
+	public boolean alterObject(String tableName,
+			String colToSet, String valToSet,
+			String whereClauseCol, String whereClauseVal)
+	{
+		String strStatement = "UPDATE " + tableName + " " +
+							  "SET " + colToSet + " = ? " +  
+							  "WHERE " + whereClauseCol + " = ?";  
+		
+		try
+		{
+			// Build the prepared statement
+			preparedStatement = connection.prepareStatement(strStatement);
+			
+			preparedStatement.setString(1, valToSet);
+			preparedStatement.setString(2, whereClauseVal);
+			
+			// Execute the query
+			int rowsAffected = preparedStatement.executeUpdate();
+			System.out.println(" * AlterObject-statement was succesfully processed without errors. " + 
+								   rowsAffected + " number of rows were affected by the statement: " +
+								   preparedStatement.toString());
+			
+			if (rowsAffected > 0)
+				return true;
+			else
+				return false;
+			
+
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			
+			System.out.println(" * Alter-statement failed with error: " + e.getMessage().toString() + "\n" +
+					   		   "   Printing query string: " + preparedStatement.toString());
+		}
+		
+		preparedStatement = null;
+		return false;
+	}
 }

@@ -4,14 +4,22 @@ import java.util.ArrayList;
 
 import alpha.android.R;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.text.SpannableString;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class ListviewAdapter extends BaseAdapter
@@ -27,11 +35,13 @@ public class ListviewAdapter extends BaseAdapter
 		this.mMessages = messages;
 	}
 	
+	
 	@Override
 	public int getCount()
 	{
 		return mMessages.size();
 	}
+	
 	
 	@Override
 	public Object getItem(int position)
@@ -39,10 +49,11 @@ public class ListviewAdapter extends BaseAdapter
 		return mMessages.get(position);
 	}
 	
+	
 	@SuppressLint("ResourceAsColor") @Override
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
-		Message message = (Message) this.getItem(position);
+		final Message message = (Message) this.getItem(position);
 
 		ViewHolder holder; 
 		if(convertView == null)
@@ -55,7 +66,43 @@ public class ListviewAdapter extends BaseAdapter
 		else
 			holder = (ViewHolder) convertView.getTag();
 		
-		holder.message.setText(message.getMessage());
+		// Set the message as text in the Chat Bubble
+		if (message.getMessage() instanceof SpannableString)
+		{
+			holder.message.setText((SpannableString) message.getMessage());
+			holder.message.setOnClickListener(new OnClickListener()
+			{
+			    @Override
+			    public void onClick(View v)
+			    {
+			    	SpannableString imageMessage = (SpannableString) message.getMessage();
+			    	String fileName = imageMessage.toString();
+			    	
+			    	Toast.makeText(appContext, fileName, Toast.LENGTH_LONG).show();
+			    	
+			    	final Dialog nagDialog = new Dialog(appContext, android.R.style.Theme_Holo_Light_NoActionBar_Fullscreen);
+		            nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); 
+		            nagDialog.setCancelable(false);
+		            nagDialog.setContentView(R.layout.preview_image);
+		            Button btnClose = (Button)nagDialog.findViewById(R.id.btnIvClose);
+		            ImageView ivPreview = (ImageView)nagDialog.findViewById(R.id.iv_preview_image);
+		            ivPreview.setImageBitmap(BitmapFactory.decodeFile(appContext.getFilesDir() + "/" + "LAST_SAVED_IMAGE.png"));
+
+		            btnClose.setOnClickListener(new OnClickListener()
+		            {
+		                @Override
+		                public void onClick(View arg0)
+		                {
+		                    nagDialog.dismiss();
+		                }
+		            });
+		            
+		            nagDialog.show();
+			    }
+			});
+		}
+		else
+			holder.message.setText(message.getMessage().toString());
 		
 		LayoutParams lp = (LayoutParams) holder.message.getLayoutParams();
 
@@ -83,6 +130,7 @@ public class ListviewAdapter extends BaseAdapter
 		TextView message;
 	}
 
+	
 	@Override
 	public long getItemId(int position)
 	{
