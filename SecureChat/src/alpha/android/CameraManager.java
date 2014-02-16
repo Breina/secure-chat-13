@@ -6,14 +6,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import alpha.android.common.CommonUtilities;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.Toast;
 
 public class CameraManager 
 {
-	//private static String currentPhotoPath;
 	private Context appContext;
 	
 	
@@ -24,7 +28,7 @@ public class CameraManager
 
 	
 	// Create a new imageFile in context
-	public File createImageFile() throws IOException
+	private File createImageFile() throws IOException
 	{	
 		File image = null;
 		
@@ -56,30 +60,43 @@ public class CameraManager
 	}
 
 	
-	// Optimizes pictures' dimensions for optimal memory usage
-//	private Bitmap optimizePictureDimensions()
-//	{
-//		ImageView imgView = (ImageView) findViewById(R.id.ivPicture);
-//		
-//	    // Get the dimensions of the View
-//	    int targetW = imgView.getWidth();
-//	    int targetH = imgView.getHeight();
-//
-//	    // Get the dimensions of the bitmap
-//	    BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-//	    bmOptions.inJustDecodeBounds = true;
-//	    BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
-//	    int photoW = bmOptions.outWidth;
-//	    int photoH = bmOptions.outHeight;
-//
-//	    // Determine how much to scale down the image
-//	    int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-//
-//	    // Decode the image file into a Bitmap sized to fill the View
-//	    bmOptions.inJustDecodeBounds = false;
-//	    bmOptions.inSampleSize = scaleFactor;
-//	    bmOptions.inPurgeable = true;
-//
-//	    return BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
-//	}
+	// Initiates the camera
+	public Intent initiateCameraIntent()
+	{
+		Intent takePictureIntent = null;
+		File photoFile = null;
+		
+		// Check for camera device
+		if (!checkForValidCameraDevice())
+			Toast.makeText(appContext, "No camera device was found. Please enable or install your camera.", Toast.LENGTH_LONG).show();
+		else
+		{
+			try
+			{
+				takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+				photoFile = this.createImageFile();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+				Log.i(CommonUtilities.TAG,
+						"IOException while getting the photo back to HomeActivity with cause "
+								+ e.getCause());
+			}
+		}
+		
+		return takePictureIntent;
+	}
+
+	
+	// Checks whether the device has a valid camera
+	private boolean checkForValidCameraDevice()
+	{
+		if (appContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA))
+			return true;
+		else
+			return false;
+	}
+
+
 }

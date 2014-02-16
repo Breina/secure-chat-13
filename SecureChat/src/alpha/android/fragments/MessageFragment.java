@@ -15,9 +15,11 @@ import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 
-public class MessageFragment extends ListFragment
+public class MessageFragment extends ListFragment implements OnClickListener
 {
 	private ArrayList<Message> messages;
 	
@@ -66,6 +68,11 @@ public class MessageFragment extends ListFragment
 		 ListviewAdapter adapter = new ListviewAdapter(getActivity(), messages);
 		 setListAdapter(adapter);
 
+			
+		 // Set button onClick-listeners
+		 Button b1 = (Button) view.findViewById(R.id.btn_Send);
+		 b1.setOnClickListener(this);
+			
          return view;
 	 }
 
@@ -88,4 +95,24 @@ public class MessageFragment extends ListFragment
 		setListAdapter(null);
 	}
 
+	
+	// Handles the click-events of the buttons
+	@Override
+	public void onClick(View v)
+	{
+		switch (v.getId())
+		{
+			case R.id.btn_Send:
+				//TODO: SEND MESSAGE
+				break;
+				
+			default:
+				break;
+        }
+	}
+	
+	public void sendMessage(View view)
+	{
+		
+	}
 }

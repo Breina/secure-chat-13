@@ -111,7 +111,7 @@ public class GcmManager
 	
 	
 	// Checks if Google Play Services .apk is installed on the device
-	private boolean validateGooglePlayServices()
+	public boolean validateGooglePlayServices()
 	{
 		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(applicationContext);
 

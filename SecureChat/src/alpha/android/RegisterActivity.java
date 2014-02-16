@@ -17,9 +17,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-
 public class RegisterActivity extends Activity implements GcmManager.GcmDataConnection
 {
 	// Managing objects
@@ -144,59 +141,13 @@ public class RegisterActivity extends Activity implements GcmManager.GcmDataConn
     	}
     	else
     	{
-    		if (checkPlayServices())
+    		if (gcmManager.validateGooglePlayServices())
     			gcmManager.registerInBackground();
     		else
     			Toast.makeText(getApplicationContext(), "Please install the Google Play Services APK in order to proceed.",
     						   Toast.LENGTH_LONG).show();
-    		
-        	// will finally enter response()-method through GcmManager's onPostExecute();
     	}
-    	
 	}
-	
-	
-	// Check the device to make sure it has the Google Play Services APK
-    private boolean checkPlayServices()
-    {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        
-        if (resultCode != ConnectionResult.SUCCESS)
-        {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode))
-            {
-            	try
-            	{
-            		GooglePlayServicesUtil.getErrorDialog(resultCode, this, CommonUtilities.PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            	}
-            	catch (IllegalStateException e)
-            	{
-        			e.printStackTrace();
-        			Log.i(CommonUtilities.TAG, "IllegalStateException thrown from MainActivity");
-            	}
-            	catch (NoClassDefFoundError e)
-            	{
-        			e.printStackTrace();
-        			Log.i(CommonUtilities.TAG, "NoClassDefFoundError thrown from MainActivity");
-            	}
-            	catch (Exception e)
-            	{
-        			e.printStackTrace();
-        			Log.i(CommonUtilities.TAG, "Exception thrown from MainActivity");
-            	}
-            }
-            else
-            {
-                Log.i(CommonUtilities.TAG, "This device is not supported.");
-                
-                finish();
-            }
-            
-            return false;
-        }
-        
-        return false;
-    }
     
     
 	// Overridden method of GcmManager's interface GcmDataConnection (to get registration id when registered in background)

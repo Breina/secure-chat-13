@@ -44,6 +44,7 @@
 	        android:paddingLeft="15sp"
 	        android:paddingRight="15sp"
 	        android:paddingTop="5sp"
+	        android:onClick="sendMessage"
 	        android:text="@string/button_send"
 	        android:textColor="#FFF" />
         
