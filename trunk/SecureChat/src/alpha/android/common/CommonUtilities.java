@@ -50,4 +50,13 @@ public final class CommonUtilities
     
     // CAMERA
 	public static final int REQUEST_IMAGE_CAPTURE = 1;
+	
+	// MAPS
+	public static final String GPSMARKER = "GPS";
+	public static final double SPACESINGLE = 0.5d;
+	public static final int MAPPADDING = 50;
+	public static final boolean ANIMATION = true;
+	public static final boolean ZOOMTOSELECTION = false;
+	public static final String SIZEKEY = "marker_size";
+	public static final String MARKERPREFIX = "marker_";
 }

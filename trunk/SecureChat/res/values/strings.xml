@@ -112,6 +112,8 @@
     <string name="pref_remember">Remember</string>
     <string name="pref_remember_username">Username</string>
     
+    <string name="pref_key_store_location">pref_key_store_location</string>
+    
     <!-- MAP -->
     <string name="map_play_fail">Google play services not found</string>
 
