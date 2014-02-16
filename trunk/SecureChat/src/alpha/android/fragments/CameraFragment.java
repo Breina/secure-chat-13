@@ -1,6 +1,5 @@
 package alpha.android.fragments;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,7 +10,6 @@ import alpha.android.common.CommonUtilities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -23,7 +21,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 public class CameraFragment extends Fragment implements OnClickListener
 {
@@ -31,13 +28,26 @@ public class CameraFragment extends Fragment implements OnClickListener
 	private Bitmap takenPicture;
 	
 	
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+
+		// CamManager -> will instantiate Camera
+		camManager = new CameraManager(getActivity());
+		Intent cameraIntent = camManager.initiateCameraIntent();
+		startActivityForResult(cameraIntent, CommonUtilities.REQUEST_IMAGE_CAPTURE);
+		
+		// takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+		// Uri.fromFile(photoFile));
+	}
+
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
-	{
-		// First initiate the camera process
-		initiateCamera();
-		
+	{		
 		View view = inflater.inflate(R.layout.fragment_content_camera, container, false);
 		
 		Button b = (Button) view.findViewById(R.id.btnPicture);
@@ -45,58 +55,6 @@ public class CameraFragment extends Fragment implements OnClickListener
 	    b.setOnClickListener(this);
 	        
 		return view;
-	}
-	
-
-	// Initiates the camera
-	public void initiateCamera()
-	{
-		// Check for camera device
-		if (!checkForValidCameraDevice())
-		{
-			Toast.makeText(getActivity(), "No camera device was found. Please enable or install your camera.", Toast.LENGTH_LONG).show();
-			return;
-		}
-		else
-		{
-			Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-			// Create new instance of CameraManager
-			camManager = new CameraManager(getActivity());
-
-			// Create the File where the photo should go
-			File photoFile = null;
-
-			try
-			{
-				photoFile = camManager.createImageFile();
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-				Log.i(CommonUtilities.TAG,
-						"IOException while getting the photo back to HomeActivity with cause "
-								+ e.getCause());
-			}
-
-			// Continue only if the File was successfully created
-			if (photoFile != null)
-			{
-				// takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-				// Uri.fromFile(photoFile));
-				startActivityForResult(takePictureIntent, CommonUtilities.REQUEST_IMAGE_CAPTURE);
-			}
-		}
-	}
-
-	
-	// Checks whether the device has a valid camera
-	private boolean checkForValidCameraDevice()
-	{
-		if (getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA))
-			return true;
-		else
-			return false;
 	}
 	
 	
@@ -109,11 +67,10 @@ public class CameraFragment extends Fragment implements OnClickListener
 			// CAMERA
 			if (requestCode == CommonUtilities.REQUEST_IMAGE_CAPTURE)
 			{
-
 				if (data.getExtras().get("data") != null)
 				{
 					takenPicture = (Bitmap) data.getExtras().get("data");
-
+					
 					Log.i(CommonUtilities.TAG, "Successfully received image: " + takenPicture.toString());
 				}
 				else
@@ -134,6 +91,8 @@ public class CameraFragment extends Fragment implements OnClickListener
 
 				if (takenPicture != null)
 				{
+					optimizePictureDimensions(takenPicture);
+					
 					// Put bitmap image in image view
 					ImageView imgView = (ImageView) getActivity().findViewById(R.id.ivPicture);
 					imgView.setImageBitmap(takenPicture);
@@ -238,4 +197,31 @@ public class CameraFragment extends Fragment implements OnClickListener
 		}
 	}
 	
+	
+	// Optimizes pictures' dimensions for optimal memory usage
+	private Bitmap optimizePictureDimensions(Bitmap image)
+	{
+		ImageView imgView = (ImageView) getActivity().findViewById(R.id.ivPicture);
+		
+	    // Get the dimensions of the View
+	    int targetW = imgView.getWidth();
+	    int targetH = imgView.getHeight();
+
+	    // Get the dimensions of the bitmap
+	    android.graphics.BitmapFactory.Options bmOptions = new android.graphics.BitmapFactory.Options();
+	    bmOptions.inJustDecodeBounds = true;
+	    
+	    int photoW = image.getWidth();
+	    int photoH = image.getHeight();
+
+	    // Determine how much to scale down the image
+	    int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+	    // Decode the image file into a Bitmap sized to fill the View
+	    bmOptions.inJustDecodeBounds = false;
+	    bmOptions.inSampleSize = scaleFactor;
+	    bmOptions.inPurgeable = true;
+
+	    return Bitmap.createScaledBitmap(image, targetW, targetH, false);
+	}
 }

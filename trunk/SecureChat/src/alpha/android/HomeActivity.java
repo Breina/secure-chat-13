@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 public class HomeActivity extends FragmentActivity
 {
+	// Object that will hold the user name of the logged in user
 	public static String username;
 	
 	// Menu Objects
@@ -177,16 +178,15 @@ public class HomeActivity extends FragmentActivity
 		}
 
 		// Check if there was previous content -> replace , else -> add
-		if (content != null)
-			if (getSupportFragmentManager().findFragmentById(
-					R.id.contentFragment_container_main) != null)
-				getSupportFragmentManager().beginTransaction()
-						.replace(R.id.contentFragment_container_main, content)
-						.commit();
-			else
-				getSupportFragmentManager().beginTransaction()
-						.add(R.id.contentFragment_container_main, content)
-						.commit();
+		if (getSupportFragmentManager().findFragmentById(
+				R.id.contentFragment_container_main) != null)
+			getSupportFragmentManager().beginTransaction()
+					.replace(R.id.contentFragment_container_main, content)
+					.commit();
+		else
+			getSupportFragmentManager().beginTransaction()
+					.add(R.id.contentFragment_container_main, content)
+					.commit();
 		
         // Highlight the selected item, update the title, and close the drawer
         menuDrawerListView.setItemChecked(position, true);
