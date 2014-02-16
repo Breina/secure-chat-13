@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>    
     
-    <integer name="google_play_services_version">4030500</integer>
+    <!-- Emulator & Nexus:	4030500 -->
+    <!-- HTC wildfile:		4132500 -->
+    <integer name="google_play_services_version">4132500</integer>
 
 </resources>
