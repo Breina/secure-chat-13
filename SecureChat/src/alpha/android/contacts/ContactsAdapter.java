@@ -14,18 +14,24 @@ public class ContactsAdapter extends BaseAdapter
 {
 	private Context context;
 	private ArrayList<Contact> contacts;
-
-	public ContactsAdapter(Context context, ArrayList<Contact> contacts)
-	{
-		super();
+	
+	public ContactsAdapter(Context context) {
 		this.context = context;
-		this.contacts = contacts;
+		contacts = new ArrayList<Contact>();
 	}
 
 	@Override
 	public int getCount()
 	{
 		return contacts.size();
+	}
+	
+	public void addContact(Contact contact) {
+		contacts.add(contact);
+	}
+	
+	public void removeContact(Contact contract) {
+		contacts.remove(contract);
 	}
 
 	@Override

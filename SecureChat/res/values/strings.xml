@@ -21,14 +21,11 @@
 
     <!-- FRAGMENT_CONTENT_HOME -->
     <string name="tv_welcome">Welcome home, </string>
-    <string name="tv_intro">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</string>
+    <string name="tv_intro">Welcome to Secure Chat, the #1 full-featured, safe and reliable android chat application. If you enjoy our app, please review it in the Android Play store!</string>
     <string name="tv_PlayServices">Google Play Services</string>
     <string name="tv_GcmServices">Google Cloud Messaging</string>
     <string name="tv_DeviceRegistration">Device registration</string>
-    <string name="tv_shortcut">shorcut to action</string>
-    <string name="btn_shortcut">GO</string>
-    <string name="tv_newShortcut">&#8230; add new shortcut</string>
-    <string name="btn_newShortcut">+</string>
+    <string name="btn_update">Update</string>
     
     <!-- FRAGMENT_CONTENT_OPTIONS -->
     <string name="btn_fix">Check</string>
