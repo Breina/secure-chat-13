@@ -18,12 +18,14 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -34,6 +36,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapsInitializer;
@@ -46,90 +49,72 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapFragment extends Fragment
 {
+	private static final String GPSMARKER = "GPS";
+	private static final double SPACESINGLE = 0.5d;
+	private static final int MAPPADDING = 50;
+	private static final boolean ANIMATION = true;
+	private static final boolean ZOOMTOSELECTION = false;
+	
 	private static final String SIZEKEY = "marker_size";
 	private static final String MARKERPREFIX = "marker_";
 
-	public static RelativeLayout view;
-
+	private SupportMapFragment fragment;
 	private GoogleMap googleMap;
 	private Location lastLoc;
 	private MarkerOptions gpsMarker;
 	private ArrayList<MarkerOptions> markers;
 	private String providerName;
 	private LocationManager locMan;
-
 	private Marker selectedMarker;
+	private Button btnZoom, btnDelete, btnOk;
 	private MarkerOptions lastAddedMarker;
-	private Button btnZoom, btnDelete, btnAccept;
-	
-	private boolean loaded;
 
 	public MapFragment()
-	{
+	{		
 		markers = new ArrayList<MarkerOptions>();
-		loaded = false;
 	}
 
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState)
+	{
+		super.onActivityCreated(savedInstanceState);
+		
+	    FragmentManager fm = getChildFragmentManager();
+	    fragment = (SupportMapFragment) fm.findFragmentById(R.id.map);
+	    
+	    if (fragment == null)
+	    {
+	        fragment = SupportMapFragment.newInstance();
+	        fm.beginTransaction().replace(R.id.map, fragment).commit();
+	    }
+	    
+	    initilizeMap();
+	}
+	
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
-		// Clear view if needed
-		if (view != null)
-		{
-			ViewGroup parent = (ViewGroup) view.getParent();
+	    // Inflate view
+		View mapView = inflater.inflate(R.layout.fragment_content_map, container, false);
 
-			if (parent != null)
-				parent.removeView(view);
-		}
-
-		// Inflate view
-		try
-		{
-			view = new RelativeLayout(getActivity());
-			View mapView = inflater.inflate(R.layout.fragment_content_map,
-					container, false);
-
-			view.addView(mapView, new RelativeLayout.LayoutParams(-1, -1));
-
-			LinearLayout linearLayout = new LinearLayout(getActivity());
-			linearLayout.setOrientation(LinearLayout.VERTICAL);
-			view.addView(linearLayout);
-
-			btnZoom = new Button(getActivity());
-			btnZoom.setText("Zoom");
-			btnZoom.setWidth(80);
-			btnZoom.setHeight(40);
-			btnZoom.setEnabled(false);
-			btnZoom.setOnClickListener(new OnBtnZoomHandler());
-			linearLayout.addView(btnZoom);
-
-			btnDelete = new Button(getActivity());
-			btnDelete.setText("Del");
-			btnDelete.setWidth(80);
-			btnDelete.setHeight(40);
-			btnDelete.setEnabled(false);
-			btnDelete.setOnClickListener(new OnBtnDeleteHandler());
-			linearLayout.addView(btnDelete);
-
-			btnAccept = new Button(getActivity());
-			btnAccept.setText("OK");
-			btnAccept.setWidth(80);
-			btnAccept.setHeight(40);
-			linearLayout.addView(btnAccept);
-
-			initilizeMap();
-			initPos();
-		}
-		catch (InflateException e)
-		{
-			// map is already there
-			return view;
-		}
-
-		return view;
-
+		// ZOOM BUTTON
+		btnZoom = (Button) mapView.findViewById(R.id.btnZoom);
+		btnZoom.setOnClickListener(new OnBtnZoomHandler());
+		
+		// DELETE BUTTON
+		btnDelete = (Button) mapView.findViewById(R.id.btnDelete);
+		btnDelete.setOnClickListener(new OnBtnDeleteHandler()); 
+		
+		// OK BUTTON
+		btnOk = (Button) mapView.findViewById(R.id.btnOk);
+		//btnOk.setOnClickListener(new OnBtnDeleteHandler());
+		
+	    return mapView;
 	}
+
 
 	private void initPos()
 	{
@@ -165,25 +150,23 @@ public class MapFragment extends Fragment
 			Toast.makeText(getActivity().getApplicationContext(), text,
 					Toast.LENGTH_LONG).show();
 
-			// TODO: add this return when you no longer want the 0,0 gps
-			return;
-
+			 return;
 		}
 		else
 		{
 			// register for location updates
 			LocationUpdateHandler luha = new LocationUpdateHandler();
 			locMan.requestLocationUpdates(providerName, 5000, 10, luha);
-
+			
 			lastLoc = locMan.getLastKnownLocation(providerName);
 		}
 
 		// set initial text
-
+		
 		// this.et_log.setText(getLocationString(lastLoc) + "\n");
 
 		gpsMarker = new MarkerOptions();
-		gpsMarker.title(CommonUtilities.GPSMARKER);
+		gpsMarker.title(GPSMARKER);
 		gpsMarker.draggable(true);
 		gpsMarker.icon(BitmapDescriptorFactory
 				.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
@@ -191,64 +174,51 @@ public class MapFragment extends Fragment
 
 		markers.add(gpsMarker);
 		googleMap.addMarker(gpsMarker);
-
+		
 		btnZoom.setEnabled(true);
-
 	}
 
+	
 	/**
-	 * function to load map. If map is not created it will create it for you
-	 * */
+	 * Function to load map. If map is not created it will create it for you
+	 **/
 	private void initilizeMap()
 	{
-		if (googleMap == null)
-		{
-			googleMap = ((SupportMapFragment) getFragmentManager()
-					.findFragmentById(R.id.map)).getMap();
-
-			// check if map is created successfully or not
-			if (googleMap == null)
-			{
-				Toast.makeText(getActivity().getApplicationContext(),
-						"Sorry! unable to create maps", Toast.LENGTH_SHORT)
-						.show();
-
-				return;
-			}
-		}
-
 		try
 		{
 			MapsInitializer.initialize(getActivity());
 		}
 		catch (GooglePlayServicesNotAvailableException e)
 		{
-			Toast.makeText(getActivity().getApplicationContext(),
-					"Google play services not available", Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(getActivity().getApplicationContext(), "Google play services not available", Toast.LENGTH_LONG).show();
 		}
-
-		// googleMap.setOnMarkerDragListener(new MarkerDraggedHandler());
-		googleMap.setOnMarkerClickListener(new MarkerClickHandler());
-		googleMap.setOnMapLongClickListener(new MapLongClickHandler());
-
-		// adding marker
-
 	}
-
+	
+	
 	@Override
 	public void onResume()
 	{
 		super.onResume();
-
+		
+		if (googleMap == null)
+		{
+			googleMap = fragment.getMap();
+			googleMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)));
+		}
+		
+		googleMap.setOnMarkerClickListener(new MarkerClickHandler());
+		googleMap.setOnMapLongClickListener(new MapLongClickHandler());
+		
+	    initPos();
 		loadMarkers();
 	}
 
+	
 	@Override
-	public void onPause()
+	public void onDestroy()
 	{
-		super.onPause();
-
+		super.onDestroy();
+		
 		saveMarkers();
 	}
 
@@ -265,11 +235,11 @@ public class MapFragment extends Fragment
 		boolean store = prefs.getBoolean("pref_key_store_location", false);
 
 		// TODO: store is always false
-		// if (!store) {
-		// Log.i(CommonUtilities.TAG,
-		// "Not saving because the preference is either unexisting or off.");
-		// return;
-		// }
+//		 if (!store) {
+//		 Log.i(CommonUtilities.TAG,
+//		 "Not saving because the preference is either unexisting or off.");
+//		 return;
+//		 }
 
 		Log.i(CommonUtilities.TAG, "Saving markers");
 
@@ -311,8 +281,6 @@ public class MapFragment extends Fragment
 
 	private void loadMarkers()
 	{
-		if (loaded)
-			return;
 
 		Log.i(CommonUtilities.TAG, "Loading markers");
 
@@ -346,11 +314,10 @@ public class MapFragment extends Fragment
 			LatLng pos = new LatLng(lat, lng);
 			addMarkerFromLoad(pos, title);
 		}
-		
-		loaded = true;
 
 		Log.i(CommonUtilities.TAG, "All done!");
 	}
+
 	
 	private void addMarkerFromLoad(LatLng pos, String title) {
 		MarkerOptions marker = new MarkerOptions();
@@ -426,50 +393,45 @@ public class MapFragment extends Fragment
 		alert.show();
 	}
 
+	
 	private void zoomToFitMarkers()
 	{
-		if (markers.size() == 0)
-		{
-			Log.e(CommonUtilities.TAG,
-					"No markers found, this should not happen!");
+		if (markers.size() == 0) {
+			Log.e(CommonUtilities.TAG, "No markers found, this should not happen!");
 			return;
 		}
-
+		
 		LatLngBounds bounds;
-
-		if (markers.size() > 1)
-		{
+		
+		if (markers.size() > 1) {
 			LatLngBounds.Builder builder = new LatLngBounds.Builder();
 			for (MarkerOptions marker : markers)
 			{
 				builder.include(marker.getPosition());
 			}
 			bounds = builder.build();
-		}
-		else
-		{
+		} else {
 			LatLng singleMarkerPos = markers.get(0).getPosition();
 			double lat = singleMarkerPos.latitude;
 			double lon = singleMarkerPos.longitude;
-
-			bounds = new LatLngBounds(new LatLng(lat
-					- CommonUtilities.SPACESINGLE, lon
-					- CommonUtilities.SPACESINGLE), new LatLng(lat
-					+ CommonUtilities.SPACESINGLE, lon
-					+ CommonUtilities.SPACESINGLE));
+			
+			bounds = new LatLngBounds(new LatLng(lat - SPACESINGLE, lon - SPACESINGLE),
+					new LatLng(lat + SPACESINGLE, lon + SPACESINGLE));
 		}
+		
 
 		// Google map's camera that is
 		CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,
-				CommonUtilities.MAPPADDING);
+				MAPPADDING);
 
-		if (CommonUtilities.ANIMATION)
+		if (ANIMATION)
 			googleMap.animateCamera(cu);
 		else
 			googleMap.moveCamera(cu);
 
 	}
 
+	
 	private void updatePos()
 	{
 		lastLoc = locMan.getLastKnownLocation(providerName);
@@ -486,28 +448,27 @@ public class MapFragment extends Fragment
 			Log.w(CommonUtilities.TAG, "Setting gps position to (0,0)");
 		}
 	}
-
-	private boolean isMarkerGPS(Marker marker)
-	{
+	
+	
+	private boolean isMarkerGPS(Marker marker) {
 		String potentialTitle = marker.getTitle();
-		return (potentialTitle != null && potentialTitle
-				.equals(CommonUtilities.GPSMARKER));
+		return (potentialTitle != null && potentialTitle.equals(GPSMARKER));
 	}
-
+	
+	
 	private boolean isMarkerGPS(MarkerOptions marker)
 	{
 		String potentialTitle = marker.getTitle();
-		return (potentialTitle != null && potentialTitle
-				.equals(CommonUtilities.GPSMARKER));
+		return (potentialTitle != null && potentialTitle.equals(GPSMARKER));
 	}
 
+	
 	private void hilightMarker(Marker marker)
 	{
 		if (marker == null)
 			return;
-
-		if (selectedMarker != null)
-		{
+		
+		if (selectedMarker != null) {
 			if (isMarkerGPS(selectedMarker))
 				selectedMarker.setIcon(BitmapDescriptorFactory
 						.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
@@ -515,22 +476,21 @@ public class MapFragment extends Fragment
 				selectedMarker.setIcon(BitmapDescriptorFactory
 						.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 		}
-
+		
 		selectedMarker = marker;
-
+		
 		marker.setIcon(BitmapDescriptorFactory
 				.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-
+		
 		if (isMarkerGPS(marker))
-		{
 			btnDelete.setEnabled(false);
-		}
 		else
 			btnDelete.setEnabled(true);
 		
 		marker.showInfoWindow();
 	}
 
+	
 	/**
 	 * Converts a location into a readable version with latitude and longitude
 	 * 
@@ -550,50 +510,44 @@ public class MapFragment extends Fragment
 		}
 	}
 
+	
 	private void removeSelectedMarker()
 	{
-		if (selectedMarker == null)
-		{
-			Log.e(CommonUtilities.TAG,
-					"No selection found, this should not happen!");
+		if (selectedMarker == null) {
+			Log.e(CommonUtilities.TAG, "No selection found, this should not happen!");
 			return;
 		}
-
+		
 		String supposedTitle = selectedMarker.getTitle();
-		if (supposedTitle != null
-				&& supposedTitle.equals(CommonUtilities.GPSMARKER))
-		{
-			Toast.makeText(getActivity(), "Can't remove GPS position",
-					Toast.LENGTH_SHORT).show();
+		if (supposedTitle != null && supposedTitle.equals(GPSMARKER)) {
+			Toast.makeText(getActivity(), "Can't remove GPS position", Toast.LENGTH_SHORT).show();
 			return;
 		}
 
 		markers.remove(selectedMarker);
-
+		
 		int size = markers.size();
 		MarkerOptions markerOptions;
-		for (int i = 0; i < size; i++)
-		{
+		for (int i = 0; i < size; i++) {
 			markerOptions = markers.get(i);
-			if (markerOptions.getPosition()
-					.equals(selectedMarker.getPosition()))
-			{
+			if (markerOptions.getPosition().equals(selectedMarker.getPosition())) {
 				markers.remove(markerOptions);
 				Log.i(CommonUtilities.TAG, "Removing some marker");
 				break;
 			}
 		}
-
+		
 		selectedMarker.remove();
-
+		
 		selectedMarker = null;
-
+		
 		if (markers.size() == 0)
 			btnZoom.setEnabled(false);
 		else
 			btnDelete.setEnabled(true);
 	}
 
+	
 	private class MapLongClickHandler implements OnMapLongClickListener
 	{
 
@@ -605,6 +559,7 @@ public class MapFragment extends Fragment
 
 	}
 
+	
 	private class MarkerClickHandler implements OnMarkerClickListener
 	{
 
@@ -613,13 +568,13 @@ public class MapFragment extends Fragment
 		{
 			hilightMarker(m);
 
-			return !CommonUtilities.ZOOMTOSELECTION;
+			return !ZOOMTOSELECTION;
 		}
 
 	}
 
-	private class OnBtnZoomHandler implements OnClickListener
-	{
+	
+	private class OnBtnZoomHandler implements OnClickListener {
 
 		@Override
 		public void onClick(View v)
@@ -628,16 +583,17 @@ public class MapFragment extends Fragment
 		}
 	}
 
-	private class OnBtnDeleteHandler implements OnClickListener
-	{
+	
+	private class OnBtnDeleteHandler implements OnClickListener {
 		@Override
 		public void onClick(View v)
 		{
 			removeSelectedMarker();
 		}
-
+		
 	}
-
+	
+	
 	private class LocationUpdateHandler implements LocationListener
 	{
 		@Override
@@ -647,9 +603,9 @@ public class MapFragment extends Fragment
 			updatePos();
 
 			// Crashes when running in background
-			// Toast.makeText(getActivity().getApplicationContext(),
-			// "Location changed: " + getLocationString(location),
-			// Toast.LENGTH_SHORT).show();
+//			Toast.makeText(getActivity().getApplicationContext(),
+//					"Location changed: " + getLocationString(location),
+//					Toast.LENGTH_SHORT).show();
 		}
 
 		@Override

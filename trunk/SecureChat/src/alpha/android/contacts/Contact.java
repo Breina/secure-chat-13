@@ -8,9 +8,9 @@ public class Contact
 	private String name, username;
 	private String gcm_id;
 
-	public Contact(String name, String description)
+	public Contact(String name, String username)
 	{
-		this(name, description, UNINITVALUE);
+		this(name, username, UNINITVALUE);
 	}
 
 	public Contact(String name, String username, String gcm_id)
@@ -25,7 +25,7 @@ public class Contact
 		return name;
 	}
 
-	public String getDescription()
+	public String getUsername()
 	{
 		return username;
 	}
@@ -40,7 +40,7 @@ public class Contact
 		this.name = name;
 	}
 
-	public void setDescription(String description)
+	public void setUsername(String description)
 	{
 		this.username = description;
 	}
@@ -55,4 +55,8 @@ public class Contact
 		return gcm_id.equals(UNINITVALUE);
 	}
 
+	@Override
+	public String toString() {
+		return "Contact: name=" + name + " username=" + username;
+	}
 }
