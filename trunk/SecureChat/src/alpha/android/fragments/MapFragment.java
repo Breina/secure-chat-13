@@ -1,5 +1,9 @@
 package alpha.android.fragments;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -11,6 +15,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -110,7 +115,7 @@ public class MapFragment extends Fragment
 		
 		// OK BUTTON
 		btnOk = (Button) mapView.findViewById(R.id.btnOk);
-		//btnOk.setOnClickListener(new OnBtnDeleteHandler());
+		btnOk.setOnClickListener(new OnBtnOkHandler());
 		
 	    return mapView;
 	}
@@ -173,6 +178,7 @@ public class MapFragment extends Fragment
 		updatePos();
 
 		markers.add(gpsMarker);
+
 		googleMap.addMarker(gpsMarker);
 		
 		btnZoom.setEnabled(true);
@@ -203,7 +209,6 @@ public class MapFragment extends Fragment
 		if (googleMap == null)
 		{
 			googleMap = fragment.getMap();
-			googleMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)));
 		}
 		
 		googleMap.setOnMarkerClickListener(new MarkerClickHandler());
@@ -320,6 +325,9 @@ public class MapFragment extends Fragment
 
 	
 	private void addMarkerFromLoad(LatLng pos, String title) {
+		
+		Log.i(CommonUtilities.TAG, "Adding " + title + " at pos " + pos.latitude + "," + pos.longitude);
+		
 		MarkerOptions marker = new MarkerOptions();
 		marker.draggable(true);
 		marker.position(pos);
@@ -338,6 +346,8 @@ public class MapFragment extends Fragment
 
 	private void addNewMarker(LatLng pos)
 	{
+		Log.i(CommonUtilities.TAG, "Adding marker at pos " + pos.latitude + "," + pos.longitude);
+		
 		MarkerOptions marker = new MarkerOptions();
 		marker.draggable(true);
 		marker.position(pos);
@@ -487,6 +497,8 @@ public class MapFragment extends Fragment
 		else
 			btnDelete.setEnabled(true);
 		
+		btnOk.setEnabled(true);
+		
 		marker.showInfoWindow();
 	}
 
@@ -545,6 +557,71 @@ public class MapFragment extends Fragment
 			btnZoom.setEnabled(false);
 		else
 			btnDelete.setEnabled(true);
+		
+		btnOk.setEnabled(false);
+	}
+	
+	private void sendToChat() {
+		if (selectedMarker == null) {
+			Toast.makeText(getActivity(), "No marker selected.", Toast.LENGTH_SHORT).show();
+			Log.w(CommonUtilities.TAG, "Button was enabled but no marker was selected.");
+			return;
+		}
+		
+		Bundle bundle = savePosition(selectedMarker.getPosition(), selectedMarker.getTitle());
+		
+		// Create MessageFragment with fileName of taken picture
+		Fragment messageFragment = new MessageFragment();
+		messageFragment.setArguments(bundle);
+		
+		// Check if there was previous content -> replace , else -> add
+		if (messageFragment != null)
+			if (getActivity().getSupportFragmentManager().findFragmentById(
+					R.id.contentFragment_container_main) != null)
+				getActivity().getSupportFragmentManager().beginTransaction()
+						.replace(R.id.contentFragment_container_main, messageFragment)
+						.commit();
+			else
+				getActivity().getSupportFragmentManager().beginTransaction()
+						.add(R.id.contentFragment_container_main, messageFragment)
+						.commit();
+	}
+	
+	
+	
+	private Bundle savePosition(LatLng pos, String title)
+	{
+		Bundle fileNameBundle = new Bundle();
+        String fileName = (title != null ? title : "somewhere");
+        FileOutputStream fos = null;
+        
+        fileNameBundle.putString("location", fileName);
+        
+        try
+        {
+        	fos = getActivity().openFileOutput(fileName, Context.MODE_PRIVATE);
+        	
+    	    ObjectOutputStream oos = new ObjectOutputStream(fos);
+    	    oos.writeDouble(pos.latitude);
+    	    oos.writeDouble(pos.longitude);
+    	    
+    	    oos.flush();
+    	    
+    	    oos.close();
+    	    fos.close();
+
+        	Log.i(CommonUtilities.TAG, "Position was succesfully saved: " + fileName);
+	    }
+        catch (FileNotFoundException e)
+        {
+        	e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+			e.printStackTrace();
+		}
+	    
+	    return fileNameBundle;
 	}
 
 	
@@ -589,6 +666,16 @@ public class MapFragment extends Fragment
 		public void onClick(View v)
 		{
 			removeSelectedMarker();
+		}
+		
+	}
+	
+	
+	private class OnBtnOkHandler implements OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			sendToChat();
 		}
 		
 	}

@@ -33,6 +33,7 @@
 	        android:id="@+id/btnOk"
 	        android:layout_width="80dp"
 	        android:layout_height="40dp"
+	        android:enabled="false"
 	        android:text="Ok" />
         
     </LinearLayout>
