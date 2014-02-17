@@ -151,11 +151,12 @@ public class CameraFragment extends Fragment implements OnClickListener
         try
         {
         	fos = getActivity().openFileOutput(fileName, Context.MODE_PRIVATE);
-        	Log.i(CommonUtilities.TAG, "Thumbnail successfully internally saved: " + fileName);
         	
     	    outputImage.compress(Bitmap.CompressFormat.PNG, 90, fos);
     	    
     	    fos.close();
+    	    
+        	Log.i(CommonUtilities.TAG, "Thumbnail successfully internally saved: " + fileName);
 	    }
         catch (FileNotFoundException e)
         {
