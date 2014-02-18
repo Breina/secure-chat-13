@@ -286,6 +286,7 @@ public class MessageFragment extends ListFragment implements OnClickListener {
 				else {
 
 					String subStr = str.substring(lastIndex, i - 1);
+					str.replace(subStr, "");
 					parseLocation(subStr);
 					
 				}
