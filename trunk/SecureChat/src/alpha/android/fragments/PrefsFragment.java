@@ -1,6 +1,7 @@
 package alpha.android.fragments;
 
 import alpha.android.R;
+import alpha.android.common.CommonUtilities;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -8,7 +9,6 @@ import android.preference.PreferenceManager;
 public class PrefsFragment extends PreferenceListFragment implements
 		SharedPreferences.OnSharedPreferenceChangeListener
 {
-	public static final String SHARED_PREFS_NAME = "settings";
 
 	@Override
 	public void onCreate(Bundle icicle)
@@ -16,7 +16,7 @@ public class PrefsFragment extends PreferenceListFragment implements
 
 		super.onCreate(icicle);
 		PreferenceManager preferenceManager = getPreferenceManager();
-		preferenceManager.setSharedPreferencesName(SHARED_PREFS_NAME);
+		preferenceManager.setSharedPreferencesName(CommonUtilities.SHARED_PREFS_NAME);
 		addPreferencesFromResource(R.xml.preferences);
 		preferenceManager.getSharedPreferences()
 				.registerOnSharedPreferenceChangeListener(this);

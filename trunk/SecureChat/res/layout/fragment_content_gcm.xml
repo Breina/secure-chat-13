@@ -5,6 +5,31 @@
     android:background="@color/listViewBg"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal"
+    	android:layout_margin="3dp" >
+    	
+        <TextView
+            android:id="@+id/tv_recipient"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/recipient"
+            android:textColor="@color/sendDarkColor" />
+        
+        <EditText
+            android:id="@+id/ed_recipient"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:inputType="text"
+            android:textColor="@color/sendDarkColor" />
+        
+    </LinearLayout>
+        
+    
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"

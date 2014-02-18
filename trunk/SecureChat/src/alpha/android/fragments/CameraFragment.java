@@ -10,7 +10,9 @@ import alpha.android.common.CommonUtilities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -27,20 +29,15 @@ public class CameraFragment extends Fragment implements OnClickListener
 	private CameraManager camManager;
 	private Bitmap takenPicture;
 	
-	
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-
+		
 		// CamManager -> will instantiate Camera
 		camManager = new CameraManager(getActivity());
 		Intent cameraIntent = camManager.initiateCameraIntent();
 		startActivityForResult(cameraIntent, CommonUtilities.REQUEST_IMAGE_CAPTURE);
-		
-		// takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-		// Uri.fromFile(photoFile));
 	}
 
 
