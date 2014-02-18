@@ -1,15 +1,25 @@
 package alpha.android.fragments;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
+import com.google.android.gms.maps.model.LatLng;
+
 import alpha.android.R;
 import alpha.android.common.CommonUtilities;
 import alpha.android.contacts.Contact;
 import alpha.android.contacts.ContactsAdapter;
+import alpha.android.webservice.WebserviceManager;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -150,7 +160,7 @@ public class ContactsFragment extends ListFragment
 			return true;
 
 		case CHAT:
-			Toast.makeText(getActivity(), "werkt nog niet", Toast.LENGTH_SHORT).show();
+			navigateToChat();
 			return false;
 
 		case DEL:
@@ -160,6 +170,58 @@ public class ContactsFragment extends ListFragment
 		}
 		
 		return false;
+	}
+
+	private void navigateToChat() {
+		
+		Bundle bundle = saveContact();
+		
+		Fragment messageFragment = new MessageFragment();
+		messageFragment.setArguments(bundle);
+
+		// Check if there was previous content -> replace , else -> add
+		if (messageFragment != null)
+			if (getActivity().getSupportFragmentManager().findFragmentById(
+					R.id.contentFragment_container_main) != null)
+				getActivity()
+						.getSupportFragmentManager()
+						.beginTransaction()
+						.replace(R.id.contentFragment_container_main,
+								messageFragment).commit();
+			else
+				getActivity()
+						.getSupportFragmentManager()
+						.beginTransaction()
+						.add(R.id.contentFragment_container_main,
+								messageFragment).commit();
+		
+	}
+	
+	private Bundle saveContact() {
+		Bundle bundle = new Bundle();
+		String fileName = lastSelectedContact.getName();
+		FileOutputStream fos = null;
+
+		bundle.putString("contact", fileName);
+
+		try {
+			fos = getActivity().openFileOutput(fileName, Context.MODE_PRIVATE);
+			
+			fos.write(lastSelectedContact.getUsername().getBytes());
+
+			fos.flush();
+
+			fos.close();
+
+			Log.i(CommonUtilities.TAG, "Position was succesfully saved: "
+					+ fileName);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return bundle;
 	}
 
 	@Override
@@ -187,13 +249,8 @@ public class ContactsFragment extends ListFragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
-//		ArrayList<Contact> contacts = new ArrayList<Contact>();
-//		contacts.add(new Contact("Tjeu", "beheerder"));
-//		contacts.add(new Contact("Brecht", "cxgamer"));
-//		contacts.add(new Contact("Jan", "chickensl4y3r"));
 
 		contactsAdapter = new ContactsAdapter(getActivity());
-//		contactsAdapter = new ContactsAdapter(getActivity(), contacts);
 		
 		loadContacts();
 		
@@ -307,4 +364,7 @@ public class ContactsFragment extends ListFragment
 
 		setListAdapter(null);
 	}
+	
+
+
 }

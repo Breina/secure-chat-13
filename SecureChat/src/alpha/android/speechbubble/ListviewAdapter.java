@@ -3,10 +3,14 @@ package alpha.android.speechbubble;
 import java.util.ArrayList;
 
 import alpha.android.R;
+import alpha.android.fragments.MapFragment;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.BitmapFactory;
+import android.preference.PreferenceManager;
 import android.text.SpannableString;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,6 +24,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 
 public class ListviewAdapter extends BaseAdapter {
 	private Context appContext;
@@ -112,9 +118,12 @@ public class ListviewAdapter extends BaseAdapter {
 			holder.message.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					// TODO: WEGDOEN VOOR MORGEN!!!!
-					Toast.makeText(appContext, "U klikte op de blauwe kut.", Toast.LENGTH_SHORT).show();
-					// TODO: WEGDOEN VOOR MORGEN!!!!
+					
+					addMarker((String) message.getMessage(), message.getPos());
+					
+//					TextView tv = (TextView) v;
+//					Log.d(CommonUtilities.TAG, tv.getText().toString());
+					
 				}
 			});
 
@@ -146,6 +155,28 @@ public class ListviewAdapter extends BaseAdapter {
 	public long getItemId(int position) {
 		// Unimplemented, because we aren't using Sqlite.
 		return 0;
+	}
+	
+	private void addMarker(String title, LatLng pos) {
+		
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(appContext);
+		Editor editor = prefs.edit();
+		
+		int size = prefs.getInt(MapFragment.SIZEKEY, 0);
+		
+		editor.putLong(MapFragment.MARKERPREFIX + "lat_" + size,
+				Double.doubleToLongBits(pos.latitude));
+		editor.putLong(MapFragment.MARKERPREFIX + "lng_" + size,
+				Double.doubleToLongBits(pos.longitude));
+		editor.putString(MapFragment.MARKERPREFIX + "title_" + size, title);
+		size++;
+		
+		editor.putInt(MapFragment.SIZEKEY, size);
+		
+		editor.commit();
+		
+		Toast.makeText(appContext, "Marker added to map", Toast.LENGTH_SHORT).show();		
+		
 	}
 
 }

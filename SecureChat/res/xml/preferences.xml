@@ -4,19 +4,29 @@
     <PreferenceCategory
         android:key="pref_key_privacy"
         android:title="@string/pref_privacy" >
-        
         <CheckBoxPreference
             android:enabled="true"
             android:key="pref_key_new_gcm_id"
             android:summary="@string/pref_new_gcm_id_desc"
             android:title="@string/pref_new_gcm_id_title" />
-        <CheckBoxPreference android:summary="@string/pref_store_gallery_desc" android:title="@string/pref_store_gallery_title" android:key="pref_key_store_gallery"/>
-        <CheckBoxPreference android:summary="@string/pref_store_location_desc" android:title="@string/pref_store_location_title" android:key="@string/pref_key_store_location"/>
-
-        
+        <CheckBoxPreference
+            android:key="@string/pref_key_store_location"
+            android:summary="@string/pref_store_location_desc"
+            android:title="@string/pref_store_location_title" />
     </PreferenceCategory>
-    
-    <PreferenceCategory android:title="@string/pref_remember" android:key="pref_key_remember"><CheckBoxPreference android:title="@string/pref_remember_username" android:key="pref_key_remember_username" /></PreferenceCategory>
-    
+    <PreferenceCategory
+        android:key="pref_key_remember"
+        android:title="@string/pref_remember" >
+        <CheckBoxPreference
+            android:key="pref_key_remember_username"
+            android:title="@string/pref_remember_username" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="pref_key_graphics"
+        android:title="@string/pref_graphic" >
+        <CheckBoxPreference
+            android:key="pref_key_animate_camera"
+            android:title="@string/pref_animate_map_zoom" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

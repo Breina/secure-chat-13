@@ -1,5 +1,7 @@
 package alpha.android.speechbubble;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import android.text.SpannableString;
 
 public class Message {
@@ -7,6 +9,7 @@ public class Message {
 	private SpannableString imageMessage;
 	private boolean isMine;
 	private boolean isLocation;
+	private LatLng pos;
 
 	// Constructor for text message
 	public Message(String message, boolean isMine) {
@@ -22,11 +25,11 @@ public class Message {
 		this.isLocation = false;
 	}
 
-	public Message(String title, boolean isMine, boolean isLocation) {
-
+	public Message(String title, boolean isMine, LatLng pos) {
+		this.pos = pos;
 		this.textMessage = title;
 		this.isMine = isMine;
-		this.isLocation = isLocation;
+		this.isLocation = true;
 	}
 
 	public Object getMessage() {
@@ -50,7 +53,10 @@ public class Message {
 
 	public boolean isLocation() {
 		return isLocation;
-
+	}
+	
+	public LatLng getPos() {
+		return pos;
 	}
 
 }

@@ -46,6 +46,7 @@
     <string name="button_clear">Clear</string>
     <string name="button_send">Send</string>
     <string name="ed_text_hint">Write here</string>
+    <string name="recipient">Recipient: </string>
     
     <!-- MENU DRAWER ACTION BAR -->
     <string name="drawer_open">Open Menu</string>
@@ -99,15 +100,12 @@
     <string name="pref_privacy">Privary</string>
     <string name="pref_new_gcm_id_title">Refresh GCM_ID</string>
     <string name="pref_new_gcm_id_desc">Clears usage traces after session</string>
-    
-    <string name="pref_store_gallery_title">Galery storage</string>
-    <string name="pref_store_gallery_desc">Store taken photos in Gallery</string>
-    
     <string name="pref_store_location_title">Location storage</string>
     <string name="pref_store_location_desc">Store marked locations internally</string>
-    
     <string name="pref_remember">Remember</string>
     <string name="pref_remember_username">Username</string>
+    <string name="pref_graphic">Graphics</string>
+    <string name="pref_animate_map_zoom">Animate map zoom</string>
     
     <string name="pref_key_store_location">pref_key_store_location</string>
     

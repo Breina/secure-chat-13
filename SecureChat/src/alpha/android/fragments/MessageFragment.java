@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import alpha.android.R;
 import alpha.android.common.CommonUtilities;
@@ -25,19 +27,27 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
 public class MessageFragment extends ListFragment implements OnClickListener {
 	private ArrayList<Message> messages;
 
+	private HashMap<String, LatLng> locations;
+	private TextView tv_input;
+	private EditText ed_recipient;
+	private String pretext;
+	private String preRecipient;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		messages = new ArrayList<Message>();
+		locations = new HashMap<String, LatLng>();
 
 		// Check if extra's (Camera / Location)
 		if (getArguments() != null) {
@@ -55,7 +65,7 @@ public class MessageFragment extends ListFragment implements OnClickListener {
 
 				messages.add(new Message(text, false));
 
-			} 
+			}
 			if (getArguments().getString("location") != null) {
 
 				try {
@@ -68,17 +78,47 @@ public class MessageFragment extends ListFragment implements OnClickListener {
 
 					double lat = ois.readDouble();
 					double lng = ois.readDouble();
-					
+
 					LatLng pos = new LatLng(lat, lng);
+
+					addLocation(title, pos);
+
+					// messages.add(new Message(title, true, pos));
+
+				} catch (StreamCorruptedException e) {
+					Log.e(CommonUtilities.TAG, e.getMessage() + ", " + e.getCause());
+				} catch (FileNotFoundException e) {
+					Log.e(CommonUtilities.TAG, e.getMessage() + ", " + e.getCause());
+				} catch (IOException e) {
+					Log.e(CommonUtilities.TAG, e.getMessage() + ", " + e.getCause());
+				}
+
+			}
+			if (getArguments().getString("contact") != null) {
+
+				try {
+
+					String name = getArguments().getString("contact");
+					String path = getActivity().getFilesDir() + "/" + name;
+
+					File file = new File(path);
+					FileInputStream fis = new FileInputStream(file);
 					
-					messages.add(new Message(title, true, true));
+					int length = (int) file.length();
+					
+					byte[] buffer = new byte[length];
+					
+					fis.read(buffer);
+					preRecipient = new String(buffer);
+					
+					Log.d(CommonUtilities.TAG, "Adding recipient: " + preRecipient);
 					
 				} catch (StreamCorruptedException e) {
-					Log.e(CommonUtilities.TAG, e.getMessage());
+					Log.e(CommonUtilities.TAG, e.getMessage() + ", " + e.getCause());
 				} catch (FileNotFoundException e) {
-					Log.e(CommonUtilities.TAG, e.getMessage());
+					Log.e(CommonUtilities.TAG, e.getMessage() + ", " + e.getCause());
 				} catch (IOException e) {
-					Log.e(CommonUtilities.TAG, e.getMessage());
+					Log.e(CommonUtilities.TAG, e.getMessage() + ", " + e.getCause());
 				}
 
 			}
@@ -97,6 +137,14 @@ public class MessageFragment extends ListFragment implements OnClickListener {
 		// Set button onClick-listeners
 		Button b1 = (Button) view.findViewById(R.id.btn_Send);
 		b1.setOnClickListener(this);
+
+		tv_input = (TextView) view.findViewById(R.id.text);
+		if (pretext != null)
+			tv_input.setText(pretext);
+		
+		ed_recipient = (EditText) view.findViewById(R.id.ed_recipient);
+		if (preRecipient != null)
+			ed_recipient.setText(preRecipient);
 
 		return view;
 	}
@@ -132,4 +180,102 @@ public class MessageFragment extends ListFragment implements OnClickListener {
 	public void sendMessage(View view) {
 
 	}
+
+	private String encodeLocations() {
+
+		Log.i(CommonUtilities.TAG, "Encoding locations");
+
+		StringBuilder sb = new StringBuilder();
+
+		Iterator<String> i = locations.keySet().iterator();
+		String title;
+		LatLng pos;
+		String inputText = tv_input.getText().toString();
+
+		while (i.hasNext()) {
+			title = i.next();
+
+			if (!inputText.contains("#" + title + "#")) {
+				Log.w(CommonUtilities.TAG, "Couldn't find location: " + title);
+				locations.remove(title);
+
+				continue;
+			}
+
+			pos = locations.get(title);
+
+			sb.append("#");
+			sb.append(title);
+			sb.append(",");
+			sb.append(String.valueOf(pos.latitude));
+			sb.append(",");
+			sb.append(String.valueOf(pos.longitude));
+			sb.append("#");
+		}
+
+		locations.clear();
+
+		return sb.toString();
+	}
+
+	private void parseLocations(String str) {
+
+		Log.i(CommonUtilities.TAG, "Parsing locations");
+
+		char c;
+		boolean inside = false;
+		int lastIndex = 0;
+
+		for (int i = 0; i < str.length(); i++) {
+			c = str.charAt(i);
+
+			if (c == '#') {
+
+				if (!inside)
+
+					lastIndex = i + 1;
+
+				else {
+
+					String subStr = str.substring(lastIndex, i - 1);
+					parseLocation(subStr);
+				}
+
+				inside = !inside;
+
+			}
+		}
+	}
+
+	private void parseLocation(String str) {
+
+		String[] parts = str.split(",");
+
+		LatLng pos = new LatLng(Double.parseDouble(parts[1]),
+				Double.parseDouble(parts[2]));
+
+		messages.add(new Message(parts[0], false, pos));
+
+	}
+
+	private void addLocation(String title, LatLng pos) {
+
+		Log.i(CommonUtilities.TAG, "Adding location");
+
+		locations.put(title, pos);
+
+		if (tv_input != null) {
+			String inputText = tv_input.getText().toString();
+
+			if (inputText.charAt(inputText.length() - 1) != ' ')
+				inputText += " ";
+
+			inputText += "#" + title + "# ";
+
+			tv_input.setText(inputText);
+		} else {
+			pretext = "#" + title + "#";
+		}
+	}
+
 }

@@ -59,4 +59,7 @@ public final class CommonUtilities
 	public static final boolean ZOOMTOSELECTION = false;
 	public static final String SIZEKEY = "marker_size";
 	public static final String MARKERPREFIX = "marker_";
+	
+	// PREFERENCES
+	public static final String SHARED_PREFS_NAME = "settings";
 }
