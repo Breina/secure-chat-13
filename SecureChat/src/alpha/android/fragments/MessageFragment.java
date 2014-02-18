@@ -92,7 +92,7 @@ public class MessageFragment extends ListFragment implements OnClickListener {
 
 					addLocation(title, pos);
 
-					// messages.add(new Message(title, true, pos));
+					messages.add(new Message(title, true, pos));
 
 				} catch (StreamCorruptedException e) {
 					Log.e(CommonUtilities.TAG, e.getMessage() + ", " + e.getCause());
