@@ -9,14 +9,20 @@ import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.ExecutionException;
 
+import alpha.android.HomeActivity;
 import alpha.android.R;
 import alpha.android.common.CommonUtilities;
+import alpha.android.contacts.Contact;
 import alpha.android.speechbubble.ListviewAdapter;
 import alpha.android.speechbubble.Message;
+import alpha.android.webservice.WebserviceManager;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -30,15 +36,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
 public class MessageFragment extends ListFragment implements OnClickListener {
 	private ArrayList<Message> messages;
 
+	private WebserviceManager webManager;
 	private HashMap<String, LatLng> locations;
 	private TextView tv_input;
 	private EditText ed_recipient;
+	
 	private String pretext;
 	private String preRecipient;
 
@@ -177,9 +186,48 @@ public class MessageFragment extends ListFragment implements OnClickListener {
 		}
 	}
 
-	public void sendMessage(View view) {
-
-	}
+	// Sends an upstream broadcast message to the web service
+		public void sendMessage(View v)
+		{
+			EditText recipient = (EditText) getActivity().findViewById(R.id.ed_recipient);
+			EditText input = (EditText) getActivity().findViewById(R.id.text);
+			
+			String inputRecipient = getUsername(recipient.getText().toString());
+			String inputText = input.getText().toString();
+			
+			String [] columnNames = {"username", "message", "recipient"};
+			String [] values = {HomeActivity.username, inputText, inputRecipient};
+			
+			try
+			{
+				webManager = new WebserviceManager(CommonUtilities.REST_SEND_MESSAGE, columnNames);
+				String result = webManager.execute(values).get();
+				
+				Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
+			}
+	    	catch (IllegalStateException e)
+	    	{
+				e.printStackTrace();
+				Log.i(CommonUtilities.TAG, "IllegalStateException thrown from MessageFragment");
+	    	}
+	    	catch (InterruptedException e)
+	    	{
+				e.printStackTrace();
+				Log.i(CommonUtilities.TAG, "InterruptedException thrown from MessageFragment");
+			}
+	    	catch (ExecutionException e)
+	    	{
+				e.printStackTrace();
+				Log.i(CommonUtilities.TAG, "ExecutionException thrown from MessageFragment");
+			}
+	    	catch (Exception e)
+	    	{
+	    		e.printStackTrace();
+				Log.i(CommonUtilities.TAG, "Error in MessageFragment of type:   " + e.getMessage().toString());
+	    	}
+			
+			input.setText("");
+		}
 
 	private String encodeLocations() {
 
@@ -239,6 +287,7 @@ public class MessageFragment extends ListFragment implements OnClickListener {
 
 					String subStr = str.substring(lastIndex, i - 1);
 					parseLocation(subStr);
+					
 				}
 
 				inside = !inside;
@@ -276,6 +325,44 @@ public class MessageFragment extends ListFragment implements OnClickListener {
 		} else {
 			pretext = "#" + title + "#";
 		}
+	}
+	
+	private SharedPreferences getPrefs()
+	{
+		return PreferenceManager.getDefaultSharedPreferences(getActivity());
+	}
+	
+	// TODO for tjeu
+	// Checks if name exists in contacts, gets its username if so. Otherwise return enteredName
+	private String getUsername(String enteredName) {
+		
+		Log.i(CommonUtilities.TAG, "Searching " + enteredName + " in contacts...");
+		
+		SharedPreferences prefs = getPrefs();
+		
+		int size = prefs.getInt(CommonUtilities.KEY_CONTACT_SIZE, 0);
+		
+		String name, username;
+		
+		for (int i = 0; i < size; i++) {
+			
+			name = prefs.getString(CommonUtilities.KEY_CONTACT_NAME_PREFIX + i, null);
+			username = prefs.getString(CommonUtilities.KEY_CONTACT_USERNAME_PREFIX + i, null);
+			
+			if (name == null || username == null) {
+				Log.w(CommonUtilities.TAG, "Contact name and/or username is null! Username=" + username + " name=" + name);
+				continue;
+			}
+			
+			if (name.toLowerCase().equals(enteredName.toLowerCase())) {
+				Log.i(CommonUtilities.TAG, "Found in Contacts: " + name);
+				return username;
+			}
+		}
+		
+		Log.i(CommonUtilities.TAG, "Not found in contacts.");
+		
+		return enteredName;
 	}
 
 }

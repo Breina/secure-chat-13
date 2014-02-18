@@ -1,5 +1,6 @@
 package alpha.android;
 
+import java.io.File;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
@@ -22,18 +23,32 @@ import android.widget.Toast;
 public class MainActivity extends FragmentActivity {
 	// Managing objects
 	private WebserviceManager webServiceManager;
-	private boolean prefRememberUsername, prefRefreshId;
+	private boolean prefRememberUsername;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		// Clears internal storage (used to keep messages)
+        for (File file : getFilesDir().listFiles())
+        	file.delete();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
+		EditText edUserName = (EditText) findViewById(R.id.edLogin);
+		String username = edUserName.getText().toString();		
+		
+		if (prefRememberUsername) {
 
-		SharedPreferences prefs = getPrefs();
-		prefRememberUsername = prefs.getBoolean("pref_key_remember_username",
-				false);
-		prefRefreshId = prefs.getBoolean("pref_key_new_gcm_id", false);
+			Editor editor = getPrefs().edit();
 
+			Log.i(CommonUtilities.TAG, "Saving " + username);
+			editor.putString("pref_key_username", username).commit();
+		}
 	}
 
 	@Override
@@ -44,14 +59,11 @@ public class MainActivity extends FragmentActivity {
 			EditText edUserName = (EditText) findViewById(R.id.edLogin);
 
 			String username = getPrefs().getString("pref_key_username",
-					"not found");
+					"");
 			Log.i(CommonUtilities.TAG, "Loading " + username);
 			edUserName.setText(username);
 
 		}
-		
-		if (prefRefreshId)
-			refreshGcmId();
 
 		return super.onCreateView(parent, name, context, attrs);
 	}
@@ -118,13 +130,6 @@ public class MainActivity extends FragmentActivity {
 					+ e.getMessage().toString() + "with cause " + e.getCause());
 		}
 
-		if (prefRememberUsername) {
-
-			Editor editor = getPrefs().edit();
-
-			Log.i(CommonUtilities.TAG, "Saving " + username);
-			editor.putString("pref_key_username", username).commit();
-		}
 	}
 
 	// Starts the HomeActivity when logged in successfully
@@ -156,26 +161,26 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	public void refreshGcmId()
-	{
-		GcmManager gcmManager = new GcmManager(this);
-		
-    	String gcm_registration_id = "huh?";
-
-    	// Reg ID already entered
-    	if (!gcm_registration_id.toLowerCase(Locale.getDefault()).startsWith("please"))
-    	{
-    		Toast.makeText(getApplicationContext(), "You already registered your device.", Toast.LENGTH_LONG).show();
-    	}
-    	else
-    	{
-    		if (gcmManager.validateGooglePlayServices())
-    			gcmManager.registerInBackground();
-    		else
-    			Toast.makeText(getApplicationContext(), "Please install the Google Play Services APK in order to proceed.",
-    						   Toast.LENGTH_LONG).show();
-    	}
-	}
+//	public void refreshGcmId()
+//	{
+//		GcmManager gcmManager = new GcmManager(this);
+//		
+//    	String gcm_registration_id = "huh?";
+//
+//    	// Reg ID already entered
+//    	if (!gcm_registration_id.toLowerCase(Locale.getDefault()).startsWith("please"))
+//    	{
+//    		Toast.makeText(getApplicationContext(), "You already registered your device.", Toast.LENGTH_LONG).show();
+//    	}
+//    	else
+//    	{
+//    		if (gcmManager.validateGooglePlayServices())
+//    			gcmManager.registerInBackground();
+//    		else
+//    			Toast.makeText(getApplicationContext(), "Please install the Google Play Services APK in order to proceed.",
+//    						   Toast.LENGTH_LONG).show();
+//    	}
+//	}
 
 	public void bypassLogin(View v) {
 

@@ -61,7 +61,6 @@ public class MapFragment extends Fragment {
 	private static final String GPSMARKER = "GPS";
 	private static final double SPACESINGLE = 0.5d;
 	private static final int MAPPADDING = 100;
-	private static final boolean ANIMATION = true;
 	private static final boolean ZOOMTOSELECTION = false;
 
 	public static final String SIZEKEY = "marker_size";

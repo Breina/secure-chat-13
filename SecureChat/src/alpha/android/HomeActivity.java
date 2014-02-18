@@ -8,12 +8,14 @@ import alpha.android.fragments.MapFragment;
 import alpha.android.fragments.MessageFragment;
 import alpha.android.fragments.OptionsFragment;
 import alpha.android.fragments.PrefsFragment;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,21 +24,18 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class HomeActivity extends FragmentActivity
-{
+public class HomeActivity extends FragmentActivity {
 	// Object that will hold the user name of the logged in user
 	public static String username;
-	
-	// Menu Objects
-    private DrawerLayout menuDrawerLayout;
-    private ListView menuDrawerListView;
-    private ActionBarDrawerToggle menuDrawerToggle;
 
-    
-    // On Create Home Activity
+	// Menu Objects
+	private DrawerLayout menuDrawerLayout;
+	private ListView menuDrawerListView;
+	private ActionBarDrawerToggle menuDrawerToggle;
+
+	// On Create Home Activity
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_container_home);
 
@@ -45,136 +44,127 @@ public class HomeActivity extends FragmentActivity
 		username = username.trim();
 
 		// Get Drawer's Layout and List
-        menuDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        menuDrawerListView = (ListView) findViewById(R.id.left_drawer);
+		menuDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		menuDrawerListView = (ListView) findViewById(R.id.left_drawer);
 
-        // Set up the drawer's list view with items and click listener
-        menuDrawerListView.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.list_navigation_drawer_row, CommonUtilities.MENU_ITEMS_HOME));
-        menuDrawerListView.setOnItemClickListener(new DrawerItemClickListener());
-        
-        // Set up the ActionBarDrawerToggle
-        menuDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* HomeActivity */
-                menuDrawerLayout,         /* DrawerLayout object */
-                R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
-                R.string.drawer_open,  /* "Open drawer" description */
-                R.string.drawer_close  /* "Close drawer" description */
-                )
-        {
-            /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view)
-            {
-                ImageView slider = (ImageView) findViewById(R.id.iv_left_drawer);
-                slider.setVisibility(View.VISIBLE);
-            }
+		// Set up the drawer's list view with items and click listener
+		menuDrawerListView.setAdapter(new ArrayAdapter<String>(this,
+				R.layout.list_navigation_drawer_row,
+				CommonUtilities.MENU_ITEMS_HOME));
+		menuDrawerListView
+				.setOnItemClickListener(new DrawerItemClickListener());
 
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView)
-            {
-                ImageView slider = (ImageView) findViewById(R.id.iv_left_drawer);
-                slider.setVisibility(View.INVISIBLE);
-            }
-        };
+		// Set up the ActionBarDrawerToggle
+		menuDrawerToggle = new ActionBarDrawerToggle(this, /* HomeActivity */
+		menuDrawerLayout, /* DrawerLayout object */
+		R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
+		R.string.drawer_open, /* "Open drawer" description */
+		R.string.drawer_close /* "Close drawer" description */
+		) {
+			/** Called when a drawer has settled in a completely closed state. */
+			public void onDrawerClosed(View view) {
+				ImageView slider = (ImageView) findViewById(R.id.iv_left_drawer);
+				slider.setVisibility(View.VISIBLE);
+			}
 
-        // Set the Drawer Toggle as the DrawerListener
-        menuDrawerLayout.setDrawerListener(menuDrawerToggle);
+			/** Called when a drawer has settled in a completely open state. */
+			public void onDrawerOpened(View drawerView) {
+				ImageView slider = (ImageView) findViewById(R.id.iv_left_drawer);
+				slider.setVisibility(View.INVISIBLE);
+			}
+		};
 
- 		// Set the Home Icon as menu button
- 	    getActionBar().setHomeButtonEnabled(true);
+		// Set the Drawer Toggle as the DrawerListener
+		menuDrawerLayout.setDrawerListener(menuDrawerToggle);
 
- 	    // Inflates HomeFragment
- 		menuItemClicked(CommonUtilities.MENU_POS_HOME);
-    }
-	
-	
-    // Syncs the Drawer Toggle state after onRestoreInstanceState has occurred.
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState)
-    {
-        super.onPostCreate(savedInstanceState);
-        
-        menuDrawerToggle.syncState();
-    }
-    
+		// Set the Home Icon as menu button
+		getActionBar().setHomeButtonEnabled(true);
 
-    // Configuration changed
-    @Override
-    public void onConfigurationChanged(Configuration newConfig)
-    {
-        super.onConfigurationChanged(newConfig);
-        
-        menuDrawerToggle.onConfigurationChanged(newConfig);
-    }
-    
-    
+		// Inflates HomeFragment
+		menuItemClicked(CommonUtilities.MENU_POS_HOME);
+	}
+
+	// Syncs the Drawer Toggle state after onRestoreInstanceState has occurred.
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+
+		menuDrawerToggle.syncState();
+	}
+
+	// Configuration changed
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+
+		menuDrawerToggle.onConfigurationChanged(newConfig);
+	}
+
 	// Click event of Drawer Action Bar
-    private class DrawerItemClickListener implements ListView.OnItemClickListener
-    {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-        {
-            menuItemClicked(position);
-        }
-    }
+	private class DrawerItemClickListener implements
+			ListView.OnItemClickListener {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			menuItemClicked(position);
+		}
+	}
 
+	// App Icon clicked (Menu drop-down)
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Pass the event to ActionBarDrawerToggle when the app icon was clicked
+		if (menuDrawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		}
 
-    // App Icon clicked (Menu drop-down)
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        // Pass the event to ActionBarDrawerToggle when the app icon was clicked
-        if (menuDrawerToggle.onOptionsItemSelected(item))
-        {
-        	return true;
-        }
-        
-        return super.onOptionsItemSelected(item);
-    }
-    
-    
-    // Occurs when a menu-item was clicked -> handles the fragments
-    private void menuItemClicked(int position)
-    {
+		return super.onOptionsItemSelected(item);
+	}
+
+	// Occurs when a menu-item was clicked -> handles the fragments
+	private void menuItemClicked(int position) {
 		Fragment content = null;
 
-		switch (position)
-		{
-			case CommonUtilities.MENU_POS_HOME:
-				content = new HomeFragment();
-				break;
-			
-			case CommonUtilities.MENU_POS_CONTACTS:
-				content = new ContactsFragment();
-				break;
-				
-			case CommonUtilities.MENU_POS_CHAT:
-				content = new MessageFragment();
-				break;
-			
-			case CommonUtilities.MENU_POS_CAMERA:
-				content = new CameraFragment();
-				break;
-			
-			case CommonUtilities.MENU_POS_LOCATION:
-				content = new MapFragment();
-				break;
-				
-			case CommonUtilities.MENU_POS_PREFS:
-				content = new PrefsFragment();
-				break;
-	
-			case CommonUtilities.MENU_POS_OPTIONS:
-				content = new OptionsFragment();
-				break;
-	
-			case CommonUtilities.MENU_POS_LOGOUT:
-				Toast.makeText(getApplicationContext(), "Successfully logged out", Toast.LENGTH_LONG).show();
-				finish();
-				break;
-	
-			default:
-				break;
+		switch (position) {
+		case CommonUtilities.MENU_POS_HOME:
+			content = new HomeFragment();
+			break;
+
+		case CommonUtilities.MENU_POS_CONTACTS:
+			content = new ContactsFragment();
+			break;
+
+		case CommonUtilities.MENU_POS_CHAT:
+			content = new MessageFragment();
+			break;
+
+		case CommonUtilities.MENU_POS_CAMERA:
+			content = new CameraFragment();
+			break;
+
+		case CommonUtilities.MENU_POS_LOCATION:
+			content = new MapFragment();
+			break;
+
+		case CommonUtilities.MENU_POS_PREFS:
+			content = new PrefsFragment();
+			break;
+
+		case CommonUtilities.MENU_POS_OPTIONS:
+			content = new OptionsFragment();
+			break;
+
+		case CommonUtilities.MENU_POS_LOGOUT:
+			Toast.makeText(getApplicationContext(), "Successfully logged out",
+					Toast.LENGTH_LONG).show();
+			Log.d(CommonUtilities.TAG, "Logging out");
+//			finish();
+			resartApp();
+			Log.d(CommonUtilities.TAG, "Done logout");
+			return;
+
+		default:
+			break;
 		}
 
 		// Check if there was previous content -> replace , else -> add
@@ -185,13 +175,24 @@ public class HomeActivity extends FragmentActivity
 					.commit();
 		else
 			getSupportFragmentManager().beginTransaction()
-					.add(R.id.contentFragment_container_main, content)
-					.commit();
-		
-        // Highlight the selected item, update the title, and close the drawer
-        menuDrawerListView.setItemChecked(position, true);
-        getActionBar().setTitle((CommonUtilities.MENU_ITEMS_HOME[position]));
-        menuDrawerLayout.closeDrawer(menuDrawerListView);
-    }
-    
+					.add(R.id.contentFragment_container_main, content).commit();
+
+		// Highlight the selected item, update the title, and close the drawer
+		menuDrawerListView.setItemChecked(position, true);
+		getActionBar().setTitle((CommonUtilities.MENU_ITEMS_HOME[position]));
+		menuDrawerLayout.closeDrawer(menuDrawerListView);
+	}
+
+	private void resartApp() {
+		try {
+			Intent i = getBaseContext().getPackageManager()
+					.getLaunchIntentForPackage(getBaseContext().getPackageName());
+			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(i);
+		} catch (Exception e) {
+			Log.e(CommonUtilities.TAG, "Couldn't restart app because " + e.getCause());
+			Log.e(CommonUtilities.TAG, e.getMessage());
+		}
+	}
+
 }
