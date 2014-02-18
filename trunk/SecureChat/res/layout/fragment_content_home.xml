@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:padding="5dp"
         android:text="@string/tv_welcome"/>
     
     <TextView
@@ -17,12 +18,22 @@
         android:layout_height="wrap_content"
         android:layout_margin="7dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
+        android:padding="5dp"
         android:text="@string/tv_intro"/>
 
     <Button
         android:id="@+id/btn_update_inbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="5dp"
         android:text="@string/btn_update" />
     
+    <LinearLayout 
+        android:id="@+id/ll_messages"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:orientation="vertical">
+        
+    </LinearLayout>
 </LinearLayout>

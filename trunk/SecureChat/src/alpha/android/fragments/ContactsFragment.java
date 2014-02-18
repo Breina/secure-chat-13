@@ -38,10 +38,6 @@ public class ContactsFragment extends ListFragment
 	private final static int ADD = 0;
 	private final static int CHAT = 1;
 	private final static int DEL = 2;
-	
-	private final static String KEY_CONTACT_NAME_PREFIX = "key_contact_name_";
-	private final static String KEY_CONTACT_USERNAME_PREFIX = "key_contact_username_";
-	private final static String KEY_SIZE = "key_contacts_size";
 
 	private boolean contactSelected;
 	private Contact lastSelectedContact;
@@ -60,7 +56,7 @@ public class ContactsFragment extends ListFragment
 		AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
 
 		alert.setTitle("New contact");
-		alert.setMessage("Input name");
+		alert.setMessage("Contact name");
 
 		final EditText input = new EditText(getActivity());
 		alert.setView(input);
@@ -300,7 +296,7 @@ public class ContactsFragment extends ListFragment
 		Editor editor = prefs.edit();
 		
 		int size = contactsAdapter.getCount();
-		editor.putInt(KEY_SIZE, size);
+		editor.putInt(CommonUtilities.KEY_CONTACT_SIZE, size);
 		
 		Contact c;
 		
@@ -310,8 +306,8 @@ public class ContactsFragment extends ListFragment
 			
 			Log.i(CommonUtilities.TAG, c.toString());
 			
-			editor.putString(KEY_CONTACT_NAME_PREFIX + i, c.getName());
-			editor.putString(KEY_CONTACT_USERNAME_PREFIX + i, c.getUsername());
+			editor.putString(CommonUtilities.KEY_CONTACT_NAME_PREFIX + i, c.getName());
+			editor.putString(CommonUtilities.KEY_CONTACT_USERNAME_PREFIX + i, c.getUsername());
 		}
 		
 		editor.commit();
@@ -325,14 +321,14 @@ public class ContactsFragment extends ListFragment
 		
 		SharedPreferences prefs = getPrefs();
 		
-		int size = prefs.getInt(KEY_SIZE, 0);
+		int size = prefs.getInt(CommonUtilities.KEY_CONTACT_SIZE, 0);
 		
 		String name, username;
 		
 		for (int i = 0; i < size; i++) {
 			
-			name = prefs.getString(KEY_CONTACT_NAME_PREFIX + i, null);
-			username = prefs.getString(KEY_CONTACT_USERNAME_PREFIX + i, null);
+			name = prefs.getString(CommonUtilities.KEY_CONTACT_NAME_PREFIX + i, null);
+			username = prefs.getString(CommonUtilities.KEY_CONTACT_USERNAME_PREFIX + i, null);
 			
 			if (name == null || username == null) {
 				Log.w(CommonUtilities.TAG, "Contact name and/or username is null! Username=" + username + " name=" + name);

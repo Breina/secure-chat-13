@@ -37,6 +37,8 @@ public final class CommonUtilities
     public static final String REST_REGISTER = "/REST/WebService/register";
     public static final String REST_CHECK_GCM = "/REST/WebService/checkgcm";
     public static final String REST_CHANGE_PASS = "/REST/WebService/changepass";
+    public static final String REST_SEND_MESSAGE = "/REST/WebService/sendmessage";
+    public static final String REST_PULL_MESSAGES = "/REST/WebService/pullmessages";
     
     
     // GOOGLE API PROJECT KEY
@@ -62,4 +64,9 @@ public final class CommonUtilities
 	
 	// PREFERENCES
 	public static final String SHARED_PREFS_NAME = "settings";
+	
+	// CONTACTS
+	public final static String KEY_CONTACT_NAME_PREFIX = "key_contact_name_";
+	public final static String KEY_CONTACT_USERNAME_PREFIX = "key_contact_username_";
+	public final static String KEY_CONTACT_SIZE = "key_contacts_size";
 }

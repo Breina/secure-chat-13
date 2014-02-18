@@ -97,12 +97,10 @@
     <string name="title_activity_register">RegisterActivity</string>
     
     <!-- Preferences -->
-    <string name="pref_privacy">Privary</string>
-    <string name="pref_new_gcm_id_title">Refresh GCM_ID</string>
     <string name="pref_new_gcm_id_desc">Clears usage traces after session</string>
     <string name="pref_store_location_title">Location storage</string>
     <string name="pref_store_location_desc">Store marked locations internally</string>
-    <string name="pref_remember">Remember</string>
+    <string name="pref_remember">Store/Remember</string>
     <string name="pref_remember_username">Username</string>
     <string name="pref_graphic">Graphics</string>
     <string name="pref_animate_map_zoom">Animate map zoom</string>
